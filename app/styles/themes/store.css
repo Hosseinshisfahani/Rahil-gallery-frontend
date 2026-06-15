@@ -1,0 +1,172 @@
+/**
+ * Store surface — Parisian maison editorial (Chaumet-inspired)
+ * Deep navy, pure white canvas, light serif display, uppercase micro-labels
+ */
+[data-surface="store"] {
+  --ink: #1a1a1f;
+  --ink-muted: #5c5c66;
+  --ink-subtle: #8a8a94;
+  --canvas: #ffffff;
+  --surface: #ffffff;
+  --surface-elevated: #f7f7f8;
+  --border: #e4e4e8;
+  --border-strong: #0c1b54;
+
+  /* Chaumet navy — primary actions & brand */
+  --brand: #0c1b54;
+  --brand-hover: #091645;
+  --brand-muted: #eef0f7;
+
+  /* Restrained gold — jewelry highlights only */
+  --accent: #a8895c;
+  --accent-hover: #8f7349;
+  --accent-muted: #f5f0e8;
+  --accent-foreground: #ffffff;
+
+  --primary: var(--brand);
+  --primary-hover: var(--brand-hover);
+  --primary-foreground: #ffffff;
+
+  --success: #1a6b45;
+  --success-muted: #eef6f1;
+  --warning: #9a6b00;
+  --warning-muted: #faf6eb;
+  --error: #9b2222;
+  --error-muted: #fdf0f0;
+  --info: #0c1b54;
+  --info-muted: var(--brand-muted);
+
+  --shadow-sm: none;
+  --shadow-md: 0 8px 32px rgb(12 27 84 / 0.06);
+
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-control: 0;
+
+  --control-height-sm: 2.5rem;
+  --control-height-md: 3rem;
+  --control-height-lg: 3.25rem;
+
+  --btn-font-size: 0.6875rem;
+  --btn-tracking: 0.16em;
+  --btn-weight: 400;
+  --nav-tracking: 0.18em;
+  --label-tracking: 0.2em;
+
+  --font-display: var(--font-cormorant);
+  --heading-weight: 400;
+  --heading-tracking: 0.04em;
+
+  --badge-transform: uppercase;
+  --badge-tracking: 0.12em;
+
+  --header-height: 3.5rem;
+  --header-nav-height: 2.75rem;
+  --container-max: 96rem;
+  --sidebar-width: 15rem;
+
+  --focus-color: var(--brand);
+  --body-weight: 400;
+  --body-size: 0.9375rem;
+  --body-leading: 1.7;
+}
+
+[data-surface="store"] {
+  font-weight: var(--body-weight);
+  font-size: var(--body-size);
+  line-height: var(--body-leading);
+}
+
+[data-surface="store"] h1,
+[data-surface="store"] h2,
+[data-surface="store"] h3,
+[data-surface="store"] h4,
+[data-surface="store"] .font-display {
+  font-family: var(--font-display), "Cormorant Garamond", Georgia, serif;
+  font-weight: var(--heading-weight);
+  letter-spacing: var(--heading-tracking);
+  color: var(--brand);
+}
+
+html[lang="fa"] [data-surface="store"] h1,
+html[lang="fa"] [data-surface="store"] h2,
+html[lang="fa"] [data-surface="store"] h3,
+html[lang="fa"] [data-surface="store"] h4,
+html[lang="fa"] [data-surface="store"] .font-display {
+  font-family: var(--font-vazirmatn), system-ui, sans-serif;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+[data-surface="store"] .ds-badge {
+  text-transform: uppercase;
+  letter-spacing: var(--badge-tracking);
+  font-weight: 400;
+  font-size: 0.625rem;
+  border-radius: 0;
+}
+
+[data-surface="store"] .ds-button {
+  text-transform: uppercase;
+  letter-spacing: var(--btn-tracking);
+  font-weight: var(--btn-weight);
+  font-size: var(--btn-font-size);
+}
+
+[data-surface="store"] .ds-card {
+  box-shadow: none;
+  border-color: var(--border);
+}
+
+[data-surface="store"] .ds-heading-1 {
+  font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+  line-height: 1.08;
+  font-weight: 300;
+}
+
+[data-surface="store"] .ds-heading-2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.12;
+  font-weight: 300;
+}
+
+[data-surface="store"] .ds-heading-3 {
+  font-size: clamp(1.625rem, 3vw, 2.25rem);
+  font-weight: 400;
+}
+
+[data-surface="store"] .ds-heading-4 {
+  font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+  font-weight: 400;
+}
+
+[data-surface="store"] .ds-eyebrow {
+  color: var(--brand);
+  letter-spacing: var(--label-tracking);
+}
+
+[data-surface="store"] .ds-nav-link {
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: var(--nav-tracking);
+  text-transform: uppercase;
+}
+
+[data-surface="store"] .ds-wordmark {
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+[data-surface="store"] .ds-product-title {
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+[data-surface="store"] .ds-product-title:hover {
+  color: var(--brand);
+}

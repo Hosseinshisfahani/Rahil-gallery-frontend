@@ -1,0 +1,181 @@
+/**
+ * Landing page — modern retro with Chaumet-inspired palette
+ * Primary blue · light gold accents · black ink
+ */
+.landing {
+  --landing-canvas: #ffffff;
+  --landing-surface: #ffffff;
+  --landing-ink: #0a0a0a;
+  --landing-muted: #5c5c66;
+  --landing-primary: #0c1b54;
+  --landing-primary-hover: #091645;
+  --landing-gold: #d4c4a8;
+  --landing-gold-deep: #b8a078;
+  --landing-border: #e4e4e8;
+  --landing-radius: 0;
+  --landing-radius-pill: 9999px;
+  --landing-display: var(--font-syne);
+  --landing-mono: var(--font-plex-mono);
+
+  background-color: var(--landing-canvas);
+  color: var(--landing-ink);
+}
+
+.landing-grain {
+  position: relative;
+  isolation: isolate;
+}
+
+.landing-display {
+  font-family: var(--landing-display), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  color: var(--landing-ink);
+}
+
+.landing-mono {
+  font-family: var(--landing-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.landing-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--landing-radius-pill);
+  padding: 0.875rem 1.75rem;
+  font-family: var(--landing-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.landing-pill-primary {
+  background-color: var(--landing-primary);
+  color: #fff;
+}
+
+.landing-pill-primary:hover {
+  background-color: var(--landing-primary-hover);
+}
+
+.landing-pill-outline {
+  border: 1px solid var(--landing-ink);
+  background-color: transparent;
+  color: var(--landing-ink);
+}
+
+.landing-pill-outline:hover {
+  background-color: var(--landing-ink);
+  color: var(--landing-surface);
+}
+
+.landing-card {
+  border-radius: var(--landing-radius);
+  background: var(--landing-surface);
+  border: 1px solid var(--landing-border);
+}
+
+.landing-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: landing-marquee 32s linear infinite;
+}
+
+.landing-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes landing-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.landing-stagger-1 {
+  animation: landing-fade-up 0.7s ease both;
+}
+
+.landing-stagger-2 {
+  animation: landing-fade-up 0.7s 0.1s ease both;
+}
+
+.landing-stagger-3 {
+  animation: landing-fade-up 0.7s 0.2s ease both;
+}
+
+@keyframes landing-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.landing .landing-header-overlay {
+  --header-height: 3.25rem;
+  --header-nav-height: 0px;
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  z-index: 30;
+  border-bottom-color: transparent;
+  background: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0.95) 0%,
+    rgb(255 255 255 / 0) 100%
+  );
+}
+
+.landing .landing-header-overlay .landing-header-nav {
+  display: none;
+}
+
+.landing .landing-header-overlay .ds-wordmark,
+.landing .landing-header-overlay .ds-nav-link,
+.landing .landing-header-overlay a[aria-label] {
+  color: var(--landing-ink);
+}
+
+.landing .landing-header-overlay .ds-wordmark:hover,
+.landing .landing-header-overlay .ds-nav-link:hover {
+  color: var(--landing-primary);
+}
+
+.landing footer .ds-wordmark {
+  color: var(--landing-ink);
+  font-family: var(--landing-display);
+  letter-spacing: 0.08em;
+  text-transform: none;
+  font-size: 1.125rem;
+}
+
+.landing .ds-product-title {
+  font-family: var(--landing-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--landing-ink);
+}
+
+.landing .ds-product-title:hover {
+  color: var(--landing-primary);
+}
+
+.landing-text-gold {
+  color: var(--landing-gold-deep);
+}
+
+.landing-text-primary {
+  color: var(--landing-primary);
+}
