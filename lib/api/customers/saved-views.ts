@@ -76,8 +76,8 @@ export function savedPayloadToCustomerFilters(
   payload: SavedFilterPayload,
 ): CustomerFilters {
   return {
+    ...defaultCustomerFilters,
     query: payload.q?.trim() ?? "",
-    customerId: "",
     email: payload.email?.trim() ?? "",
     segment: (payload.segment as CustomerSegment | undefined) ?? "all",
     status:

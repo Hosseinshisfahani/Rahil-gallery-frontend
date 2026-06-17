@@ -5,6 +5,7 @@ const apiBaseUrl =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ?? "/api/v1";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   async rewrites() {
     // Same-origin proxy: /api/v1/* and /static/* → Go backend (avoids CORS in local dev)
     if (apiBaseUrl.startsWith("http")) {
