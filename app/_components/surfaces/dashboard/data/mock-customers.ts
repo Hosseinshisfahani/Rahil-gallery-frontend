@@ -51,11 +51,11 @@ export const CUSTOMER_TYPES = [
 export type CustomerType = (typeof CUSTOMER_TYPES)[number];
 
 export const CUSTOMER_TYPE_LABELS: Record<CustomerType, string> = {
-  foreign_and_tour_guidance: "Foreign Customer and Tour Guidances",
+  foreign_and_tour_guidance: "Foreign Customer and Tour Guidance",
   vip: "Internal VIP",
   public: "Public Customers",
   colleagues: "Colleagues",
-  family_and_friends: "Family and Friends",
+  family_and_friends: "Friends and Family",
 };
 
 /** Manual import — age range buckets */
@@ -86,13 +86,23 @@ export const PURCHASED_CATEGORY_OPTIONS = [
 
 export type PurchasedCategory = (typeof PURCHASED_CATEGORY_OPTIONS)[number];
 
+/** Preferred display order for product categories in lists. */
+export const PURCHASED_CATEGORY_DISPLAY_ORDER: PurchasedCategory[] = [
+  "gold_and_gemstones",
+  "gold_and_stones",
+  "silver_and_gemstones",
+  "silver_and_stones",
+  "gemstones_and_special_roughs",
+  "stones_and_roughs",
+];
+
 export const PURCHASED_CATEGORY_LABELS: Record<PurchasedCategory, string> = {
-  gold_and_stones: "Gold and Stones",
-  silver_and_stones: "Silver and Stones",
-  stones_and_roughs: "Stones and Roughs",
-  gold_and_gemstones: "Gold and Gemstones",
-  silver_and_gemstones: "Silver and Gemstones",
-  gemstones_and_special_roughs: "Gemstones and Special Roughs",
+  gold_and_gemstones: "Gold and gemstone",
+  gold_and_stones: "Gold and stones",
+  silver_and_gemstones: "Silver and gemstone",
+  silver_and_stones: "Silver and stones",
+  gemstones_and_special_roughs: "Gemstones and Special roughs",
+  stones_and_roughs: "Stones and roughs",
 };
 
 export type CustomerImportMode = "quick" | "history_included";
@@ -145,6 +155,8 @@ export interface CustomerSummary {
   status: CustomerStatus;
   isVip: boolean;
   tags: CustomerTag[];
+  customerType: CustomerType;
+  purchasedCategories: PurchasedCategory[];
   country: "IR";
   href: string;
 }
@@ -288,6 +300,8 @@ const customerSummaries: CustomerSummary[] = [
     status: "active",
     isVip: true,
     tags: ["VIP", "High spender", "Bridal customer"],
+    customerType: "vip",
+    purchasedCategories: ["gold_and_gemstones", "silver_and_stones"],
     country: "IR",
     href: "/admin/customers/usr-001",
   },
@@ -304,6 +318,8 @@ const customerSummaries: CustomerSummary[] = [
     status: "active",
     isVip: false,
     tags: ["High spender"],
+    customerType: "public",
+    purchasedCategories: ["gold_and_stones"],
     country: "IR",
     href: "/admin/customers/usr-002",
   },

@@ -18,6 +18,12 @@ export {
   toggleCustomerVip,
   toggleCustomerTag,
 } from "./mutations";
+export {
+  uploadCustomerSignature,
+  deleteCustomerSignature,
+  saveCustomerImportProfile,
+  createCustomerWithImportProfile,
+} from "./signature";
 export type {
   CreateCustomerInput,
   UpdateCustomerInput,

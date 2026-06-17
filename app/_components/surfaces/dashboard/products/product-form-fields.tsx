@@ -1,8 +1,8 @@
 "use client";
 
 import { Input } from "@/_components/core/primitive/input";
-import { Label } from "@/_components/core/primitive/label";
 import { DashboardSelect, DashboardSelectOption } from "../abstract/dashboard-select";
+import { fieldPlaceholder } from "../abstract/form-placeholders";
 import { Textarea } from "@/_components/core/primitive/textarea";
 import type { Category } from "@/lib/api/products/types";
 import type {
@@ -126,63 +126,68 @@ export function ProductFormFields({
     onChange(next);
   }
 
+  const nameLabel = fieldPlaceholder(t("products.form.name"), true);
+  const skuLabel = fieldPlaceholder(t("products.form.sku"), true);
+  const slugLabel = fieldPlaceholder(t("products.form.slug"), true);
+  const categoryLabel = fieldPlaceholder(t("products.form.category"), true);
+  const typeLabel = fieldPlaceholder(t("products.filters.jewelryType"), true);
+  const statusLabel = fieldPlaceholder(t("common.status"));
+  const priceLabel = fieldPlaceholder(t("products.form.basePrice"), true);
+  const compareLabel = fieldPlaceholder(t("products.form.compareAtPrice"));
+  const metalLabel = fieldPlaceholder(t("products.form.metal"));
+  const gemstoneLabel = fieldPlaceholder(t("products.form.gemstone"));
+  const karatLabel = fieldPlaceholder(t("products.form.karat"));
+  const weightLabel = fieldPlaceholder(t("products.form.weight"));
+  const shortLabel = fieldPlaceholder(t("products.form.shortDescription"));
+  const descLabel = fieldPlaceholder(t("products.form.description"));
+
   return (
     <div className="flex flex-col gap-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
-          <Label htmlFor={`${idPrefix}-name`} required>
-            {t("products.form.name")}
-          </Label>
           <Input
             id={`${idPrefix}-name`}
             value={values.name}
             onChange={(e) => handleNameChange(e.target.value)}
-            placeholder={t("products.form.namePlaceholder")}
-            className="mt-1.5"
+            placeholder={nameLabel}
+            aria-label={nameLabel}
           />
         </div>
 
         <div>
-          <Label htmlFor={`${idPrefix}-sku`} required>
-            {t("products.form.sku")}
-          </Label>
           <Input
             id={`${idPrefix}-sku`}
             value={values.sku}
             onChange={(e) => update({ sku: e.target.value })}
-            placeholder="RG-JOS-001"
-            className="mt-1.5 font-mono text-ltr"
+            placeholder={skuLabel}
+            aria-label={skuLabel}
+            className="font-mono text-ltr"
             dir="ltr"
           />
         </div>
 
         <div>
-          <Label htmlFor={`${idPrefix}-slug`} required>
-            {t("products.form.slug")}
-          </Label>
           <Input
             id={`${idPrefix}-slug`}
             value={values.slug}
             onChange={(e) => update({ slug: slugify(e.target.value) })}
-            placeholder="josephine-aigrette-ring"
-            className="mt-1.5 font-mono text-ltr"
+            placeholder={slugLabel}
+            aria-label={slugLabel}
+            className="font-mono text-ltr"
             dir="ltr"
             disabled={!slugEditable}
           />
         </div>
 
         <div>
-          <Label htmlFor={`${idPrefix}-category`} required>
-            {t("products.form.category")}
-          </Label>
           <DashboardSelect
             id={`${idPrefix}-category`}
             value={values.categoryId}
             onChange={(e) => update({ categoryId: e.target.value })}
-            className="mt-1.5"
+            aria-label={categoryLabel}
           >
             <DashboardSelectOption value="" placeholder>
-              {t("products.form.selectCategory")}
+              {categoryLabel}
             </DashboardSelectOption>
             {categories.map((cat) => (
               <DashboardSelectOption key={cat.id} value={cat.id}>
@@ -193,16 +198,13 @@ export function ProductFormFields({
         </div>
 
         <div>
-          <Label htmlFor={`${idPrefix}-type`} required>
-            {t("products.filters.jewelryType")}
-          </Label>
           <DashboardSelect
             id={`${idPrefix}-type`}
             value={values.jewelryType}
             onChange={(e) =>
               update({ jewelryType: e.target.value as JewelryType })
             }
-            className="mt-1.5"
+            aria-label={typeLabel}
           >
             {jewelryTypes.map((value) => (
               <DashboardSelectOption key={value} value={value}>
@@ -213,14 +215,13 @@ export function ProductFormFields({
         </div>
 
         <div>
-          <Label htmlFor={`${idPrefix}-status`}>{t("common.status")}</Label>
           <DashboardSelect
             id={`${idPrefix}-status`}
             value={values.status}
             onChange={(e) =>
               update({ status: e.target.value as ProductStatus })
             }
-            className="mt-1.5"
+            aria-label={statusLabel}
           >
             <DashboardSelectOption value="draft">
               {t("products.status.draft")}
@@ -235,43 +236,39 @@ export function ProductFormFields({
         </div>
 
         <div>
-          <Label htmlFor={`${idPrefix}-price`} required>
-            {t("products.form.basePrice")}
-          </Label>
           <Input
             id={`${idPrefix}-price`}
             type="number"
             min={0}
             value={values.basePrice}
             onChange={(e) => update({ basePrice: e.target.value })}
-            placeholder="50000000"
-            className="mt-1.5 tabular-nums"
+            placeholder={priceLabel}
+            aria-label={priceLabel}
+            className="tabular-nums"
           />
         </div>
 
         <div>
-          <Label htmlFor={`${idPrefix}-compare`}>
-            {t("products.form.compareAtPrice")}
-          </Label>
           <Input
             id={`${idPrefix}-compare`}
             type="number"
             min={0}
             value={values.compareAtPrice}
             onChange={(e) => update({ compareAtPrice: e.target.value })}
-            className="mt-1.5 tabular-nums"
+            placeholder={compareLabel}
+            aria-label={compareLabel}
+            className="tabular-nums"
           />
         </div>
 
         <div>
-          <Label htmlFor={`${idPrefix}-metal`}>{t("products.form.metal")}</Label>
           <DashboardSelect
             id={`${idPrefix}-metal`}
             value={values.metalType}
             onChange={(e) =>
               update({ metalType: e.target.value as MetalType | "" })
             }
-            className="mt-1.5"
+            aria-label={metalLabel}
           >
             {metalOptions.map((option) => (
               <DashboardSelectOption
@@ -279,23 +276,20 @@ export function ProductFormFields({
                 value={option.value}
                 placeholder={option.value === ""}
               >
-                {t(option.labelKey)}
+                {option.value === "" ? metalLabel : t(option.labelKey)}
               </DashboardSelectOption>
             ))}
           </DashboardSelect>
         </div>
 
         <div>
-          <Label htmlFor={`${idPrefix}-gemstone`}>
-            {t("products.form.gemstone")}
-          </Label>
           <DashboardSelect
             id={`${idPrefix}-gemstone`}
             value={values.gemstoneType}
             onChange={(e) =>
               update({ gemstoneType: e.target.value as GemstoneType })
             }
-            className="mt-1.5"
+            aria-label={gemstoneLabel}
           >
             {gemstoneOptions.map((option) => (
               <DashboardSelectOption key={option.value} value={option.value}>
@@ -306,20 +300,18 @@ export function ProductFormFields({
         </div>
 
         <div>
-          <Label htmlFor={`${idPrefix}-karat`}>{t("products.form.karat")}</Label>
           <Input
             id={`${idPrefix}-karat`}
             type="number"
             min={0}
             value={values.karat}
             onChange={(e) => update({ karat: e.target.value })}
-            placeholder="18"
-            className="mt-1.5"
+            placeholder={karatLabel}
+            aria-label={karatLabel}
           />
         </div>
 
         <div>
-          <Label htmlFor={`${idPrefix}-weight`}>{t("products.form.weight")}</Label>
           <Input
             id={`${idPrefix}-weight`}
             type="number"
@@ -327,33 +319,30 @@ export function ProductFormFields({
             step="0.01"
             value={values.weightGrams}
             onChange={(e) => update({ weightGrams: e.target.value })}
-            className="mt-1.5"
+            placeholder={weightLabel}
+            aria-label={weightLabel}
           />
         </div>
       </div>
 
       <div>
-        <Label htmlFor={`${idPrefix}-short`}>
-          {t("products.form.shortDescription")}
-        </Label>
         <Input
           id={`${idPrefix}-short`}
           value={values.shortDescription}
           onChange={(e) => update({ shortDescription: e.target.value })}
-          className="mt-1.5"
+          placeholder={shortLabel}
+          aria-label={shortLabel}
         />
       </div>
 
       <div>
-        <Label htmlFor={`${idPrefix}-desc`}>
-          {t("products.form.description")}
-        </Label>
         <Textarea
           id={`${idPrefix}-desc`}
           value={values.description}
           onChange={(e) => update({ description: e.target.value })}
+          placeholder={descLabel}
+          aria-label={descLabel}
           rows={4}
-          className="mt-1.5"
         />
       </div>
 

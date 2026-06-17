@@ -25,6 +25,7 @@ export interface DashboardDateInputProps {
   className?: string;
   min?: string;
   max?: string;
+  placeholder?: string;
   "aria-label"?: string;
 }
 
@@ -59,6 +60,7 @@ export const DashboardDateInput = forwardRef<HTMLInputElement, DashboardDateInpu
       className,
       min,
       max,
+      placeholder,
       "aria-label": ariaLabel,
     },
     ref,
@@ -141,15 +143,18 @@ export const DashboardDateInput = forwardRef<HTMLInputElement, DashboardDateInpu
           hasError={hasError}
           min={min}
           max={max}
-          aria-label={ariaLabel}
+          placeholder={placeholder}
+          aria-label={ariaLabel ?? placeholder}
           className={className}
         />
       );
     }
 
+    const emptyLabel = placeholder ?? ariaLabel ?? t("calendar.selectDate");
+
     const displayValue = value
       ? formatIsoAsJalali(value, { style: "long" })
-      : t("calendar.selectDate");
+      : emptyLabel;
 
     const panel = open ? (
       <div
@@ -175,6 +180,8 @@ export const DashboardDateInput = forwardRef<HTMLInputElement, DashboardDateInpu
           clearLabel={t("calendar.clear")}
           prevMonthLabel={t("calendar.prevMonth")}
           nextMonthLabel={t("calendar.nextMonth")}
+          monthLabel={t("calendar.month")}
+          yearLabel={t("calendar.year")}
         />
       </div>
     ) : null;
@@ -194,7 +201,7 @@ export const DashboardDateInput = forwardRef<HTMLInputElement, DashboardDateInpu
           aria-haspopup="dialog"
           aria-expanded={open}
           aria-controls={calendarId}
-          aria-label={ariaLabel}
+          aria-label={ariaLabel ?? placeholder}
           className="dashboard-date-input-trigger"
           onClick={() => setOpen((current) => !current)}
         >

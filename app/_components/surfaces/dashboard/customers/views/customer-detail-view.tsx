@@ -212,8 +212,8 @@ export function CustomerDetailView({ customerId }: CustomerDetailViewProps) {
         <EditHistoryImportModal
           customer={customer}
           onClose={() => setModal(null)}
-          onConfirm={async (profile) => {
-            await updateImportProfile(profile);
+          onConfirm={async (payload) => {
+            await updateImportProfile(payload);
             setModal(null);
             router.refresh();
           }}

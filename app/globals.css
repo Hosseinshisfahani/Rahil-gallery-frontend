@@ -89,6 +89,10 @@
   --font-sans: var(--font-geist-sans);
   --font-fa: var(--font-vazirmatn);
   --font-mono: var(--font-geist-mono);
+  --font-syne: var(--font-syne);
+  --font-plex-mono: var(--font-plex-mono);
+  --font-cormorant: var(--font-cormorant);
+  --font-playfair: var(--font-playfair);
 
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);

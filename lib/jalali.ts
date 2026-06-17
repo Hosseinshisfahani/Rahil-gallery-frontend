@@ -204,3 +204,36 @@ export function digitsForLocale(value: number | string, locale: AdminLocale): st
   const text = String(value);
   return locale === "fa" ? toPersianDigits(text) : text;
 }
+
+/** Inclusive Jalali year range for calendar navigation. */
+export function jalaliYearRange(
+  min?: string,
+  max?: string,
+  anchor?: JalaliParts,
+): { minYear: number; maxYear: number } {
+  const pivot = anchor ?? dateToJalali(new Date());
+  let minYear = pivot.jy - 100;
+  let maxYear = pivot.jy + 20;
+
+  if (min) {
+    const parts = isoToJalali(min);
+    if (parts) minYear = Math.max(minYear, parts.jy);
+  }
+  if (max) {
+    const parts = isoToJalali(max);
+    if (parts) maxYear = Math.min(maxYear, parts.jy);
+  }
+
+  if (minYear > maxYear) {
+    return { minYear: maxYear, maxYear: minYear };
+  }
+
+  return { minYear, maxYear };
+}
+
+export function jalaliMonthLabel(jm: number, locale: AdminLocale): string {
+  if (locale === "en") {
+    return String(jm).padStart(2, "0");
+  }
+  return JALALI_MONTH_NAMES[jm - 1];
+}

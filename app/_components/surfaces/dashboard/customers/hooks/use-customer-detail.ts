@@ -18,7 +18,8 @@ import {
   unblockCustomer,
   updateCustomer,
 } from "@/lib/api/customers";
-import type { CustomerImportProfile } from "../../data/mock-customers";
+import { saveCustomerImportProfile } from "@/lib/api/customers/signature";
+import type { ImportProfileSubmit } from "../add-customer-flow";
 import type { CustomerFormValues } from "../customer-crud-modals";
 
 function adminT(key: string): string {
@@ -90,9 +91,14 @@ export function useCustomerDetail(customerId: string) {
         });
         return refreshCustomer();
       }),
-    updateImportProfile: (profile: CustomerImportProfile) =>
+    updateImportProfile: (payload: ImportProfileSubmit) =>
       mutate(async () => {
-        await updateCustomer(customerId, { importProfile: profile });
+        await saveCustomerImportProfile({
+          customerId,
+          profile: payload.profile,
+          signatureFile: payload.signatureFile,
+          removeSignature: payload.removeSignature,
+        });
         return refreshCustomer();
       }),
     block: (reason: BlockReasonCode, note: string) =>

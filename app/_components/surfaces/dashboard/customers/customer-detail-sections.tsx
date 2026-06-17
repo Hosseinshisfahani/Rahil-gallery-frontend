@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
+import { isSignatureImage, signatureImageSrc } from "@/lib/signature-url";
 import { useCustomerEnumLabels } from "@/lib/i18n/admin/use-customer-labels";
 import { Badge } from "@/_components/core/primitive/badge";
 import { StatusBadge, type OrderStatus } from "@/_components/shared/inclusive/status-badge";
@@ -326,7 +327,16 @@ export function CustomerImportProfileSection({
               label={t("customers.fields.signature")}
               value={
                 profile.signature ? (
-                  <span className="font-serif italic">{profile.signature}</span>
+                  isSignatureImage(profile.signature) ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- same-origin uploaded signatures
+                    <img
+                      src={signatureImageSrc(profile.signature)}
+                      alt={t("customers.fields.signature")}
+                      className="max-h-24 max-w-full object-contain"
+                    />
+                  ) : (
+                    <span className="font-serif italic">{profile.signature}</span>
+                  )
                 ) : (
                   EMPTY
                 )

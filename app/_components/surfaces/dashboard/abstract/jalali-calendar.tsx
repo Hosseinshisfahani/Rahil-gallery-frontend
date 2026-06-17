@@ -9,7 +9,9 @@ import {
   digitsForLocale,
   isoToJalali,
   isIsoInRange,
+  jalaliMonthLabel,
   jalaliToIso,
+  jalaliYearRange,
   JALALI_MONTH_NAMES,
   JALALI_WEEKDAY_SHORT,
   type JalaliParts,
@@ -27,6 +29,8 @@ export interface JalaliCalendarProps {
   clearLabel: string;
   prevMonthLabel: string;
   nextMonthLabel: string;
+  monthLabel: string;
+  yearLabel: string;
 }
 
 function sameJalaliDay(a: JalaliParts, b: JalaliParts): boolean {
@@ -44,6 +48,8 @@ export function JalaliCalendar({
   clearLabel,
   prevMonthLabel,
   nextMonthLabel,
+  monthLabel,
+  yearLabel,
 }: JalaliCalendarProps) {
   const selected = value ? isoToJalali(value) : null;
   const today = dateToJalali(new Date());
@@ -52,10 +58,27 @@ export function JalaliCalendar({
   const [viewYear, setViewYear] = useState(initialView.jy);
   const [viewMonth, setViewMonth] = useState(initialView.jm);
 
+  const yearRange = useMemo(
+    () => jalaliYearRange(min, max, today),
+    [max, min, today.jy],
+  );
+
+  const yearOptions = useMemo(() => {
+    const years: number[] = [];
+    for (let year = yearRange.minYear; year <= yearRange.maxYear; year += 1) {
+      years.push(year);
+    }
+    return years;
+  }, [yearRange.maxYear, yearRange.minYear]);
+
   const cells = useMemo(
     () => buildJalaliMonthGrid(viewYear, viewMonth),
     [viewMonth, viewYear],
   );
+
+  function clampYear(year: number): number {
+    return Math.min(yearRange.maxYear, Math.max(yearRange.minYear, year));
+  }
 
   function shiftMonth(delta: number) {
     let nextMonth = viewMonth + delta;
@@ -70,8 +93,16 @@ export function JalaliCalendar({
       nextYear -= 1;
     }
 
-    setViewYear(nextYear);
+    setViewYear(clampYear(nextYear));
     setViewMonth(nextMonth);
+  }
+
+  function handleMonthChange(nextMonth: number) {
+    setViewMonth(nextMonth);
+  }
+
+  function handleYearChange(nextYear: number) {
+    setViewYear(clampYear(nextYear));
   }
 
   function handleSelect(parts: JalaliParts) {
@@ -88,8 +119,6 @@ export function JalaliCalendar({
     onSelect(iso);
   }
 
-  const monthTitle = `${JALALI_MONTH_NAMES[viewMonth - 1]} ${digitsForLocale(viewYear, locale)}`;
-
   return (
     <div className={cn("dashboard-jalali-calendar", className)}>
       <div className="dashboard-jalali-calendar-header">
@@ -101,7 +130,38 @@ export function JalaliCalendar({
         >
           ‹
         </button>
-        <p className="dashboard-jalali-calendar-title">{monthTitle}</p>
+
+        <div className="dashboard-jalali-calendar-selects">
+          <select
+            className="dashboard-jalali-calendar-select"
+            value={viewMonth}
+            aria-label={monthLabel}
+            onChange={(event) => handleMonthChange(Number(event.target.value))}
+          >
+            {JALALI_MONTH_NAMES.map((name, index) => {
+              const month = index + 1;
+              return (
+                <option key={month} value={month}>
+                  {locale === "fa" ? name : jalaliMonthLabel(month, locale)}
+                </option>
+              );
+            })}
+          </select>
+
+          <select
+            className="dashboard-jalali-calendar-select"
+            value={viewYear}
+            aria-label={yearLabel}
+            onChange={(event) => handleYearChange(Number(event.target.value))}
+          >
+            {yearOptions.map((year) => (
+              <option key={year} value={year}>
+                {digitsForLocale(year, locale)}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <button
           type="button"
           className="dashboard-jalali-calendar-nav"

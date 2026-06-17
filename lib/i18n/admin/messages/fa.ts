@@ -109,6 +109,8 @@ export const adminMessagesFaBase = {
     failedLoadOne: "بارگذاری مشتری ناموفق بود",
     table: {
       name: "نام",
+      customerType: "نوع مشتری",
+      productCategory: "دسته محصول مشتری",
       phone: "تلفن",
       segment: "بخش",
     },

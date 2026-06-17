@@ -11,6 +11,8 @@ export function exportCustomersToCsv(customers: CustomerSummary[]): string {
   const headers = [
     "User ID",
     "Full Name",
+    "Customer Type",
+    "Product Categories",
     "Phone",
     "Registration Date",
     "Last Activity",
@@ -27,6 +29,8 @@ export function exportCustomersToCsv(customers: CustomerSummary[]): string {
     [
       c.id,
       c.fullName,
+      c.customerType ?? "",
+      (c.purchasedCategories ?? []).join("; "),
       c.phone,
       c.registeredAt,
       c.lastActivityAt,

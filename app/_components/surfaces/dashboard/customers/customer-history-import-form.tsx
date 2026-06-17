@@ -2,9 +2,10 @@
 
 import { cn } from "@/lib/utils";
 import { Input } from "@/_components/core/primitive/input";
-import { Label } from "@/_components/core/primitive/label";
 import { DashboardDateInput } from "../abstract/dashboard-date-input";
 import { DashboardSelect, DashboardSelectOption } from "../abstract/dashboard-select";
+import { fieldPlaceholder } from "../abstract/form-placeholders";
+import { CustomerSignatureField } from "./customer-signature-field";
 import { Textarea } from "@/_components/core/primitive/textarea";
 import { useCustomerEnumLabels } from "@/lib/i18n/admin/use-customer-labels";
 import {
@@ -67,12 +68,18 @@ function FormSection({
 export interface CustomerHistoryImportFormProps {
   values: CustomerImportProfile;
   onChange: (values: CustomerImportProfile) => void;
+  signatureFile?: File | null;
+  onSignatureFileChange?: (file: File | null) => void;
+  onSignatureRemove?: () => void;
   idPrefix?: string;
 }
 
 export function CustomerHistoryImportForm({
   values,
   onChange,
+  signatureFile,
+  onSignatureFileChange,
+  onSignatureRemove,
   idPrefix = "import",
 }: CustomerHistoryImportFormProps) {
   const { t } = useAdminT();
@@ -89,6 +96,21 @@ export function CustomerHistoryImportForm({
     update({ purchasedCategories: next });
   }
 
+  const firstNameLabel = fieldPlaceholder(t("customers.fields.firstName"), true);
+  const lastNameLabel = fieldPlaceholder(t("customers.fields.lastName"), true);
+  const jobLabel = fieldPlaceholder(t("customers.fields.job"));
+  const phoneLabel = fieldPlaceholder(t("customers.import.phoneNumber"), true);
+  const emailLabel = fieldPlaceholder(t("customers.fields.email"));
+  const addressLabel = fieldPlaceholder(t("customers.fields.address"));
+  const birthdayLabel = fieldPlaceholder(t("customers.fields.birthday"));
+  const marriageLabel = fieldPlaceholder(t("customers.fields.marriageDate"));
+  const importantLabel = fieldPlaceholder(t("customers.fields.importantDate"));
+  const firstVisitLabel = fieldPlaceholder(t("customers.fields.firstVisit"));
+  const typeLabel = fieldPlaceholder(t("customers.fields.customerType"), true);
+  const ageLabel = fieldPlaceholder(t("customers.fields.ageRange"));
+  const categoriesLabel = t("customers.fields.purchasedCategories");
+  const descriptionLabel = fieldPlaceholder(t("customers.fields.description"));
+
   return (
     <div className="flex flex-col gap-5">
       <FormSection
@@ -97,72 +119,64 @@ export function CustomerHistoryImportForm({
       >
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <Label htmlFor={`${idPrefix}-first`} required>
-              {t("customers.fields.firstName")}
-            </Label>
             <Input
               id={`${idPrefix}-first`}
               value={values.firstName}
               onChange={(e) => update({ firstName: e.target.value })}
-              className="mt-1.5"
+              placeholder={firstNameLabel}
+              aria-label={firstNameLabel}
             />
           </div>
           <div>
-            <Label htmlFor={`${idPrefix}-last`} required>
-              {t("customers.fields.lastName")}
-            </Label>
             <Input
               id={`${idPrefix}-last`}
               value={values.lastName}
               onChange={(e) => update({ lastName: e.target.value })}
-              className="mt-1.5"
+              placeholder={lastNameLabel}
+              aria-label={lastNameLabel}
             />
           </div>
         </div>
         <div>
-          <Label htmlFor={`${idPrefix}-job`}>{t("customers.fields.job")}</Label>
           <Input
             id={`${idPrefix}-job`}
             value={values.job ?? ""}
             onChange={(e) => update({ job: e.target.value })}
-            placeholder={t("customers.import.jobPlaceholder")}
-            className="mt-1.5"
+            placeholder={jobLabel}
+            aria-label={jobLabel}
           />
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <Label htmlFor={`${idPrefix}-phone`} required>
-              {t("customers.import.phoneNumber")}
-            </Label>
             <Input
               id={`${idPrefix}-phone`}
               value={values.phone}
               onChange={(e) => update({ phone: e.target.value })}
-              placeholder="+989121234567"
-              className="mt-1.5 font-mono text-ltr"
+              placeholder={phoneLabel}
+              aria-label={phoneLabel}
+              className="font-mono text-ltr"
               dir="ltr"
             />
           </div>
           <div>
-            <Label htmlFor={`${idPrefix}-email`}>{t("customers.fields.email")}</Label>
             <Input
               id={`${idPrefix}-email`}
               type="email"
               value={values.email ?? ""}
               onChange={(e) => update({ email: e.target.value })}
-              className="mt-1.5"
+              placeholder={emailLabel}
+              aria-label={emailLabel}
             />
           </div>
         </div>
         <div>
-          <Label htmlFor={`${idPrefix}-address`}>{t("customers.fields.address")}</Label>
           <Textarea
             id={`${idPrefix}-address`}
             rows={2}
             value={values.address ?? ""}
             onChange={(e) => update({ address: e.target.value })}
-            placeholder={t("customers.import.addressPlaceholder")}
-            className="mt-1.5"
+            placeholder={addressLabel}
+            aria-label={addressLabel}
           />
         </div>
       </FormSection>
@@ -173,39 +187,39 @@ export function CustomerHistoryImportForm({
       >
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <Label htmlFor={`${idPrefix}-birthday`}>{t("customers.fields.birthday")}</Label>
             <DashboardDateInput
               id={`${idPrefix}-birthday`}
               value={values.birthday ?? ""}
               onChange={(birthday) => update({ birthday })}
-              className="mt-1.5"
+              placeholder={birthdayLabel}
+              aria-label={birthdayLabel}
             />
           </div>
           <div>
-            <Label htmlFor={`${idPrefix}-marriage`}>{t("customers.fields.marriageDate")}</Label>
             <DashboardDateInput
               id={`${idPrefix}-marriage`}
               value={values.marriageDate ?? ""}
               onChange={(marriageDate) => update({ marriageDate })}
-              className="mt-1.5"
+              placeholder={marriageLabel}
+              aria-label={marriageLabel}
             />
           </div>
           <div>
-            <Label htmlFor={`${idPrefix}-important`}>{t("customers.fields.importantDate")}</Label>
             <DashboardDateInput
               id={`${idPrefix}-important`}
               value={values.importantDate ?? ""}
               onChange={(importantDate) => update({ importantDate })}
-              className="mt-1.5"
+              placeholder={importantLabel}
+              aria-label={importantLabel}
             />
           </div>
           <div>
-            <Label htmlFor={`${idPrefix}-first-visit`}>{t("customers.fields.firstVisit")}</Label>
             <DashboardDateInput
               id={`${idPrefix}-first-visit`}
               value={values.firstVisitDate ?? ""}
               onChange={(firstVisitDate) => update({ firstVisitDate })}
-              className="mt-1.5"
+              placeholder={firstVisitLabel}
+              aria-label={firstVisitLabel}
             />
           </div>
         </div>
@@ -217,16 +231,13 @@ export function CustomerHistoryImportForm({
       >
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <Label htmlFor={`${idPrefix}-type`} required>
-              {t("customers.fields.customerType")}
-            </Label>
             <DashboardSelect
               id={`${idPrefix}-type`}
               value={values.customerType}
               onChange={(e) =>
                 update({ customerType: e.target.value as CustomerType })
               }
-              className="mt-1.5"
+              aria-label={typeLabel}
             >
               {CUSTOMER_TYPES.map((type) => (
                 <DashboardSelectOption key={type} value={type}>
@@ -236,7 +247,6 @@ export function CustomerHistoryImportForm({
             </DashboardSelect>
           </div>
           <div>
-            <Label htmlFor={`${idPrefix}-age`}>{t("customers.fields.ageRange")}</Label>
             <DashboardSelect
               id={`${idPrefix}-age`}
               value={values.customerAgeRange ?? ""}
@@ -247,10 +257,10 @@ export function CustomerHistoryImportForm({
                     : undefined,
                 })
               }
-              className="mt-1.5"
+              aria-label={ageLabel}
             >
               <DashboardSelectOption value="" placeholder>
-                {t("common.notSpecified")}
+                {ageLabel}
               </DashboardSelectOption>
               {CUSTOMER_AGE_RANGES.map((range) => (
                 <DashboardSelectOption key={range} value={range}>
@@ -260,9 +270,8 @@ export function CustomerHistoryImportForm({
             </DashboardSelect>
           </div>
         </div>
-        <div>
-          <Label>{t("customers.fields.purchasedCategories")}</Label>
-          <div className="mt-2 grid gap-2 sm:grid-cols-2">
+        <div role="group" aria-label={categoriesLabel}>
+          <div className="grid gap-2 sm:grid-cols-2">
             {PURCHASED_CATEGORY_OPTIONS.map((category) => {
               const active = values.purchasedCategories.includes(category);
               return (
@@ -294,24 +303,29 @@ export function CustomerHistoryImportForm({
         description={t("customers.import.section4Desc")}
       >
         <div>
-          <Label htmlFor={`${idPrefix}-description`}>{t("customers.fields.description")}</Label>
           <Textarea
             id={`${idPrefix}-description`}
             rows={4}
             value={values.description ?? ""}
             onChange={(e) => update({ description: e.target.value })}
-            placeholder={t("customers.import.visitExperience")}
-            className="mt-1.5"
+            placeholder={descriptionLabel}
+            aria-label={descriptionLabel}
           />
         </div>
         <div>
-          <Label htmlFor={`${idPrefix}-signature`}>{t("customers.fields.signature")}</Label>
-          <Input
-            id={`${idPrefix}-signature`}
-            value={values.signature ?? ""}
-            onChange={(e) => update({ signature: e.target.value })}
-            placeholder={t("customers.import.signaturePlaceholder")}
-            className="mt-1.5 font-serif italic"
+          <CustomerSignatureField
+            idPrefix={`${idPrefix}-signature`}
+            signatureUrl={values.signature}
+            pendingFile={signatureFile}
+            onPendingFileChange={(file) => {
+              onSignatureFileChange?.(file);
+              if (file) update({ signature: "" });
+            }}
+            onSignatureUrlChange={(url) => update({ signature: url ?? "" })}
+            onRemove={() => {
+              update({ signature: "" });
+              onSignatureRemove?.();
+            }}
           />
         </div>
       </FormSection>

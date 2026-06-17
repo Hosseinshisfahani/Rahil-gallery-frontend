@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/_components/core/primitive/button";
 import { Input } from "@/_components/core/primitive/input";
 import { DashboardDateInput } from "../abstract/dashboard-date-input";
-import { Label } from "@/_components/core/primitive/label";
 import { DashboardSelect, DashboardSelectOption } from "../abstract/dashboard-select";
+import { fieldPlaceholder } from "../abstract/form-placeholders";
 import { useCustomerEnumLabels } from "@/lib/i18n/admin/use-customer-labels";
 import { CUSTOMER_TAGS, type CustomerTag } from "../data/mock-customers";
 import { useAdminT } from "../layout/admin-locale-provider";
@@ -53,27 +53,23 @@ function RangeField({
       <legend className="text-sm font-medium text-ink">{label}</legend>
       <div className="grid grid-cols-2 gap-2">
         <div>
-          <Label htmlFor={`${label}-min`} className="mb-1 text-xs text-ink-muted">
-            {minLabel}
-          </Label>
           <Input
             id={`${label}-min`}
             type="number"
             min={0}
-            placeholder={minPlaceholder}
+            placeholder={minLabel}
+            aria-label={minLabel}
             value={minValue}
             onChange={(e) => onMinChange(e.target.value)}
           />
         </div>
         <div>
-          <Label htmlFor={`${label}-max`} className="mb-1 text-xs text-ink-muted">
-            {maxLabel}
-          </Label>
           <Input
             id={`${label}-max`}
             type="number"
             min={0}
-            placeholder={maxPlaceholder}
+            placeholder={maxLabel}
+            aria-label={maxLabel}
             value={maxValue}
             onChange={(e) => onMaxChange(e.target.value)}
           />
@@ -106,24 +102,20 @@ function DateRangeField({
       <legend className="text-sm font-medium text-ink">{label}</legend>
       <div className="grid grid-cols-2 gap-2">
         <div>
-          <Label htmlFor={`${slug}-from`} className="mb-1 text-xs text-ink-muted">
-            {fromLabel}
-          </Label>
           <DashboardDateInput
             id={`${slug}-from`}
             value={fromValue}
             onChange={onFromChange}
+            placeholder={fromLabel}
             aria-label={fromLabel}
           />
         </div>
         <div>
-          <Label htmlFor={`${slug}-to`} className="mb-1 text-xs text-ink-muted">
-            {toLabel}
-          </Label>
           <DashboardDateInput
             id={`${slug}-to`}
             value={toValue}
             onChange={onToChange}
+            placeholder={toLabel}
             aria-label={toLabel}
           />
         </div>
@@ -176,12 +168,10 @@ export function CustomersAdvancedSearch({
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <div className="flex flex-col gap-2">
-          <Label htmlFor="customer-id-filter" className="text-sm font-medium">
-            {t("customers.advancedSearch.customerId")}
-          </Label>
           <Input
             id="customer-id-filter"
-            placeholder="550e8400-e29b-41d4-a716-446655440000"
+            placeholder={fieldPlaceholder(t("customers.advancedSearch.customerId"))}
+            aria-label={fieldPlaceholder(t("customers.advancedSearch.customerId"))}
             value={filters.customerId}
             onChange={(e) => update({ customerId: e.target.value })}
             className="font-mono text-xs text-ltr"
@@ -193,13 +183,11 @@ export function CustomersAdvancedSearch({
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="customer-email-filter" className="text-sm font-medium">
-            {t("customers.advancedSearch.email")}
-          </Label>
           <Input
             id="customer-email-filter"
             type="email"
-            placeholder="sara@example.com"
+            placeholder={fieldPlaceholder(t("customers.advancedSearch.email"))}
+            aria-label={fieldPlaceholder(t("customers.advancedSearch.email"))}
             value={filters.email}
             onChange={(e) => update({ email: e.target.value })}
           />
@@ -271,9 +259,6 @@ export function CustomersAdvancedSearch({
         />
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="has-purchased" className="text-sm font-medium">
-            {t("customers.advancedSearch.purchaseHistory")}
-          </Label>
           <DashboardSelect
             id="has-purchased"
             value={filters.hasPurchased}
@@ -282,6 +267,7 @@ export function CustomersAdvancedSearch({
                 hasPurchased: e.target.value as CustomerFilters["hasPurchased"],
               })
             }
+            aria-label={fieldPlaceholder(t("customers.advancedSearch.purchaseHistory"))}
           >
             <DashboardSelectOption value="all">
               {t("customers.advancedSearch.any")}

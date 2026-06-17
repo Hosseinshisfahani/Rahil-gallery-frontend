@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/_components/core/primitive/button";
 import { Input } from "@/_components/core/primitive/input";
-import { Label } from "@/_components/core/primitive/label";
 import { DashboardSelect, DashboardSelectOption } from "../abstract/dashboard-select";
+import { fieldPlaceholder } from "../abstract/form-placeholders";
 import type { CustomerDetail } from "../data/mock-customers";
 import { useAdminT } from "../layout/admin-locale-provider";
 import { ModalShell } from "./modal-shell";
@@ -59,42 +59,42 @@ export function CustomerFormFields({
     onChange({ ...values, ...partial });
   }
 
+  const fullNameLabel = fieldPlaceholder(t("customers.fields.fullName"), true);
+  const phoneLabel = fieldPlaceholder(t("customers.fields.phone"), true);
+  const emailLabel = fieldPlaceholder(t("customers.fields.email"));
+  const localeLabel = fieldPlaceholder(t("customers.fields.language"));
+  const ringLabel = fieldPlaceholder(t("customers.fields.defaultRingSize"));
+
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <Label htmlFor={`${idPrefix}-name`} required>
-          {t("customers.fields.fullName")}
-        </Label>
         <Input
           id={`${idPrefix}-name`}
           value={values.fullName}
           onChange={(e) => update({ fullName: e.target.value })}
-          placeholder="Sara Mohammadi"
-          className="mt-1.5"
+          placeholder={fullNameLabel}
+          aria-label={fullNameLabel}
         />
       </div>
       <div>
-        <Label htmlFor={`${idPrefix}-phone`} required>
-          {t("customers.fields.phone")}
-        </Label>
         <Input
           id={`${idPrefix}-phone`}
           value={values.phone}
           onChange={(e) => update({ phone: e.target.value })}
-          placeholder="+989121234567"
-          className="mt-1.5 font-mono text-ltr"
+          placeholder={phoneLabel}
+          aria-label={phoneLabel}
+          className="font-mono text-ltr"
           dir="ltr"
         />
       </div>
       <div>
-        <Label htmlFor={`${idPrefix}-email`}>{t("customers.fields.email")}</Label>
         <Input
           id={`${idPrefix}-email`}
           type="email"
           value={values.email}
           onChange={(e) => update({ email: e.target.value })}
-          placeholder="optional@example.com"
-          className="mt-1.5"
+          placeholder={emailLabel}
+          aria-label={emailLabel}
         />
       </div>
       {(showLocale || showDefaultRingSize) && (
@@ -105,14 +105,13 @@ export function CustomerFormFields({
         >
           {showLocale && (
             <div>
-              <Label htmlFor={`${idPrefix}-locale`}>{t("customers.fields.language")}</Label>
               <DashboardSelect
                 id={`${idPrefix}-locale`}
                 value={values.locale}
                 onChange={(e) =>
                   update({ locale: e.target.value as "fa" | "en" })
                 }
-                className="mt-1.5"
+                aria-label={localeLabel}
               >
                 <DashboardSelectOption value="fa">
                   {t("customers.fields.localeFa")}
@@ -125,13 +124,12 @@ export function CustomerFormFields({
           )}
           {showDefaultRingSize && (
             <div>
-              <Label htmlFor={`${idPrefix}-ring`}>{t("customers.fields.defaultRingSize")}</Label>
               <Input
                 id={`${idPrefix}-ring`}
                 value={values.defaultRingSize}
                 onChange={(e) => update({ defaultRingSize: e.target.value })}
-                placeholder="14"
-                className="mt-1.5"
+                placeholder={ringLabel}
+                aria-label={ringLabel}
               />
             </div>
           )}

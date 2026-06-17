@@ -11,7 +11,6 @@ import {
   DashboardSectionTitle,
   StatCard,
 } from "../../abstract/dashboard-card";
-import type { CustomerImportProfile } from "../../data/mock-customers";
 import { CustomersFilters } from "../customers-filters";
 import { CustomersTable } from "../customers-table";
 import { CustomersPagination } from "../customers-pagination";
@@ -21,7 +20,6 @@ import {
   DeleteCustomerModal,
   type CustomerFormValues,
 } from "../customer-crud-modals";
-import type { CustomerImportProfile } from "../../data/mock-customers";
 import { useCustomersList } from "../hooks/use-customers-list";
 import { useAdminT } from "../../layout/admin-locale-provider";
 import { useCustomerEnumLabels } from "@/lib/i18n/admin/use-customer-labels";
@@ -30,6 +28,8 @@ import {
   createSavedView,
   deleteCustomer,
 } from "@/lib/api/customers";
+import { createCustomerWithImportProfile } from "@/lib/api/customers/signature";
+import type { ImportProfileSubmit } from "../add-customer-flow";
 import {
   canSaveCustomerFilters,
   customerFiltersToSavedPayload,
@@ -86,11 +86,16 @@ export function CustomersListView() {
     router.push(created.href);
   }
 
-  async function handleHistoryCreate(profile: CustomerImportProfile) {
-    const created = await createCustomer({
-      importMode: "history_included",
-      importProfile: profile,
-    });
+  async function handleHistoryCreate({ profile, signatureFile }: ImportProfileSubmit) {
+    const created = await createCustomerWithImportProfile(
+      (importProfile) =>
+        createCustomer({
+          importMode: "history_included",
+          importProfile,
+        }),
+      profile,
+      signatureFile,
+    );
     refetch();
     router.push(created.href);
   }

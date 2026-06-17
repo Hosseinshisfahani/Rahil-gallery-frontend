@@ -2,9 +2,9 @@
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/_components/core/primitive/button";
-import { Label } from "@/_components/core/primitive/label";
 import { DashboardDateInput } from "../abstract/dashboard-date-input";
 import { DashboardSelect, DashboardSelectOption } from "../abstract/dashboard-select";
+import { fieldPlaceholder } from "../abstract/form-placeholders";
 import { useCustomerEnumLabels } from "@/lib/i18n/admin/use-customer-labels";
 import {
   CUSTOMER_AGE_RANGES,
@@ -50,24 +50,20 @@ function DateRangeField({
       <legend className="text-sm font-medium text-ink">{label}</legend>
       <div className="grid grid-cols-2 gap-2">
         <div>
-          <Label htmlFor={`${slug}-from`} className="mb-1 text-xs text-ink-muted">
-            {fromLabel}
-          </Label>
           <DashboardDateInput
             id={`${slug}-from`}
             value={fromValue}
             onChange={onFromChange}
+            placeholder={fromLabel}
             aria-label={fromLabel}
           />
         </div>
         <div>
-          <Label htmlFor={`${slug}-to`} className="mb-1 text-xs text-ink-muted">
-            {toLabel}
-          </Label>
           <DashboardDateInput
             id={`${slug}-to`}
             value={toValue}
             onChange={onToChange}
+            placeholder={toLabel}
             aria-label={toLabel}
           />
         </div>
@@ -104,6 +100,9 @@ export function CustomersCrmAdvancedSearch({
     update({ purchaseTypes: next });
   }
 
+  const ageRangeFieldLabel = fieldPlaceholder(t("customers.fields.ageRange"));
+  const genderFieldLabel = fieldPlaceholder(t("customers.fields.gender"));
+
   return (
     <div
       className={cn(
@@ -125,9 +124,6 @@ export function CustomersCrmAdvancedSearch({
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <div className="flex flex-col gap-2">
-          <Label htmlFor="crm-age-range" className="text-sm font-medium">
-            {t("customers.fields.ageRange")}
-          </Label>
           <DashboardSelect
             id="crm-age-range"
             value={filters.customerAgeRange}
@@ -136,9 +132,10 @@ export function CustomersCrmAdvancedSearch({
                 customerAgeRange: e.target.value as CustomerAgeRange | "",
               })
             }
+            aria-label={ageRangeFieldLabel}
           >
-            <DashboardSelectOption value="">
-              {t("customers.advancedSearch.any")}
+            <DashboardSelectOption value="" placeholder>
+              {ageRangeFieldLabel}
             </DashboardSelectOption>
             {CUSTOMER_AGE_RANGES.map((range) => (
               <DashboardSelectOption key={range} value={range}>
@@ -149,18 +146,16 @@ export function CustomersCrmAdvancedSearch({
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="crm-gender" className="text-sm font-medium">
-            {t("customers.fields.gender")}
-          </Label>
           <DashboardSelect
             id="crm-gender"
             value={filters.gender}
             onChange={(e) =>
               update({ gender: e.target.value as CustomerFilters["gender"] })
             }
+            aria-label={genderFieldLabel}
           >
-            <DashboardSelectOption value="all">
-              {t("customers.advancedSearch.any")}
+            <DashboardSelectOption value="all" placeholder>
+              {genderFieldLabel}
             </DashboardSelectOption>
             {CUSTOMER_GENDERS.map((value) => (
               <DashboardSelectOption key={value} value={value}>

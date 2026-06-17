@@ -4,7 +4,7 @@ import { useState } from "react";
 import { CatalogImage } from "@/_components/shared/catalog-image";
 import { Button } from "@/_components/core/primitive/button";
 import { Input } from "@/_components/core/primitive/input";
-import { Label } from "@/_components/core/primitive/label";
+import { fieldPlaceholder } from "../abstract/form-placeholders";
 import { formatPrice } from "@/lib/format";
 import type { ProductDetail, ProductVariant } from "@/lib/api/products/types";
 import {
@@ -283,59 +283,54 @@ export function ProductVariantsSection({
           )}
           <div className="flex flex-col gap-4">
             <div>
-              <Label htmlFor="variant-sku" required>
-                {t("products.detail.variantSku")}
-              </Label>
               <Input
                 id="variant-sku"
                 value={sku}
                 onChange={(e) => setSku(e.target.value)}
-                className="mt-1.5 font-mono"
+                placeholder={fieldPlaceholder(t("products.detail.variantSku"), true)}
+                aria-label={fieldPlaceholder(t("products.detail.variantSku"), true)}
+                className="font-mono"
               />
             </div>
             <div>
-              <Label htmlFor="variant-name" required>
-                {t("products.detail.variantName")}
-              </Label>
               <Input
                 id="variant-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1.5"
+                placeholder={fieldPlaceholder(t("products.detail.variantName"), true)}
+                aria-label={fieldPlaceholder(t("products.detail.variantName"), true)}
               />
             </div>
             <div>
-              <Label htmlFor="variant-size">{t("products.detail.sizeLabel")}</Label>
               <Input
                 id="variant-size"
                 value={sizeLabel}
                 onChange={(e) => setSizeLabel(e.target.value)}
-                className="mt-1.5"
+                placeholder={fieldPlaceholder(t("products.detail.sizeLabel"))}
+                aria-label={fieldPlaceholder(t("products.detail.sizeLabel"))}
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label htmlFor="variant-qty">{t("products.detail.initialQuantity")}</Label>
                 <Input
                   id="variant-qty"
                   type="number"
                   min={0}
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
-                  className="mt-1.5"
+                  placeholder={fieldPlaceholder(t("products.detail.initialQuantity"))}
+                  aria-label={fieldPlaceholder(t("products.detail.initialQuantity"))}
                 />
               </div>
               <div>
-                <Label htmlFor="variant-threshold">
-                  {t("products.detail.lowStockThreshold")}
-                </Label>
                 <Input
                   id="variant-threshold"
                   type="number"
                   min={0}
                   value={threshold}
                   onChange={(e) => setThreshold(e.target.value)}
-                  className="mt-1.5"
+                  placeholder={fieldPlaceholder(t("products.detail.lowStockThreshold"))}
+                  aria-label={fieldPlaceholder(t("products.detail.lowStockThreshold"))}
                 />
               </div>
             </div>
@@ -543,22 +538,21 @@ export function ProductImagesSection({
         )}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="min-w-0 flex-1">
-            <Label htmlFor="image-url">{t("common.url")}</Label>
             <Input
               id="image-url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://…"
-              className="mt-1.5"
+              placeholder={fieldPlaceholder(t("common.url"))}
+              aria-label={fieldPlaceholder(t("common.url"))}
             />
           </div>
           <div className="min-w-0 flex-1">
-            <Label htmlFor="image-alt">{t("products.detail.altText")}</Label>
             <Input
               id="image-alt"
               value={altText}
               onChange={(e) => setAltText(e.target.value)}
-              className="mt-1.5"
+              placeholder={fieldPlaceholder(t("products.detail.altText"))}
+              aria-label={fieldPlaceholder(t("products.detail.altText"))}
             />
           </div>
           <label className="flex items-center gap-2 pb-2 text-sm">

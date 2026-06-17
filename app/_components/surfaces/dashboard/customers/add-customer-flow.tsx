@@ -19,9 +19,15 @@ import {
 
 type AddStep = "choose" | "quick" | "history";
 
+export interface ImportProfileSubmit {
+  profile: CustomerImportProfile;
+  signatureFile?: File | null;
+  removeSignature?: boolean;
+}
+
 export interface AddCustomerFlowModalProps {
   onQuickAdd: (values: CustomerFormValues) => Promise<void>;
-  onHistoryAdd: (profile: CustomerImportProfile) => Promise<void>;
+  onHistoryAdd: (payload: ImportProfileSubmit) => Promise<void>;
   onClose: () => void;
 }
 
@@ -49,8 +55,8 @@ export function AddCustomerFlowModal({
     return (
       <HistoryIncludedImportModal
         onClose={() => setStep("choose")}
-        onConfirm={async (profile) => {
-          await onHistoryAdd(profile);
+        onConfirm={async (payload) => {
+          await onHistoryAdd(payload);
           onClose();
         }}
       />
@@ -105,7 +111,7 @@ export function AddCustomerFlowModal({
 }
 
 interface HistoryIncludedImportModalProps {
-  onConfirm: (profile: CustomerImportProfile) => Promise<void>;
+  onConfirm: (payload: ImportProfileSubmit) => Promise<void>;
   onClose: () => void;
 }
 
@@ -115,6 +121,7 @@ function HistoryIncludedImportModal({
 }: HistoryIncludedImportModalProps) {
   const { t } = useAdminT();
   const [values, setValues] = useState(emptyImportProfile);
+  const [signatureFile, setSignatureFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -128,7 +135,7 @@ function HistoryIncludedImportModal({
     setSubmitting(true);
     setError(null);
     try {
-      await onConfirm(values);
+      await onConfirm({ profile: values, signatureFile });
       onClose();
     } catch (err) {
       setError(
@@ -163,6 +170,8 @@ function HistoryIncludedImportModal({
       <CustomerHistoryImportForm
         values={values}
         onChange={setValues}
+        signatureFile={signatureFile}
+        onSignatureFileChange={setSignatureFile}
         idPrefix="history-import"
       />
     </ModalShell>
@@ -171,7 +180,7 @@ function HistoryIncludedImportModal({
 
 interface EditHistoryImportModalProps {
   customer: import("../data/mock-customers").CustomerDetail;
-  onConfirm: (profile: CustomerImportProfile) => Promise<void>;
+  onConfirm: (payload: ImportProfileSubmit) => Promise<void>;
   onClose: () => void;
 }
 
@@ -186,6 +195,8 @@ export function EditHistoryImportModal({
       ? importProfileToForm(customer.importProfile)
       : emptyImportProfile(),
   );
+  const [signatureFile, setSignatureFile] = useState<File | null>(null);
+  const [removeSignature, setRemoveSignature] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -199,7 +210,7 @@ export function EditHistoryImportModal({
     setSubmitting(true);
     setError(null);
     try {
-      await onConfirm(values);
+      await onConfirm({ profile: values, signatureFile, removeSignature });
       onClose();
     } catch (err) {
       setError(
@@ -234,6 +245,12 @@ export function EditHistoryImportModal({
       <CustomerHistoryImportForm
         values={values}
         onChange={setValues}
+        signatureFile={signatureFile}
+        onSignatureFileChange={(file) => {
+          setSignatureFile(file);
+          if (file) setRemoveSignature(false);
+        }}
+        onSignatureRemove={() => setRemoveSignature(true)}
         idPrefix="edit-history"
       />
     </ModalShell>

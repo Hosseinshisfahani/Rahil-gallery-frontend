@@ -6,7 +6,7 @@ import { Button } from "@/_components/core/primitive/button";
 import { Heading } from "@/_components/core/primitive/heading";
 import { Input } from "@/_components/core/primitive/input";
 import { Text } from "@/_components/core/primitive/text";
-import { FormField } from "@/_components/surfaces/store/abstract/form-field";
+import { fieldPlaceholder } from "@/_components/surfaces/dashboard/abstract/form-placeholders";
 import { AdminThemeToggle } from "./admin-theme-toggle";
 import { AdminLocaleSwitcher } from "./admin-locale-switcher";
 import { useAdminT } from "./admin-locale-provider";
@@ -62,29 +62,31 @@ export function AdminLoginView() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <FormField id="email" label={t("auth.email")} required>
-            <Input
-              type="email"
-              autoComplete="username"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-              dir="ltr"
-              className="text-ltr"
-            />
-          </FormField>
+          <Input
+            id="email"
+            type="email"
+            autoComplete="username"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder={fieldPlaceholder(t("auth.email"), true)}
+            aria-label={fieldPlaceholder(t("auth.email"), true)}
+            required
+            dir="ltr"
+            className="text-ltr"
+          />
 
-          <FormField id="password" label={t("auth.password")} required>
-            <Input
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-              dir="ltr"
-              className="text-ltr"
-            />
-          </FormField>
+          <Input
+            id="password"
+            type="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder={fieldPlaceholder(t("auth.password"), true)}
+            aria-label={fieldPlaceholder(t("auth.password"), true)}
+            required
+            dir="ltr"
+            className="text-ltr"
+          />
 
           {error && (
             <p className="rounded-[var(--radius-md)] bg-danger/10 px-3 py-2 text-sm text-danger">
