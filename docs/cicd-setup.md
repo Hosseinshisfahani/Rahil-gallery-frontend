@@ -26,6 +26,7 @@
 ## One-time VPS setup
 
 ```bash
+apt install -y rsync   # optional — deploy uses tar+scp if rsync is missing
 git clone https://github.com/aliakbarebrahimy/Rahil-Gallery-Client.git ~/source/Rahil-Gallery-Client
 cd ~/source/Rahil-Gallery-Client
 cp .env.example .env

@@ -48,15 +48,21 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: Sync repo on server
+      - name: Sync repo files on server
         run: |
-          rsync -az \
-            --exclude '.git' \
-            --exclude '.env' \
-            --exclude 'node_modules' \
-            --exclude '.next' \
-            -e "ssh -o StrictHostKeyChecking=yes" \
-            ./ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.CLIENT_DEPLOY_PATH }}/"
+          tar -czf repo-sync.tar.gz \
+            --exclude='./.git' \
+            --exclude='./node_modules' \
+            --exclude='./.next' \
+            --exclude='./.env' \
+            .
+          scp -o StrictHostKeyChecking=yes repo-sync.tar.gz \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/tmp/client-repo-sync.tar.gz"
+          ssh -o StrictHostKeyChecking=yes \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            "mkdir -p ${CLIENT_DEPLOY_PATH} && tar -xzf /tmp/client-repo-sync.tar.gz -C ${CLIENT_DEPLOY_PATH} && rm -f /tmp/client-repo-sync.tar.gz"
+        env:
+          CLIENT_DEPLOY_PATH: ${{ secrets.CLIENT_DEPLOY_PATH }}
 
       - name: Upload release and deploy
         run: |
