@@ -230,12 +230,12 @@ export function CustomersCrmAdvancedSearch({
           toLabel={t("common.to")}
         />
         <DateRangeField
-          label={t("customers.advancedSearch.registrationDate")}
-          slug="registration"
-          fromValue={filters.registeredFrom}
-          toValue={filters.registeredTo}
-          onFromChange={(registeredFrom) => update({ registeredFrom })}
-          onToChange={(registeredTo) => update({ registeredTo })}
+          label={t("customers.crmAdvancedSearch.lastOrderDate")}
+          slug="last-order"
+          fromValue={filters.lastPurchaseFrom}
+          toValue={filters.lastPurchaseTo}
+          onFromChange={(lastPurchaseFrom) => update({ lastPurchaseFrom })}
+          onToChange={(lastPurchaseTo) => update({ lastPurchaseTo })}
           fromLabel={t("common.from")}
           toLabel={t("common.to")}
         />

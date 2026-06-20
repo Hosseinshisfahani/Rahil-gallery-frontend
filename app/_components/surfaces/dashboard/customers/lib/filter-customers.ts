@@ -124,8 +124,8 @@ export function hasCrmAdvancedFilters(filters: CustomerFilters): boolean {
     filters.birthdayTo !== "" ||
     filters.marriageFrom !== "" ||
     filters.marriageTo !== "" ||
-    filters.registeredFrom !== "" ||
-    filters.registeredTo !== ""
+    filters.lastPurchaseFrom !== "" ||
+    filters.lastPurchaseTo !== ""
   );
 }
 
@@ -366,8 +366,8 @@ export function countAdvancedPanelFilters(filters: CustomerFilters): number {
   if (filters.customerTypes.length > 0) count++;
   if (filters.firstVisitFrom) count++;
   if (filters.firstVisitTo) count++;
-  if (filters.registeredFrom) count++;
-  if (filters.registeredTo) count++;
+  if (filters.lastPurchaseFrom) count++;
+  if (filters.lastPurchaseTo) count++;
   if (filters.birthdayFrom) count++;
   if (filters.birthdayTo) count++;
   if (filters.marriageFrom) count++;
