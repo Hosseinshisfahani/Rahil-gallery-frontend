@@ -7,10 +7,14 @@ import { useCustomerEnumLabels } from "@/lib/i18n/admin/use-customer-labels";
 import type {
   CustomerSummary,
   CustomerType,
+  CustomerAgeRange,
+  CustomerGender,
   PurchasedCategory,
 } from "../data/mock-customers";
 import {
   CUSTOMER_TYPES,
+  CUSTOMER_AGE_RANGES,
+  CUSTOMER_GENDERS,
   PURCHASED_CATEGORY_DISPLAY_ORDER,
   PURCHASED_CATEGORY_OPTIONS,
 } from "../data/mock-customers";
@@ -22,6 +26,7 @@ import {
   tableThClass,
 } from "../abstract/responsive-table";
 import { useAdminT } from "../layout/admin-locale-provider";
+import { CUSTOMER_DETAIL_PAGE_ENABLED } from "./lib/customer-detail-enabled";
 
 export interface CustomersTableProps {
   customers: CustomerSummary[];
@@ -35,6 +40,14 @@ function isCustomerType(value: string): value is CustomerType {
 
 function isPurchasedCategory(value: string): value is PurchasedCategory {
   return (PURCHASED_CATEGORY_OPTIONS as readonly string[]).includes(value);
+}
+
+function isCustomerAgeRange(value: string): value is CustomerAgeRange {
+  return (CUSTOMER_AGE_RANGES as readonly string[]).includes(value);
+}
+
+function isCustomerGender(value: string): value is CustomerGender {
+  return (CUSTOMER_GENDERS as readonly string[]).includes(value);
 }
 
 function sortPurchasedCategories(categories: PurchasedCategory[]): PurchasedCategory[] {
@@ -52,8 +65,12 @@ export function CustomersTable({
   className,
 }: CustomersTableProps) {
   const { t } = useAdminT();
-  const { customerType: customerTypeLabel, purchasedCategory } =
-    useCustomerEnumLabels();
+  const {
+    customerType: customerTypeLabel,
+    purchasedCategory,
+    ageRange: ageRangeLabel,
+    gender: genderLabel,
+  } = useCustomerEnumLabels();
 
   if (customers.length === 0) {
     return (
@@ -68,6 +85,8 @@ export function CustomersTable({
       <thead>
         <tr className={tableHeadRowClass}>
           <th className={tableThClass}>{t("customers.table.name")}</th>
+          <th className={tableThClass}>{t("customers.table.ageGroup")}</th>
+          <th className={tableThClass}>{t("customers.table.gender")}</th>
           <th className={tableThClass}>{t("customers.table.customerType")}</th>
           <th className={tableThClass}>
             {t("customers.table.productCategory")}
@@ -84,16 +103,43 @@ export function CustomersTable({
           const categories = sortPurchasedCategories(
             (customer.purchasedCategories ?? []).filter(isPurchasedCategory),
           );
+          const ageRange =
+            customer.customerAgeRange &&
+            isCustomerAgeRange(customer.customerAgeRange)
+              ? customer.customerAgeRange
+              : null;
+          const gender =
+            customer.gender && isCustomerGender(customer.gender)
+              ? customer.gender
+              : null;
 
           return (
             <tr key={customer.id} className={tableBodyRowClass}>
               <TableCell label={t("customers.table.name")} layout="stack">
-                <Link
-                  href={customer.href}
-                  className="font-medium text-ink hover:text-primary"
-                >
-                  {customer.fullName}
-                </Link>
+                {CUSTOMER_DETAIL_PAGE_ENABLED ? (
+                  <Link
+                    href={customer.href}
+                    className="font-medium text-ink hover:text-primary"
+                  >
+                    {customer.fullName}
+                  </Link>
+                ) : (
+                  <span className="font-medium text-ink">{customer.fullName}</span>
+                )}
+              </TableCell>
+              <TableCell label={t("customers.table.ageGroup")}>
+                {ageRange ? (
+                  <span className="text-sm text-ink">{ageRangeLabel(ageRange)}</span>
+                ) : (
+                  <span className="text-sm text-ink-muted">—</span>
+                )}
+              </TableCell>
+              <TableCell label={t("customers.table.gender")}>
+                {gender ? (
+                  <span className="text-sm text-ink">{genderLabel(gender)}</span>
+                ) : (
+                  <span className="text-sm text-ink-muted">—</span>
+                )}
               </TableCell>
               <TableCell label={t("customers.table.customerType")}>
                 {type ? (
@@ -126,12 +172,14 @@ export function CustomersTable({
               {onDelete && (
                 <TableCell label={t("common.actions")} layout="actions" className="py-3">
                   <div className="flex items-center gap-2">
-                    <Link
-                      href={customer.href}
-                      className={buttonVariants({ variant: "ghost", size: "sm" })}
-                    >
-                      {t("common.view")}
-                    </Link>
+                    {CUSTOMER_DETAIL_PAGE_ENABLED && (
+                      <Link
+                        href={customer.href}
+                        className={buttonVariants({ variant: "ghost", size: "sm" })}
+                      >
+                        {t("common.view")}
+                      </Link>
+                    )}
                     <button
                       type="button"
                       onClick={() => onDelete(customer)}

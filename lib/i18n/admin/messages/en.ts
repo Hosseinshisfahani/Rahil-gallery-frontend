@@ -109,6 +109,8 @@ export const adminMessagesEnBase = {
     failedLoadOne: "Failed to load customer",
     table: {
       name: "Name",
+      ageGroup: "Age group",
+      gender: "Gender",
       customerType: "Customer type",
       productCategory: "Customer product category",
       phone: "Phone",

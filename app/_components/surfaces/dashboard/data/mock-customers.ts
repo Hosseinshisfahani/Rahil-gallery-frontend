@@ -157,6 +157,8 @@ export interface CustomerSummary {
   tags: CustomerTag[];
   customerType: CustomerType;
   purchasedCategories: PurchasedCategory[];
+  customerAgeRange?: CustomerAgeRange;
+  gender?: CustomerGender;
   country: "IR";
   href: string;
 }
@@ -290,6 +292,8 @@ const customerSummaries: CustomerSummary[] = [
     tags: ["VIP", "High spender", "Bridal customer"],
     customerType: "vip",
     purchasedCategories: ["gold_and_gemstones", "silver_and_stones"],
+    customerAgeRange: "21-40",
+    gender: "female",
     country: "IR",
     href: "/admin/customers/usr-001",
   },
@@ -308,6 +312,8 @@ const customerSummaries: CustomerSummary[] = [
     tags: ["High spender"],
     customerType: "public",
     purchasedCategories: ["gold_and_stones"],
+    customerAgeRange: "14-21",
+    gender: "male",
     country: "IR",
     href: "/admin/customers/usr-002",
   },
@@ -486,6 +492,8 @@ const generatedCustomers: CustomerSummary[] = Array.from({ length: 22 }, (_, i) 
     customerType: segment === "vip" ? "vip" : "public",
     purchasedCategories:
       i % 2 === 0 ? (["gold_and_stones"] as PurchasedCategory[]) : (["silver_and_stones"] as PurchasedCategory[]),
+    customerAgeRange: CUSTOMER_AGE_RANGES[i % CUSTOMER_AGE_RANGES.length],
+    gender: i % 7 === 0 ? undefined : CUSTOMER_GENDERS[i % CUSTOMER_GENDERS.length],
     country: "IR",
     href: `/admin/customers/${id}`,
   };

@@ -37,6 +37,7 @@ import {
 } from "@/lib/api/customers/saved-views";
 import { filtersToSaveSummary } from "../lib/filters-to-save-summary";
 import { buildCustomerListKpis } from "../lib/customer-list-kpis";
+import { CUSTOMER_DETAIL_PAGE_ENABLED } from "../lib/customer-detail-enabled";
 import {
   downloadCsv,
   exportCustomersToCsv,
@@ -84,7 +85,10 @@ export function CustomersListView() {
       isVip: values.isVip,
     });
     refetch();
-    router.push(created.href);
+    setShowCreateModal(false);
+    if (CUSTOMER_DETAIL_PAGE_ENABLED) {
+      router.push(created.href);
+    }
   }
 
   async function handleHistoryCreate({ profile, signatureFile }: ImportProfileSubmit) {
@@ -98,7 +102,10 @@ export function CustomersListView() {
       signatureFile,
     );
     refetch();
-    router.push(created.href);
+    setShowCreateModal(false);
+    if (CUSTOMER_DETAIL_PAGE_ENABLED) {
+      router.push(created.href);
+    }
   }
 
   async function handleDeleteFromList() {
