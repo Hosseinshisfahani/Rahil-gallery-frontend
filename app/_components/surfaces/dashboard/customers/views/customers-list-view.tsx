@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/_components/core/primitive/button";
 import { Skeleton } from "@/_components/core/primitive/skeleton";
@@ -36,7 +36,7 @@ import {
   isSavedPayloadEmpty,
 } from "@/lib/api/customers/saved-views";
 import { filtersToSaveSummary } from "../lib/filters-to-save-summary";
-import { localizeCustomerListKpis } from "@/lib/i18n/admin/localized-mock";
+import { buildCustomerListKpis } from "../lib/customer-list-kpis";
 import {
   downloadCsv,
   exportCustomersToCsv,
@@ -44,7 +44,7 @@ import {
 
 export function CustomersListView() {
   const router = useRouter();
-  const { t } = useAdminT();
+  const { t, locale } = useAdminT();
   const { tag: tagLabel } = useCustomerEnumLabels();
   const {
     customers,
@@ -59,6 +59,7 @@ export function CustomersListView() {
     error,
     refetch,
     segments,
+    segmentsLoading,
   } = useCustomersList();
 
   const [showExportModal, setShowExportModal] = useState(false);
@@ -158,7 +159,10 @@ export function CustomersListView() {
   const exportDisabled =
     loading || (totalCount !== undefined ? totalCount === 0 : resultCount === 0);
 
-  const localizedKpis = localizeCustomerListKpis(t);
+  const localizedKpis = useMemo(
+    () => buildCustomerListKpis(segments, t, locale, segmentsLoading),
+    [segments, t, locale, segmentsLoading],
+  );
 
   return (
     <div className="flex flex-col gap-8">
@@ -192,7 +196,6 @@ export function CustomersListView() {
               key={kpi.id}
               label={kpi.label}
               value={kpi.value}
-              change={kpi.change}
               trend="neutral"
             />
           ))}

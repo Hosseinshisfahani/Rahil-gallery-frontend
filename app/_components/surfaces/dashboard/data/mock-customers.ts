@@ -235,13 +235,6 @@ export interface CustomerDetail extends CustomerSummary {
   importProfile?: CustomerImportProfile;
 }
 
-export interface CustomerListKpi {
-  id: string;
-  label: string;
-  value: string;
-  change?: string;
-}
-
 export interface SavedSegment {
   id: string;
   name: string;
@@ -249,11 +242,6 @@ export interface SavedSegment {
   customerCount: number;
   lastUpdated: string;
 }
-
-export const customerListKpis: CustomerListKpi[] = [
-  { id: "total", label: "Total customers", value: "2,847", change: "+124 this month" },
-  { id: "vip", label: "VIP customers", value: "186", change: "12 manual overrides" },
-];
 
 export const savedSegments: SavedSegment[] = [
   {

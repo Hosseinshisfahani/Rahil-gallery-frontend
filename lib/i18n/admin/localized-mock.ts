@@ -7,7 +7,6 @@ import {
   type DashboardKpi,
   type QuickAction,
 } from "@/_components/surfaces/dashboard/data/mock-dashboard";
-import { customerListKpis } from "@/_components/surfaces/dashboard/data/mock-customers";
 
 export function localizeDashboardKpis(t: TFunction): DashboardKpi[] {
   return dashboardKpis.map((kpi) => ({
@@ -46,14 +45,5 @@ export function localizeQuickActions(t: TFunction): QuickAction[] {
   return quickActions.map((action) => ({
     ...action,
     label: labels[action.href] ?? action.label,
-  }));
-}
-
-export function localizeCustomerListKpis(t: TFunction) {
-  const ids = ["total", "vip"] as const;
-  return customerListKpis.map((kpi, index) => ({
-    ...kpi,
-    label: t(`dashboardHome.listKpis.${ids[index]}.label`),
-    change: kpi.change ? t(`dashboardHome.listKpis.${ids[index]}.change`) : undefined,
   }));
 }
