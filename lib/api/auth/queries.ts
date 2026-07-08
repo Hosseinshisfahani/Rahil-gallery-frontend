@@ -40,7 +40,14 @@ async function parseAuthResponse<T>(
   if (!response.ok) {
     const errorBody = body as AuthErrorEnvelope | null;
     const code = errorBody?.error?.code?.toUpperCase() ?? "REQUEST_FAILED";
-    const message = errorBody?.error?.message ?? `Request failed (${response.status})`;
+    let message = errorBody?.error?.message ?? `Request failed (${response.status})`;
+    if (response.status === 404) {
+      message =
+        "API backend not found (404). Check API_PROXY_URL matches APP_PORT (default :8081). Start Rahil-Gallery-Server: make docker-dev && make dev";
+    } else if (response.status === 502 || response.status === 503) {
+      message =
+        "API backend unavailable. Start Rahil-Gallery-Server: make docker-dev && make dev";
+    }
     if (options.handleAuthFailure && isAuthError(response.status, code)) {
       handleAuthIssue();
     }

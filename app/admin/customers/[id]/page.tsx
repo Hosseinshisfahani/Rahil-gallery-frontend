@@ -15,10 +15,7 @@ export default async function AdminCustomerDetailPage({
   const { id } = await params;
 
   return (
-    <TranslatedAdminShell
-      titleKey="customers.profileTitle"
-      subtitleSuffix={id}
-    >
+    <TranslatedAdminShell titleKey="customers.profileTitle">
       <CustomerDetailView customerId={id} />
     </TranslatedAdminShell>
   );

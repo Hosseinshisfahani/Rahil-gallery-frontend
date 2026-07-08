@@ -13,8 +13,12 @@ export { CustomersTable } from "./customers-table";
 export { CustomersPagination, PAGE_SIZE_OPTIONS } from "./customers-pagination";
 export { useCustomersList } from "./hooks/use-customers-list";
 export {
+  CustomerProfileHero,
+  CustomerProfileTable,
   CustomerIdentitySection,
   CustomerImportProfileSection,
+  CustomerClassificationSection,
+  CustomerStoredMetricsSection,
   CustomerLifecycleSection,
   CustomerBehaviorSection,
   CustomerOrdersSection,

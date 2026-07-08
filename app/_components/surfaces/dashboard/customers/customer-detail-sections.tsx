@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 import { formatPrice } from "@/lib/format";
 import { isSignatureImage, signatureImageSrc } from "@/lib/signature-url";
 import { useCustomerEnumLabels } from "@/lib/i18n/admin/use-customer-labels";
@@ -67,6 +68,247 @@ function DetailField({
         {value}
       </dd>
     </div>
+  );
+}
+
+function isEmptyValue(value: React.ReactNode): boolean {
+  return (
+    value === null ||
+    value === undefined ||
+    value === "" ||
+    (Array.isArray(value) && value.length === 0)
+  );
+}
+
+function ProfileTableRow({
+  label,
+  value,
+  mono,
+  emphasis,
+}: {
+  label: string;
+  value: React.ReactNode;
+  mono?: boolean;
+  emphasis?: "error";
+}) {
+  return (
+    <tr className="profile-details-row">
+      <th scope="row">{label}</th>
+      <td>
+        {isEmptyValue(value) ? (
+          <span className="text-ink-muted">{EMPTY}</span>
+        ) : (
+          <span
+            className={cn(
+              mono && "font-mono text-ltr",
+              emphasis === "error" && "font-medium text-error",
+            )}
+            dir={mono ? "ltr" : undefined}
+          >
+            {value}
+          </span>
+        )}
+      </td>
+    </tr>
+  );
+}
+
+function ProfileSectionRow({ title }: { title: string }) {
+  return (
+    <tr className="profile-details-section">
+      <td colSpan={2}>{title}</td>
+    </tr>
+  );
+}
+
+function ProfileTable({
+  title,
+  description,
+  children,
+  className,
+}: {
+  title?: string;
+  description?: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const { t } = useAdminT();
+  const showHeader = Boolean(title);
+
+  return (
+    <DashboardCard
+      padding={showHeader ? "md" : "none"}
+      className={cn("overflow-hidden hover:shadow-sm", className)}
+    >
+      {showHeader ? (
+        <DashboardCardHeader className="mb-0 border-b border-border/60 pb-4">
+          <div>
+            <DashboardCardTitle>{title}</DashboardCardTitle>
+            {description ? (
+              <DashboardCardDescription className="mt-1">{description}</DashboardCardDescription>
+            ) : null}
+          </div>
+        </DashboardCardHeader>
+      ) : null}
+      <div className={cn("profile-details-table", showHeader && "border-t border-border/60")}>
+        <table>
+          <thead className="sr-only">
+            <tr>
+              <th scope="col">{t("customers.profile.fieldColumn")}</th>
+              <th scope="col">{t("customers.profile.valueColumn")}</th>
+            </tr>
+          </thead>
+          <tbody>{children}</tbody>
+        </table>
+      </div>
+    </DashboardCard>
+  );
+}
+
+export function CustomerProfileHero({
+  customer,
+  className,
+}: {
+  customer: CustomerDetail;
+  className?: string;
+}) {
+  const { t } = useAdminT();
+
+  const meta = [
+    t(`customers.accountStatus.${customer.status}`),
+    t(`customers.segment.${customer.segment}`),
+  ].join(" · ");
+
+  return (
+    <div
+      className={cn(
+        "rounded-[var(--radius-lg)] border border-border/70 bg-gradient-to-b from-surface-elevated/50 to-surface px-5 py-5 sm:px-6",
+        className,
+      )}
+    >
+      <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+        {customer.fullName}
+      </h2>
+      <div className="mt-3 flex flex-col gap-1.5 text-sm text-ink-muted sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5">
+        <span className="font-mono text-ltr text-ink" dir="ltr">
+          {customer.phone}
+        </span>
+        {customer.email ? (
+          <span className="text-ltr" dir="ltr">
+            {customer.email}
+          </span>
+        ) : null}
+      </div>
+      <p className="mt-3 text-xs font-medium uppercase tracking-wide text-ink-subtle">
+        {meta}
+      </p>
+    </div>
+  );
+}
+
+/** Customer record shown as a responsive field/value table. */
+export function CustomerProfileTable({
+  customer,
+  className,
+}: {
+  customer: CustomerDetail;
+  className?: string;
+}) {
+  const { t, locale } = useAdminT();
+  const { customerType, purchasedCategory, ageRange, gender, blockReason } =
+    useCustomerEnumLabels();
+
+  const purchasedCategoryText =
+    customer.purchasedCategories.length > 0
+      ? customer.purchasedCategories.map((category) => purchasedCategory(category)).join(" · ")
+      : null;
+
+  const statusLabel = t(`customers.accountStatus.${customer.status}`);
+
+  return (
+    <ProfileTable className={className}>
+      <ProfileSectionRow title={t("customers.profile.sections.account")} />
+      <ProfileTableRow
+        label={t("customers.fields.accountStatus")}
+        value={statusLabel}
+        emphasis={customer.status === "blocked" ? "error" : undefined}
+      />
+      <ProfileTableRow
+        label={t("customers.fields.registrationDate")}
+        value={formatDate(customer.registeredAt, locale)}
+      />
+      <ProfileTableRow
+        label={t("customers.fields.lastActivity")}
+        value={formatDate(customer.lastActivityAt, locale)}
+      />
+      <ProfileTableRow
+        label={t("customers.fields.preferredLanguage")}
+        value={
+          customer.locale === "fa"
+            ? t("customers.fields.localeFa")
+            : t("customers.fields.localeEn")
+        }
+      />
+      <ProfileTableRow
+        label={t("customers.fields.defaultRingSize")}
+        value={customer.defaultRingSize}
+      />
+      <ProfileTableRow
+        label={t("customers.fields.country")}
+        value={t("customers.fields.countryIran")}
+      />
+      <ProfileTableRow
+        label={t("customers.fields.importMode")}
+        value={
+          customer.importMode === "history_included"
+            ? t("customers.fields.historyIncluded")
+            : customer.importMode === "quick"
+              ? t("customers.fields.quickImport")
+              : null
+        }
+      />
+      <ProfileTableRow
+        label={t("customers.table.segment")}
+        value={t(`customers.segment.${customer.segment}`)}
+      />
+      <ProfileTableRow
+        label={t("customers.fields.vipStatus")}
+        value={customer.isVip ? t("common.yes") : t("common.no")}
+      />
+      {customer.status === "blocked" && customer.blockReason ? (
+        <>
+          <ProfileTableRow
+            label={t("customers.fields.blockReason")}
+            value={blockReason(customer.blockReason)}
+            emphasis="error"
+          />
+          <ProfileTableRow
+            label={t("customers.fields.blockNote")}
+            value={customer.blockNote}
+          />
+        </>
+      ) : null}
+
+      <ProfileSectionRow title={t("customers.profile.sections.crm")} />
+      <ProfileTableRow
+        label={t("customers.table.ageGroup")}
+        value={
+          customer.customerAgeRange ? ageRange(customer.customerAgeRange) : null
+        }
+      />
+      <ProfileTableRow
+        label={t("customers.table.gender")}
+        value={customer.gender ? gender(customer.gender) : null}
+      />
+      <ProfileTableRow
+        label={t("customers.table.customerType")}
+        value={customer.customerType ? customerType(customer.customerType) : null}
+      />
+      <ProfileTableRow
+        label={t("customers.table.productCategory")}
+        value={purchasedCategoryText}
+      />
+    </ProfileTable>
   );
 }
 
@@ -224,127 +466,215 @@ export function CustomerImportProfileSection({
   className?: string;
 }) {
   const { t, locale } = useAdminT();
-  const { customerType, purchasedCategory, ageRange } = useCustomerEnumLabels();
+  const { customerType, purchasedCategory, ageRange, gender } = useCustomerEnumLabels();
   const profile = customer.importProfile;
   if (!profile || customer.importMode !== "history_included") {
     return null;
   }
 
+  const purchasedCategoryText =
+    profile.purchasedCategories.length > 0
+      ? profile.purchasedCategories.map((category) => purchasedCategory(category)).join(" · ")
+      : null;
+
+  return (
+    <ProfileTable
+      title={t("customers.profile.importedTitle")}
+      description={t("customers.profile.importedDescription")}
+      className={className}
+    >
+      <ProfileSectionRow title={t("customers.profile.sections.personal")} />
+      <ProfileTableRow label={t("customers.fields.firstName")} value={profile.firstName} />
+      <ProfileTableRow label={t("customers.fields.lastName")} value={profile.lastName} />
+      <ProfileTableRow label={t("customers.fields.job")} value={profile.job} />
+      <ProfileTableRow label={t("customers.fields.phone")} value={profile.phone} mono />
+      <ProfileTableRow label={t("customers.fields.email")} value={profile.email} />
+      <ProfileTableRow label={t("customers.fields.address")} value={profile.address} />
+      <ProfileTableRow
+        label={t("customers.fields.gender")}
+        value={profile.gender ? gender(profile.gender) : null}
+      />
+
+      <ProfileSectionRow title={t("customers.profile.sections.dates")} />
+      <ProfileTableRow
+        label={t("customers.fields.birthday")}
+        value={profile.birthday ? formatDate(profile.birthday, locale) : null}
+      />
+      <ProfileTableRow
+        label={t("customers.fields.marriageDate")}
+        value={profile.marriageDate ? formatDate(profile.marriageDate, locale) : null}
+      />
+      <ProfileTableRow
+        label={t("customers.fields.importantDate")}
+        value={profile.importantDate ? formatDate(profile.importantDate, locale) : null}
+      />
+      <ProfileTableRow
+        label={t("customers.fields.firstVisit")}
+        value={profile.firstVisitDate ? formatDate(profile.firstVisitDate, locale) : null}
+      />
+
+      <ProfileSectionRow title={t("customers.profile.sections.crm")} />
+      <ProfileTableRow
+        label={t("customers.fields.customerType")}
+        value={customerType(profile.customerType)}
+      />
+      <ProfileTableRow
+        label={t("customers.fields.ageRange")}
+        value={profile.customerAgeRange ? ageRange(profile.customerAgeRange) : null}
+      />
+      <ProfileTableRow
+        label={t("customers.fields.purchasedCategories")}
+        value={purchasedCategoryText}
+      />
+
+      <ProfileSectionRow title={t("customers.profile.sections.notes")} />
+      <ProfileTableRow label={t("customers.fields.description")} value={profile.description} />
+      <ProfileTableRow
+        label={t("customers.fields.signature")}
+        value={
+          profile.signature ? (
+            isSignatureImage(profile.signature) ? (
+              // eslint-disable-next-line @next/next/no-img-element -- same-origin uploaded signatures
+              <img
+                src={signatureImageSrc(profile.signature)}
+                alt={t("customers.fields.signature")}
+                className="max-h-28 rounded-[var(--radius-sm)] border border-border/60 bg-surface object-contain p-2"
+              />
+            ) : (
+              <span className="font-serif italic">{profile.signature}</span>
+            )
+          ) : null
+        }
+      />
+    </ProfileTable>
+  );
+}
+
+/** CRM classification columns stored on customer_profiles / import_profile. */
+export function CustomerClassificationSection({
+  customer,
+  className,
+}: {
+  customer: CustomerDetail;
+  className?: string;
+}) {
+  const { t } = useAdminT();
+  const { customerType, purchasedCategory, ageRange, gender } = useCustomerEnumLabels();
+
   return (
     <DashboardCard className={className}>
       <DashboardCardHeader>
         <div>
-          <DashboardCardTitle>{t("customers.fields.importedProfile")}</DashboardCardTitle>
+          <DashboardCardTitle>{t("customers.fields.classification")}</DashboardCardTitle>
+          <DashboardCardDescription>
+            {t("customers.fields.classificationSubtitle")}
+          </DashboardCardDescription>
         </div>
-        <Badge variant="accent">{t("customers.fields.historyIncluded")}</Badge>
+        <CustomerSegmentBadge segment={customer.segment} />
       </DashboardCardHeader>
+      <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <DetailField
+          label={t("customers.table.ageGroup")}
+          value={
+            customer.customerAgeRange
+              ? ageRange(customer.customerAgeRange)
+              : EMPTY
+          }
+        />
+        <DetailField
+          label={t("customers.table.gender")}
+          value={customer.gender ? gender(customer.gender) : EMPTY}
+        />
+        <DetailField
+          label={t("customers.table.customerType")}
+          value={
+            customer.customerType ? customerType(customer.customerType) : EMPTY
+          }
+        />
+        <DetailField
+          label={t("customers.table.productCategory")}
+          value={
+            customer.purchasedCategories.length > 0 ? (
+              <div className="mt-1 flex flex-wrap gap-1.5">
+                {customer.purchasedCategories.map((cat) => (
+                  <Badge key={cat} variant="default">
+                    {purchasedCategory(cat)}
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              EMPTY
+            )
+          }
+        />
+        <DetailField
+          label={t("customers.fields.importMode")}
+          value={
+            customer.importMode === "history_included"
+              ? t("customers.fields.historyIncluded")
+              : customer.importMode === "quick"
+                ? t("customers.fields.quickImport")
+                : EMPTY
+          }
+        />
+      </dl>
+    </DashboardCard>
+  );
+}
 
-      <div className="flex flex-col gap-6">
-        <div>
-          <h4 className="mb-3 text-sm font-medium text-ink">
-            {t("customers.fields.identityData")}
-          </h4>
-          <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <DetailField label={t("customers.fields.firstName")} value={profile.firstName} />
-            <DetailField label={t("customers.fields.lastName")} value={profile.lastName} />
-            <DetailField label={t("customers.fields.job")} value={profile.job ?? EMPTY} />
-            <DetailField label={t("customers.fields.phone")} value={profile.phone} mono />
-            <DetailField label={t("customers.fields.email")} value={profile.email ?? EMPTY} />
-            <DetailField label={t("customers.fields.address")} value={profile.address ?? EMPTY} />
-          </dl>
-        </div>
+/** Denormalized purchase metrics stored on customer_profiles. */
+export function CustomerStoredMetricsSection({
+  customer,
+  className,
+}: {
+  customer: CustomerDetail;
+  className?: string;
+}) {
+  const { t, locale } = useAdminT();
 
+  return (
+    <DashboardCard className={className}>
+      <DashboardCardHeader>
         <div>
-          <h4 className="mb-3 text-sm font-medium text-ink">
-            {t("customers.fields.importantDates")}
-          </h4>
-          <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <DetailField
-              label={t("customers.fields.birthday")}
-              value={profile.birthday ? formatDate(profile.birthday, locale) : EMPTY}
-            />
-            <DetailField
-              label={t("customers.fields.marriageDate")}
-              value={profile.marriageDate ? formatDate(profile.marriageDate, locale) : EMPTY}
-            />
-            <DetailField
-              label={t("customers.fields.importantDate")}
-              value={profile.importantDate ? formatDate(profile.importantDate, locale) : EMPTY}
-            />
-            <DetailField
-              label={t("customers.fields.firstVisit")}
-              value={profile.firstVisitDate ? formatDate(profile.firstVisitDate, locale) : EMPTY}
-            />
-          </dl>
+          <DashboardCardTitle>{t("customers.fields.storedMetrics")}</DashboardCardTitle>
+          <DashboardCardDescription>
+            {t("customers.fields.storedMetricsSubtitle")}
+          </DashboardCardDescription>
         </div>
-
-        <div>
-          <h4 className="mb-3 text-sm font-medium text-ink">
-            {t("customers.fields.classification")}
-          </h4>
-          <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <DetailField
-              label={t("customers.fields.customerType")}
-              value={customerType(profile.customerType)}
-            />
-            <DetailField
-              label={t("customers.fields.ageRange")}
-              value={
-                profile.customerAgeRange
-                  ? ageRange(profile.customerAgeRange)
-                  : EMPTY
-              }
-            />
-            <DetailField
-              label={t("customers.fields.purchasedCategories")}
-              value={
-                profile.purchasedCategories.length > 0 ? (
-                  <div className="mt-1 flex flex-wrap gap-1.5">
-                    {profile.purchasedCategories.map((cat) => (
-                      <Badge key={cat} variant="default">
-                        {purchasedCategory(cat)}
-                      </Badge>
-                    ))}
-                  </div>
-                ) : (
-                  EMPTY
-                )
-              }
-            />
-          </dl>
-        </div>
-
-        <div>
-          <h4 className="mb-3 text-sm font-medium text-ink">
-            {t("customers.fields.experienceSignature")}
-          </h4>
-          <dl className="grid gap-4">
-            <DetailField
-              label={t("customers.fields.description")}
-              value={profile.description ?? EMPTY}
-            />
-            <DetailField
-              label={t("customers.fields.signature")}
-              value={
-                profile.signature ? (
-                  isSignatureImage(profile.signature) ? (
-                    // eslint-disable-next-line @next/next/no-img-element -- same-origin uploaded signatures
-                    <img
-                      src={signatureImageSrc(profile.signature)}
-                      alt={t("customers.fields.signature")}
-                      className="max-h-24 max-w-full object-contain"
-                    />
-                  ) : (
-                    <span className="font-serif italic">{profile.signature}</span>
-                  )
-                ) : (
-                  EMPTY
-                )
-              }
-            />
-          </dl>
-        </div>
-      </div>
+      </DashboardCardHeader>
+      <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <DetailField label={t("customers.fields.totalOrders")} value={customer.totalOrders} />
+        <DetailField
+          label={t("customers.fields.totalSpend")}
+          value={customer.totalLtv > 0 ? formatPrice(customer.totalLtv) : EMPTY}
+        />
+        <DetailField
+          label={t("customers.fields.firstPurchase")}
+          value={
+            customer.firstPurchaseDate
+              ? formatDate(customer.firstPurchaseDate, locale)
+              : EMPTY
+          }
+        />
+        <DetailField
+          label={t("customers.fields.lastPurchase")}
+          value={
+            customer.lastPurchaseDate
+              ? formatDate(customer.lastPurchaseDate, locale)
+              : EMPTY
+          }
+        />
+        <DetailField
+          label={t("customers.fields.vipStatus")}
+          value={
+            customer.isVip ? t("customers.fields.vipYesManual") : t("common.no")
+          }
+        />
+        <DetailField
+          label={t("customers.table.segment")}
+          value={<CustomerSegmentBadge segment={customer.segment} />}
+        />
+      </dl>
     </DashboardCard>
   );
 }

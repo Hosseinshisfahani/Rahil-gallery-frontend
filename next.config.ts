@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const apiProxyUrl = process.env.API_PROXY_URL ?? "http://localhost:8080";
+const apiProxyUrl = process.env.API_PROXY_URL ?? "http://localhost:8081";
 const apiBaseUrl =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ?? "/api/v1";
 

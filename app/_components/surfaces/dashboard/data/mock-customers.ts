@@ -146,6 +146,7 @@ export interface CustomerSummary {
   id: string;
   fullName: string;
   phone: string;
+  importProfile?: CustomerImportProfile;
   registeredAt: string;
   lastActivityAt: string;
   lastPurchaseDate?: string;

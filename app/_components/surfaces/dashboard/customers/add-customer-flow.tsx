@@ -1,23 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 import { Button } from "@/_components/core/primitive/button";
 import type { CustomerImportProfile } from "../data/mock-customers";
 import { useAdminT } from "../layout/admin-locale-provider";
 import { ModalShell } from "./modal-shell";
-import {
-  CreateCustomerModal,
-  type CustomerFormValues,
-} from "./customer-crud-modals";
 import {
   CustomerHistoryImportForm,
   emptyImportProfile,
   importProfileToForm,
   validateImportProfile,
 } from "./customer-history-import-form";
-
-type AddStep = "choose" | "quick" | "history";
 
 export interface ImportProfileSubmit {
   profile: CustomerImportProfile;
@@ -26,87 +19,23 @@ export interface ImportProfileSubmit {
 }
 
 export interface AddCustomerFlowModalProps {
-  onQuickAdd: (values: CustomerFormValues) => Promise<void>;
-  onHistoryAdd: (payload: ImportProfileSubmit) => Promise<void>;
+  onSubmit: (payload: ImportProfileSubmit) => Promise<void>;
   onClose: () => void;
 }
 
 export function AddCustomerFlowModal({
-  onQuickAdd,
-  onHistoryAdd,
+  onSubmit,
   onClose,
 }: AddCustomerFlowModalProps) {
-  const { t } = useAdminT();
-  const [step, setStep] = useState<AddStep>("choose");
-
-  if (step === "quick") {
-    return (
-      <CreateCustomerModal
-        onClose={() => setStep("choose")}
-        onConfirm={async (values) => {
-          await onQuickAdd(values);
-          onClose();
-        }}
-      />
-    );
-  }
-
-  if (step === "history") {
-    return (
-      <HistoryIncludedImportModal
-        onClose={() => setStep("choose")}
-        onConfirm={async (payload) => {
-          await onHistoryAdd(payload);
-          onClose();
-        }}
-      />
-    );
-  }
-
+  useAdminT();
   return (
-    <ModalShell
-      title={t("customers.modals.addFlow.title")}
+    <HistoryIncludedImportModal
       onClose={onClose}
-      size="md"
-      footer={
-        <Button variant="ghost" onClick={onClose}>
-          {t("common.cancel")}
-        </Button>
-      }
-    >
-      <div className="grid gap-3 sm:grid-cols-2">
-        <button
-          type="button"
-          onClick={() => setStep("quick")}
-          className={cn(
-            "flex flex-col gap-2 rounded-[var(--radius-md)] border p-4 text-start transition-colors",
-            "border-border bg-surface hover:border-primary hover:bg-surface-elevated/80",
-          )}
-        >
-          <span className="text-sm font-semibold text-ink">
-            {t("customers.modals.addFlow.quickAdd")}
-          </span>
-          <span className="text-xs text-ink-muted">
-            {t("customers.modals.addFlow.quickAddDesc")}
-          </span>
-        </button>
-        <button
-          type="button"
-          onClick={() => setStep("history")}
-          className={cn(
-            "flex flex-col gap-2 rounded-[var(--radius-md)] border p-4 text-start transition-colors",
-            "border-border bg-surface hover:border-accent hover:bg-accent/5",
-          )}
-        >
-          <span className="text-sm font-semibold text-ink">
-            {t("customers.modals.addFlow.historyIncluded")}
-          </span>
-          <span className="text-xs text-ink-muted">
-            {t("customers.modals.addFlow.historyIncludedDesc")}
-          </span>
-        </button>
-      </div>
-    </ModalShell>
+      onConfirm={async (payload) => {
+        await onSubmit(payload);
+        onClose();
+      }}
+    />
   );
 }
 
@@ -190,10 +119,19 @@ export function EditHistoryImportModal({
   onClose,
 }: EditHistoryImportModalProps) {
   const { t } = useAdminT();
+  const fullNameParts = customer.fullName.trim().split(/\s+/);
+  const derivedFirst = fullNameParts[0] ?? "";
+  const derivedLast = fullNameParts.slice(1).join(" ");
   const [values, setValues] = useState(() =>
     customer.importProfile
       ? importProfileToForm(customer.importProfile)
-      : emptyImportProfile(),
+      : {
+          ...emptyImportProfile(),
+          firstName: derivedFirst,
+          lastName: derivedLast,
+          phone: customer.phone ?? "",
+          email: customer.email ?? "",
+        },
   );
   const [signatureFile, setSignatureFile] = useState<File | null>(null);
   const [removeSignature, setRemoveSignature] = useState(false);

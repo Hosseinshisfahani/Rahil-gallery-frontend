@@ -18,7 +18,6 @@ import { ExportConfirmModal, SaveFiltersModal } from "../customer-action-modals"
 import { AddCustomerFlowModal } from "../add-customer-flow";
 import {
   DeleteCustomerModal,
-  type CustomerFormValues,
 } from "../customer-crud-modals";
 import { useCustomersList } from "../hooks/use-customers-list";
 import { useAdminT } from "../../layout/admin-locale-provider";
@@ -73,23 +72,6 @@ export function CustomersListView() {
   const [showSaveFiltersModal, setShowSaveFiltersModal] = useState(false);
   const [savingFilters, setSavingFilters] = useState(false);
   const [saveFiltersError, setSaveFiltersError] = useState<string | null>(null);
-
-  async function handleQuickCreate(values: CustomerFormValues) {
-    const created = await createCustomer({
-      importMode: "quick",
-      fullName: values.fullName,
-      phone: values.phone,
-      email: values.email || undefined,
-      locale: values.locale,
-      defaultRingSize: values.defaultRingSize || undefined,
-      isVip: values.isVip,
-    });
-    refetch();
-    setShowCreateModal(false);
-    if (CUSTOMER_DETAIL_PAGE_ENABLED) {
-      router.push(created.href);
-    }
-  }
 
   async function handleHistoryCreate({ profile, signatureFile }: ImportProfileSubmit) {
     const created = await createCustomerWithImportProfile(
@@ -279,8 +261,7 @@ export function CustomersListView() {
       {showCreateModal && (
         <AddCustomerFlowModal
           onClose={() => setShowCreateModal(false)}
-          onQuickAdd={handleQuickCreate}
-          onHistoryAdd={handleHistoryCreate}
+          onSubmit={handleHistoryCreate}
         />
       )}
 
