@@ -1,8 +1,8 @@
 import type { CustomerDetail } from "@/_components/surfaces/dashboard/data/mock-customers";
 import type { CustomerImportProfile } from "@/_components/surfaces/dashboard/data/mock-customers";
 import { buildApiUrl } from "../config";
-import { getAccessToken, handleAuthIssue, isAuthError } from "../auth/session";
-import { refreshAccessToken } from "../auth/queries";
+import { ensureValidAccessToken, refreshAccessToken } from "../auth/refresh-coordinator";
+import { handleAuthIssue, isAuthError } from "../auth/session";
 import { ApiError, type ApiErrorBody } from "../types";
 import { updateCustomer } from "./mutations";
 
@@ -50,7 +50,7 @@ async function uploadSignatureRequest(
   const path = buildApiUrl(`${CUSTOMERS_PATH}/${customerId}/signature`);
   const url = path.startsWith("http") ? path : `${origin}${path}`;
 
-  const token = getAccessToken();
+  const token = await ensureValidAccessToken();
   const headers: Record<string, string> = { Accept: "application/json" };
   if (token) headers.Authorization = `Bearer ${token}`;
 

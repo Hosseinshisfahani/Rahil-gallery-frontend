@@ -4,8 +4,9 @@
 
 | File | Trigger | Action |
 |------|---------|--------|
-| `.github/workflows/ci.yml` | push / PR | lint + build |
-| `.github/workflows/deploy.yml` | push to `master` | Standalone build → SCP → PM2 reload |
+| `.github/workflows/ci-cd.yml` | push / PR / manual / `deploy-after-api` | CI on every run; deploy to VPS only after CI passes |
+
+The client also deploys automatically when the API pipeline finishes (repository dispatch).
 
 ## Required GitHub secrets
 

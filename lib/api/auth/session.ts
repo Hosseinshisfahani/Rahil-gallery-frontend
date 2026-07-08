@@ -3,6 +3,9 @@ const REFRESH_TOKEN_KEY = "rehil_refresh_token";
 const EXPIRES_AT_KEY = "rehil_token_expires_at";
 const AUTH_EXPIRED_EVENT = "rehil:auth-expired";
 
+/** Refresh access token this many ms before it expires. */
+export const ACCESS_TOKEN_REFRESH_BUFFER_MS = 60_000;
+
 export interface AuthSession {
   accessToken: string;
   refreshToken: string;
@@ -17,19 +20,37 @@ export function getDevAccessToken(): string | null {
   return process.env.NEXT_PUBLIC_DEV_ACCESS_TOKEN?.trim() || null;
 }
 
+export function getStoredAccessToken(): string | null {
+  if (!canUseSessionStorage()) return null;
+  return sessionStorage.getItem(ACCESS_TOKEN_KEY);
+}
+
+export function getAccessTokenExpiresAt(): number | null {
+  if (!canUseSessionStorage()) return null;
+
+  const raw = sessionStorage.getItem(EXPIRES_AT_KEY);
+  if (!raw) return null;
+
+  const expiresAt = Number(raw);
+  return Number.isFinite(expiresAt) && expiresAt > 0 ? expiresAt : null;
+}
+
+export function isAccessTokenExpired(bufferMs = 0): boolean {
+  const expiresAt = getAccessTokenExpiresAt();
+  if (!expiresAt) return false;
+
+  return Date.now() >= expiresAt - bufferMs;
+}
+
+/** Returns a usable access token, or null when missing/expired (refresh token is kept). */
 export function getAccessToken(): string | null {
   const devToken = getDevAccessToken();
   if (devToken) return devToken;
 
-  if (!canUseSessionStorage()) return null;
-
-  const token = sessionStorage.getItem(ACCESS_TOKEN_KEY);
+  const token = getStoredAccessToken();
   if (!token) return null;
 
-  const expiresAt = Number(sessionStorage.getItem(EXPIRES_AT_KEY) ?? "0");
-  if (expiresAt > 0 && Date.now() >= expiresAt) {
-    clearAuthSession();
-    notifyAuthExpired();
+  if (isAccessTokenExpired()) {
     return null;
   }
 
@@ -64,8 +85,18 @@ export function clearAuthSession(): void {
   sessionStorage.removeItem(EXPIRES_AT_KEY);
 }
 
+/** True when a refresh token exists or the access token is still valid. */
 export function hasAuthSession(): boolean {
-  return Boolean(getAccessToken());
+  if (getDevAccessToken()) return true;
+  if (!canUseSessionStorage()) return false;
+
+  const refreshToken = getRefreshToken();
+  const accessToken = getStoredAccessToken();
+
+  if (!accessToken && !refreshToken) return false;
+  if (accessToken && !isAccessTokenExpired()) return true;
+
+  return Boolean(refreshToken);
 }
 
 export function isAuthError(status: number, code?: string): boolean {

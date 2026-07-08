@@ -1,6 +1,6 @@
 import { buildApiUrl } from "./config";
-import { refreshAccessToken } from "./auth/queries";
-import { getAccessToken, handleAuthIssue, isAuthError } from "./auth/session";
+import { ensureValidAccessToken, refreshAccessToken } from "./auth/refresh-coordinator";
+import { handleAuthIssue, isAuthError } from "./auth/session";
 import { ApiError, type ApiErrorBody } from "./types";
 
 export interface ApiRequestOptions extends Omit<RequestInit, "body"> {
@@ -35,10 +35,10 @@ function buildUrl(path: string, params?: ApiRequestOptions["params"]): string {
   return `${url.pathname}${url.search}`;
 }
 
-function buildAuthHeaders(skipAuth?: boolean): Record<string, string> {
+async function resolveAuthHeader(skipAuth?: boolean): Promise<Record<string, string>> {
   if (skipAuth) return {};
 
-  const token = getAccessToken();
+  const token = await ensureValidAccessToken();
   if (!token) return {};
 
   return { Authorization: `Bearer ${token}` };
@@ -71,7 +71,7 @@ export async function apiRequest<T>(
     ...init,
     headers: {
       Accept: "application/json",
-      ...buildAuthHeaders(skipAuth),
+      ...(await resolveAuthHeader(skipAuth)),
       ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
       ...headers,
     },

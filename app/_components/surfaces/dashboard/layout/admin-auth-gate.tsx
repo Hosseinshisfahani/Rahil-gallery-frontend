@@ -2,7 +2,8 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { hasAuthSession } from "@/lib/api/auth";
+import { ensureValidAccessToken } from "@/lib/api/auth/refresh-coordinator";
+import { hasAuthSession } from "@/lib/api/auth/session";
 import { useAdminT } from "./admin-locale-provider";
 
 export interface AdminAuthGateProps {
@@ -23,13 +24,32 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
       return;
     }
 
-    if (hasAuthSession()) {
+    let cancelled = false;
+
+    async function restoreSession() {
+      if (!hasAuthSession()) {
+        const next = encodeURIComponent(pathname);
+        router.replace(`/admin/login?next=${next}`);
+        return;
+      }
+
+      const token = await ensureValidAccessToken();
+      if (cancelled) return;
+
+      if (!token) {
+        const next = encodeURIComponent(pathname);
+        router.replace(`/admin/login?next=${next}`);
+        return;
+      }
+
       setReady(true);
-      return;
     }
 
-    const next = encodeURIComponent(pathname);
-    router.replace(`/admin/login?next=${next}`);
+    void restoreSession();
+
+    return () => {
+      cancelled = true;
+    };
   }, [isLoginRoute, pathname, router]);
 
   if (!ready && !isLoginRoute) {
