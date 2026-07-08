@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useMemo, useId, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/_components/core/primitive/button";
 import { validateSignatureFile } from "@/lib/api/customers/signature";
@@ -33,23 +33,26 @@ export function CustomerSignatureField({
   const { t } = useAdminT();
   const inputId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const objectPreviewUrl = useMemo(
+    () => (pendingFile ? URL.createObjectURL(pendingFile) : null),
+    [pendingFile],
+  );
+
   useEffect(() => {
-    if (pendingFile) {
-      const objectUrl = URL.createObjectURL(pendingFile);
-      setPreviewUrl(objectUrl);
-      return () => URL.revokeObjectURL(objectUrl);
-    }
+    return () => {
+      if (objectPreviewUrl) {
+        URL.revokeObjectURL(objectPreviewUrl);
+      }
+    };
+  }, [objectPreviewUrl]);
 
-    if (signatureUrl && isSignatureImage(signatureUrl)) {
-      setPreviewUrl(signatureImageSrc(signatureUrl) ?? null);
-      return;
-    }
-
-    setPreviewUrl(null);
-  }, [pendingFile, signatureUrl]);
+  const previewUrl = pendingFile
+    ? objectPreviewUrl
+    : signatureUrl && isSignatureImage(signatureUrl)
+      ? signatureImageSrc(signatureUrl) ?? null
+      : null;
 
   function handleFileSelect(file: File | null) {
     setError(null);

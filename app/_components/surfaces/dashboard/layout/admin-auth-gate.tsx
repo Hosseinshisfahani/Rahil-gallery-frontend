@@ -14,15 +14,11 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { t } = useAdminT();
-  const [ready, setReady] = useState(false);
-
   const isLoginRoute = pathname === "/admin/login";
+  const [sessionReady, setSessionReady] = useState(false);
 
   useEffect(() => {
-    if (isLoginRoute) {
-      setReady(true);
-      return;
-    }
+    if (isLoginRoute) return;
 
     let cancelled = false;
 
@@ -42,7 +38,7 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
         return;
       }
 
-      setReady(true);
+      setSessionReady(true);
     }
 
     void restoreSession();
@@ -52,7 +48,11 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
     };
   }, [isLoginRoute, pathname, router]);
 
-  if (!ready && !isLoginRoute) {
+  if (isLoginRoute) {
+    return children;
+  }
+
+  if (!sessionReady) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-canvas text-sm text-ink-muted">
         {t("auth.checkingSession")}

@@ -11,7 +11,6 @@ import {
 } from "react";
 import {
   applyAdminLocale,
-  DEFAULT_ADMIN_LOCALE,
   persistAdminLocale,
   readStoredAdminLocale,
   type AdminLocale,
@@ -28,11 +27,9 @@ type AdminLocaleContextValue = {
 const AdminLocaleContext = createContext<AdminLocaleContextValue | null>(null);
 
 export function AdminLocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<AdminLocale>(DEFAULT_ADMIN_LOCALE);
-
-  useEffect(() => {
-    setLocaleState(readStoredAdminLocale());
-  }, []);
+  const [locale, setLocaleState] = useState<AdminLocale>(() =>
+    readStoredAdminLocale(),
+  );
 
   const setLocale = useCallback((next: AdminLocale) => {
     persistAdminLocale(next);

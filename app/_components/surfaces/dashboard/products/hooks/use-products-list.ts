@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ProductSummary } from "@/lib/api/products/types";
 import { listProducts } from "@/lib/api/products";
 import type { PaginationMeta } from "@/lib/api/types";
@@ -40,11 +40,17 @@ export function useProductsList(): UseProductsListResult {
   const [error, setError] = useState<string | null>(null);
   const [fetchKey, setFetchKey] = useState(0);
 
+  const skipInitialListReset = useRef(true);
+
   useEffect(() => {
-    const timer = window.setTimeout(
-      () => setDebouncedQuery(filters.query),
-      SEARCH_DEBOUNCE_MS,
-    );
+    const timer = window.setTimeout(() => {
+      setDebouncedQuery((previous) => {
+        if (previous !== filters.query) {
+          setPage(1);
+        }
+        return filters.query;
+      });
+    }, SEARCH_DEBOUNCE_MS);
     return () => window.clearTimeout(timer);
   }, [filters.query]);
 
@@ -64,15 +70,14 @@ export function useProductsList(): UseProductsListResult {
   }, []);
 
   useEffect(() => {
-    setPage(1);
-  }, [debouncedQuery]);
-
-  useEffect(() => {
     const controller = new AbortController();
 
     async function load() {
-      setLoading(true);
-      setError(null);
+      if (!skipInitialListReset.current) {
+        setLoading(true);
+        setError(null);
+      }
+      skipInitialListReset.current = false;
 
       try {
         const result = await listProducts({
@@ -106,7 +111,7 @@ export function useProductsList(): UseProductsListResult {
       }
     }
 
-    load();
+    void load();
     return () => controller.abort();
   }, [requestFilters, page, perPage, fetchKey, t]);
 

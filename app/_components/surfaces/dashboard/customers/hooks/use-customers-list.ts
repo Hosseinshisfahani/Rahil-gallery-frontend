@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { readStoredAdminLocale } from "@/lib/admin-locale";
 import { getAdminMessage } from "@/lib/i18n/admin";
 import type { CustomerSummary } from "../../data/mock-customers";
@@ -50,10 +50,14 @@ export function useCustomersList(): UseCustomersListResult {
   const [segmentsLoading, setSegmentsLoading] = useState(true);
 
   useEffect(() => {
-    const timer = window.setTimeout(
-      () => setDebouncedQuery(filters.query),
-      SEARCH_DEBOUNCE_MS,
-    );
+    const timer = window.setTimeout(() => {
+      setDebouncedQuery((previous) => {
+        if (previous !== filters.query) {
+          setPage(1);
+        }
+        return filters.query;
+      });
+    }, SEARCH_DEBOUNCE_MS);
     return () => window.clearTimeout(timer);
   }, [filters.query]);
 
@@ -72,15 +76,18 @@ export function useCustomersList(): UseCustomersListResult {
     setPage(1);
   }, []);
 
-  useEffect(() => {
-    setPage(1);
-  }, [debouncedQuery]);
+  const skipInitialListReset = useRef(true);
+  const skipInitialSegmentsReset = useRef(true);
 
   useEffect(() => {
     const controller = new AbortController();
 
     async function loadSegments() {
-      setSegmentsLoading(true);
+      if (!skipInitialSegmentsReset.current) {
+        setSegmentsLoading(true);
+      }
+      skipInitialSegmentsReset.current = false;
+
       try {
         const data = await getCustomerSegments(controller.signal);
         setSegments(data);
@@ -95,7 +102,7 @@ export function useCustomersList(): UseCustomersListResult {
       }
     }
 
-    loadSegments();
+    void loadSegments();
     return () => controller.abort();
   }, [fetchKey]);
 
@@ -103,8 +110,11 @@ export function useCustomersList(): UseCustomersListResult {
     const controller = new AbortController();
 
     async function load() {
-      setLoading(true);
-      setError(null);
+      if (!skipInitialListReset.current) {
+        setLoading(true);
+        setError(null);
+      }
+      skipInitialListReset.current = false;
 
       try {
         const result = await listCustomers({
@@ -138,7 +148,7 @@ export function useCustomersList(): UseCustomersListResult {
       }
     }
 
-    load();
+    void load();
     return () => controller.abort();
   }, [requestFilters, page, perPage, fetchKey]);
 

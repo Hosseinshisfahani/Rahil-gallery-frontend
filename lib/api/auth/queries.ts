@@ -1,11 +1,10 @@
 import { ApiError } from "../types";
 import type { AuthTokenPair, AuthUser, LoginInput } from "./types";
 import { parseAuthResponse, resolveAuthUrl } from "./auth-fetch";
-import { ensureValidAccessToken, refreshAccessToken } from "./refresh-coordinator";
+import { ensureValidAccessToken } from "./refresh-coordinator";
 import {
   clearAuthSession,
   getRefreshToken,
-  handleAuthIssue,
   setAuthSession,
 } from "./session";
 

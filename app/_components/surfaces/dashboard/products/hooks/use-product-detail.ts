@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Category, ProductDetail } from "@/lib/api/products/types";
 import {
   addProductImage,
@@ -31,9 +31,11 @@ export function useProductDetail(productId: string) {
   const [error, setError] = useState<string | null>(null);
   const [mutating, setMutating] = useState(false);
 
-  const load = useCallback(async (signal?: AbortSignal) => {
-    setLoading(true);
-    setError(null);
+  const load = useCallback(async (signal?: AbortSignal, resetPending = true) => {
+    if (resetPending) {
+      setLoading(true);
+      setError(null);
+    }
     try {
       const [data, categoryList] = await Promise.all([
         getProduct(productId, signal),
@@ -50,9 +52,12 @@ export function useProductDetail(productId: string) {
     }
   }, [productId, t]);
 
+  const skipInitialLoadReset = useRef(true);
+
   useEffect(() => {
     const controller = new AbortController();
-    load(controller.signal);
+    void load(controller.signal, !skipInitialLoadReset.current);
+    skipInitialLoadReset.current = false;
     return () => controller.abort();
   }, [load]);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { readStoredAdminLocale } from "@/lib/admin-locale";
 import { getAdminMessage } from "@/lib/i18n/admin";
 import type {
@@ -32,9 +32,11 @@ export function useCustomerDetail(customerId: string) {
   const [error, setError] = useState<string | null>(null);
   const [mutating, setMutating] = useState(false);
 
-  const load = useCallback(async (signal?: AbortSignal) => {
-    setLoading(true);
-    setError(null);
+  const load = useCallback(async (signal?: AbortSignal, resetPending = true) => {
+    if (resetPending) {
+      setLoading(true);
+      setError(null);
+    }
     try {
       const data = await getCustomer(customerId, signal);
       setCustomer(data);
@@ -47,9 +49,12 @@ export function useCustomerDetail(customerId: string) {
     }
   }, [customerId]);
 
+  const skipInitialLoadReset = useRef(true);
+
   useEffect(() => {
     const controller = new AbortController();
-    load(controller.signal);
+    void load(controller.signal, !skipInitialLoadReset.current);
+    skipInitialLoadReset.current = false;
     return () => controller.abort();
   }, [load]);
 

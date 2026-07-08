@@ -1,33 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import {
-  applyDashboardTheme,
-  persistDashboardTheme,
-  resolveDashboardTheme,
-  type DashboardTheme,
-} from "@/lib/dashboard-theme";
+import { useEffect } from "react";
+import { applyDashboardTheme } from "@/lib/dashboard-theme";
+import { useDashboardThemeStore } from "@/lib/use-dashboard-theme-store";
 
 export function useDashboardTheme() {
-  const [theme, setThemeState] = useState<DashboardTheme>("light");
-  const [ready, setReady] = useState(false);
+  const { theme, setTheme, toggle } = useDashboardThemeStore();
 
   useEffect(() => {
-    const resolved = resolveDashboardTheme();
-    setThemeState(resolved);
-    applyDashboardTheme(resolved);
-    setReady(true);
-  }, []);
+    applyDashboardTheme(theme);
+  }, [theme]);
 
-  const setTheme = useCallback((next: DashboardTheme) => {
-    setThemeState(next);
-    applyDashboardTheme(next);
-    persistDashboardTheme(next);
-  }, []);
-
-  const toggle = useCallback(() => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  }, [setTheme, theme]);
-
-  return { theme, setTheme, toggle, ready };
+  return { theme, setTheme, toggle, ready: true };
 }
