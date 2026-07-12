@@ -30,7 +30,9 @@ import { CUSTOMER_DETAIL_PAGE_ENABLED } from "./lib/customer-detail-enabled";
 
 export interface CustomersTableProps {
   customers: CustomerSummary[];
+  onEdit?: (customer: CustomerSummary) => void;
   onDelete?: (customer: CustomerSummary) => void;
+  editingCustomerId?: string | null;
   className?: string;
 }
 
@@ -61,7 +63,9 @@ function sortPurchasedCategories(categories: PurchasedCategory[]): PurchasedCate
 
 export function CustomersTable({
   customers,
+  onEdit,
   onDelete,
+  editingCustomerId,
   className,
 }: CustomersTableProps) {
   const { t } = useAdminT();
@@ -91,7 +95,9 @@ export function CustomersTable({
           <th className={tableThClass}>
             {t("customers.table.productCategory")}
           </th>
-          {onDelete && <th className={tableThClass}>{t("common.actions")}</th>}
+          {(onEdit || onDelete) && (
+            <th className={tableThClass}>{t("common.actions")}</th>
+          )}
         </tr>
       </thead>
       <tbody>
@@ -169,7 +175,7 @@ export function CustomersTable({
                   <span className="text-sm text-ink-muted">—</span>
                 )}
               </TableCell>
-              {onDelete && (
+              {(onEdit || onDelete) && (
                 <TableCell label={t("common.actions")} layout="actions" className="py-3">
                   <div className="flex items-center gap-2">
                     {CUSTOMER_DETAIL_PAGE_ENABLED && (
@@ -180,17 +186,31 @@ export function CustomersTable({
                         {t("common.view")}
                       </Link>
                     )}
-                    <button
-                      type="button"
-                      onClick={() => onDelete(customer)}
-                      className={buttonVariants({
-                        variant: "ghost",
-                        size: "sm",
-                        className: "text-error hover:text-error",
-                      })}
-                    >
-                      {t("common.delete")}
-                    </button>
+                    {onEdit && (
+                      <button
+                        type="button"
+                        onClick={() => onEdit(customer)}
+                        disabled={editingCustomerId === customer.id}
+                        className={buttonVariants({ variant: "ghost", size: "sm" })}
+                      >
+                        {editingCustomerId === customer.id
+                          ? t("common.loading")
+                          : t("common.edit")}
+                      </button>
+                    )}
+                    {onDelete && (
+                      <button
+                        type="button"
+                        onClick={() => onDelete(customer)}
+                        className={buttonVariants({
+                          variant: "ghost",
+                          size: "sm",
+                          className: "text-error hover:text-error",
+                        })}
+                      >
+                        {t("common.delete")}
+                      </button>
+                    )}
                   </div>
                 </TableCell>
               )}

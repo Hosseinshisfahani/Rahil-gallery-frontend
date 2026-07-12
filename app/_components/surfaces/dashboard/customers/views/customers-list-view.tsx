@@ -14,13 +14,14 @@ import { CustomersFilters } from "../customers-filters";
 import { CustomersTable } from "../customers-table";
 import { CustomersPagination } from "../customers-pagination";
 import { ExportConfirmModal } from "../customer-action-modals";
-import { AddCustomerFlowModal } from "../add-customer-flow";
+import { AddCustomerFlowModal, EditHistoryImportModal } from "../add-customer-flow";
 import { DeleteCustomerModal } from "../customer-crud-modals";
 import { useCustomersList } from "../hooks/use-customers-list";
 import { useAdminT } from "../../layout/admin-locale-provider";
-import { createCustomer, deleteCustomer } from "@/lib/api/customers";
-import { createCustomerWithImportProfile } from "@/lib/api/customers/signature";
+import { createCustomer, deleteCustomer, getCustomer } from "@/lib/api/customers";
+import { createCustomerWithImportProfile, saveCustomerImportProfile } from "@/lib/api/customers/signature";
 import type { ImportProfileSubmit } from "../add-customer-flow";
+import type { CustomerDetail } from "@/lib/api/customers/types";
 import { CUSTOMER_DETAIL_PAGE_ENABLED } from "../lib/customer-detail-enabled";
 import {
   downloadCsv,
@@ -49,6 +50,9 @@ export function CustomersListView() {
     id: string;
     name: string;
   } | null>(null);
+  const [editCustomer, setEditCustomer] = useState<CustomerDetail | null>(null);
+  const [editingCustomerId, setEditingCustomerId] = useState<string | null>(null);
+  const [editError, setEditError] = useState<string | null>(null);
 
   async function handleHistoryCreate({ profile, signatureFile }: ImportProfileSubmit) {
     const created = await createCustomerWithImportProfile(
@@ -71,6 +75,39 @@ export function CustomersListView() {
     if (!deleteTarget) return;
     await deleteCustomer(deleteTarget.id);
     setDeleteTarget(null);
+    refetch();
+  }
+
+  async function openEdit(customerId: string) {
+    if (editingCustomerId) return;
+    setEditingCustomerId(customerId);
+    setEditError(null);
+    try {
+      const customer = await getCustomer(customerId);
+      setEditCustomer(customer);
+    } catch (err) {
+      setEditError(
+        err instanceof Error ? err.message : t("customers.modals.edit.failed"),
+      );
+    } finally {
+      setEditingCustomerId(null);
+    }
+  }
+
+  function closeEdit() {
+    setEditCustomer(null);
+    setEditError(null);
+  }
+
+  async function handleEditSave(payload: ImportProfileSubmit) {
+    if (!editCustomer) return;
+    await saveCustomerImportProfile({
+      customerId: editCustomer.id,
+      profile: payload.profile,
+      signatureFile: payload.signatureFile,
+      removeSignature: payload.removeSignature,
+    });
+    closeEdit();
     refetch();
   }
 
@@ -153,6 +190,23 @@ export function CustomersListView() {
             </div>
           )}
 
+          {editError && (
+            <div
+              className="mt-4 rounded-[var(--radius-md)] border border-error/30 bg-error/5 p-4"
+              role="alert"
+            >
+              <p className="text-sm font-medium text-error">{editError}</p>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="mt-2"
+                onClick={() => setEditError(null)}
+              >
+                {t("common.closeDialog")}
+              </Button>
+            </div>
+          )}
+
           <div className="relative mt-6">
             {loading && (
               <div className="absolute inset-0 z-10 flex flex-col gap-2 bg-surface/80 p-4 backdrop-blur-[1px]">
@@ -163,6 +217,8 @@ export function CustomersListView() {
             )}
             <CustomersTable
               customers={customers}
+              editingCustomerId={editingCustomerId}
+              onEdit={(customer) => void openEdit(customer.id)}
               onDelete={(customer) =>
                 setDeleteTarget({ id: customer.id, name: customer.fullName })
               }
@@ -195,6 +251,14 @@ export function CustomersListView() {
           customerId={deleteTarget.id}
           onClose={() => setDeleteTarget(null)}
           onConfirm={handleDeleteFromList}
+        />
+      )}
+
+      {editCustomer && (
+        <EditHistoryImportModal
+          customer={editCustomer}
+          onClose={closeEdit}
+          onConfirm={handleEditSave}
         />
       )}
 
