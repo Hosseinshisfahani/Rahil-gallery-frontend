@@ -359,6 +359,11 @@ export const adminMessagesEnExtra = {
         title: "Edit customer profile",
         failed: "Failed to update customer",
       },
+      errors: {
+        phoneExists: "This phone number is already registered",
+        emailExists: "This email is already registered",
+        validation: "The information entered is invalid",
+      },
       delete: {
         title: "Delete customer account",
         description: "This permanently removes the customer record and associated data.",

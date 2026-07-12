@@ -6,6 +6,7 @@ const apiBaseUrl =
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  allowedDevOrigins: ["127.0.0.1"],
   async rewrites() {
     // Same-origin proxy: /api/v1/* and /static/* → Go backend (avoids CORS in local dev)
     if (apiBaseUrl.startsWith("http")) {

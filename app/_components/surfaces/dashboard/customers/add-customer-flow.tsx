@@ -11,6 +11,7 @@ import {
   importProfileToForm,
   validateImportProfile,
 } from "./customer-history-import-form";
+import { customerMutationErrorMessage } from "./lib/customer-error";
 
 export interface ImportProfileSubmit {
   profile: CustomerImportProfile;
@@ -68,7 +69,7 @@ function HistoryIncludedImportModal({
       onClose();
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : t("customers.modals.addFlow.importFailed"),
+        customerMutationErrorMessage(err, t, "customers.modals.addFlow.importFailed"),
       );
     } finally {
       setSubmitting(false);
@@ -152,7 +153,7 @@ export function EditHistoryImportModal({
       onClose();
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : t("customers.modals.addFlow.editCrmFailed"),
+        customerMutationErrorMessage(err, t, "customers.modals.addFlow.editCrmFailed"),
       );
     } finally {
       setSubmitting(false);
