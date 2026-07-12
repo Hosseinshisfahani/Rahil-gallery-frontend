@@ -10,14 +10,14 @@ import type {
   CustomerAgeRange,
   CustomerGender,
   PurchasedCategory,
-} from "../data/mock-customers";
+} from "@/lib/api/customers/types";
 import {
   CUSTOMER_TYPES,
   CUSTOMER_AGE_RANGES,
   CUSTOMER_GENDERS,
   PURCHASED_CATEGORY_DISPLAY_ORDER,
   PURCHASED_CATEGORY_OPTIONS,
-} from "../data/mock-customers";
+} from "@/lib/api/customers/types";
 import {
   ResponsiveTable,
   TableCell,

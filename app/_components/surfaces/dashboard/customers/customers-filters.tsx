@@ -4,9 +4,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/_components/core/primitive/button";
 import { Input } from "@/_components/core/primitive/input";
-import { DashboardSelect, DashboardSelectOption } from "../abstract/dashboard-select";
 import { FilterChip } from "@/_components/core/primitive/filter-chip";
-import type { CustomerSegment } from "../data/mock-customers";
 import { useAdminT } from "../layout/admin-locale-provider";
 import { useCustomerEnumLabels } from "@/lib/i18n/admin/use-customer-labels";
 import { CustomersCrmAdvancedSearch } from "./customers-crm-advanced-search";
@@ -26,18 +24,7 @@ export interface CustomersFiltersProps {
   /** Omitted when list uses `includeTotal=false` (quick search) */
   totalCount?: number;
   hasMore?: boolean;
-  canSaveFilters?: boolean;
-  onSaveFilters?: () => void;
 }
-
-const segmentKeys: (CustomerSegment | "all")[] = [
-  "all",
-  "new",
-  "active",
-  "returning",
-  "vip",
-  "inactive",
-];
 
 export function CustomersFilters({
   filters,
@@ -45,12 +32,9 @@ export function CustomersFilters({
   resultCount,
   totalCount,
   hasMore,
-  canSaveFilters = false,
-  onSaveFilters,
 }: CustomersFiltersProps) {
   const { t, locale } = useAdminT();
   const {
-    tag: tagLabel,
     customerType: customerTypeLabel,
     purchasedCategory: purchaseTypeLabel,
     ageRange: ageRangeLabel,
@@ -64,7 +48,6 @@ export function CustomersFilters({
     filters,
     onChange,
     t,
-    tagLabel,
     customerTypeLabel,
     purchaseTypeLabel,
     ageRangeLabel,
@@ -87,14 +70,14 @@ export function CustomersFilters({
   function resetAdvanced() {
     onChange({
       ...filters,
+      customerId: "",
+      email: "",
       customerAgeRange: "",
       gender: "all",
       purchaseTypes: [],
       customerTypes: [],
       firstVisitFrom: "",
       firstVisitTo: "",
-      lastPurchaseFrom: "",
-      lastPurchaseTo: "",
       birthdayFrom: "",
       birthdayTo: "",
       marriageFrom: "",
@@ -114,49 +97,6 @@ export function CustomersFilters({
           aria-label={t("common.search")}
           disabled={advancedMode}
         />
-        <DashboardSelect
-          value={filters.segment}
-          onChange={(e) =>
-            update({ segment: e.target.value as CustomerSegment | "all" })
-          }
-          aria-label={t("customers.table.segment")}
-          className="sm:w-44"
-        >
-          {segmentKeys.map((value) => (
-            <DashboardSelectOption key={value} value={value}>
-              {value === "all"
-                ? t("customers.filters.allSegments")
-                : t(`customers.segment.${value}`)}
-            </DashboardSelectOption>
-          ))}
-        </DashboardSelect>
-        <DashboardSelect
-          value={filters.status}
-          onChange={(e) =>
-            update({ status: e.target.value as CustomerFilters["status"] })
-          }
-          aria-label={t("common.status")}
-          className="sm:w-36"
-        >
-          <DashboardSelectOption value="all">
-            {t("customers.filters.allStatuses")}
-          </DashboardSelectOption>
-          <DashboardSelectOption value="active">
-            {t("customers.accountStatus.active")}
-          </DashboardSelectOption>
-          <DashboardSelectOption value="blocked">
-            {t("customers.accountStatus.blocked")}
-          </DashboardSelectOption>
-        </DashboardSelect>
-        <label className="flex items-center gap-2 text-sm text-ink-muted">
-          <input
-            type="checkbox"
-            checked={filters.vipOnly}
-            onChange={(e) => update({ vipOnly: e.target.checked })}
-            className="size-4 rounded border-border accent-primary"
-          />
-          {t("customers.filters.vipOnly")}
-        </label>
         <Button
           variant={advancedOpen ? "secondary" : "ghost"}
           size="sm"
@@ -227,11 +167,6 @@ export function CustomersFilters({
         ))}
         {(activeFilterCount > 0 || filters.query) && (
           <div className="ms-auto flex gap-2">
-            {canSaveFilters && onSaveFilters && (
-              <Button variant="secondary" size="sm" onClick={onSaveFilters}>
-                {t("common.saveFilters")}
-              </Button>
-            )}
             {activeFilterCount > 0 && (
               <Button variant="ghost" size="sm" onClick={clearFilters}>
                 {t("customers.filters.clearFilters", { count: activeFilterCount })}

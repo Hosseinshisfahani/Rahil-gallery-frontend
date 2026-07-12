@@ -1,5 +1,4 @@
-import type { CustomerDetail } from "@/_components/surfaces/dashboard/data/mock-customers";
-import type { CustomerImportProfile } from "@/_components/surfaces/dashboard/data/mock-customers";
+import type { CustomerDetail, CustomerImportProfile } from "./types";
 import { buildApiUrl } from "../config";
 import { ensureValidAccessToken, refreshAccessToken } from "../auth/refresh-coordinator";
 import { handleAuthIssue, isAuthError } from "../auth/session";

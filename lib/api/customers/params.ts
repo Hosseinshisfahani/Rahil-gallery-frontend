@@ -1,11 +1,9 @@
 import type {
   CustomerAgeRange,
   CustomerGender,
-  CustomerSegment,
-  CustomerTag,
   CustomerType,
   PurchasedCategory,
-} from "@/_components/surfaces/dashboard/data/mock-customers";
+} from "./types";
 import type { CustomerFilters } from "@/_components/surfaces/dashboard/customers/lib/filter-customers";
 import { hasAdvancedCustomerFilters } from "@/_components/surfaces/dashboard/customers/lib/filter-customers";
 
@@ -42,21 +40,6 @@ export function customerFiltersToParams(
     const email = filters.email.trim();
     if (email) params.email = email;
 
-    if (filters.segment !== "all") params.segment = filters.segment;
-    if (filters.status !== "all") params.status = filters.status;
-    if (filters.vipOnly) params.vip = true;
-    if (filters.ltvMin !== null) params.ltvMin = filters.ltvMin;
-    if (filters.ltvMax !== null) params.ltvMax = filters.ltvMax;
-    if (filters.ordersMin !== null) params.ordersMin = filters.ordersMin;
-    if (filters.ordersMax !== null) params.ordersMax = filters.ordersMax;
-    if (filters.registeredFrom) params.registeredFrom = filters.registeredFrom;
-    if (filters.registeredTo) params.registeredTo = filters.registeredTo;
-    if (filters.lastPurchaseFrom) params.lastPurchaseFrom = filters.lastPurchaseFrom;
-    if (filters.lastPurchaseTo) params.lastPurchaseTo = filters.lastPurchaseTo;
-    if (filters.lastActivityFrom) params.lastActivityFrom = filters.lastActivityFrom;
-    if (filters.lastActivityTo) params.lastActivityTo = filters.lastActivityTo;
-    if (filters.tags.length > 0) params.tags = filters.tags.join(",");
-    if (filters.hasPurchased !== "all") params.hasPurchased = filters.hasPurchased;
     if (filters.customerAgeRange) params.ageRange = filters.customerAgeRange;
     if (filters.gender !== "all") params.gender = filters.gender;
     if (filters.customerTypes.length > 0) {
@@ -90,10 +73,6 @@ export function customerFiltersToParams(
 export function paramsToCustomerFilters(
   searchParams: URLSearchParams,
 ): CustomerFilters & { page: number; perPage: number } {
-  const tagsParam = searchParams.get("tags");
-  const tags = tagsParam
-    ? (tagsParam.split(",").filter(Boolean) as CustomerTag[])
-    : [];
   const customerTypesParam = searchParams.get("customerTypes");
   const customerTypes = customerTypesParam
     ? (customerTypesParam.split(",").filter(Boolean) as CustomerType[])
@@ -103,34 +82,10 @@ export function paramsToCustomerFilters(
     ? (purchaseTypesParam.split(",").filter(Boolean) as PurchasedCategory[])
     : [];
 
-  const num = (key: string) => {
-    const value = searchParams.get(key);
-    if (!value) return null;
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : null;
-  };
-
   return {
     query: searchParams.get("q") ?? "",
     customerId: searchParams.get("id") ?? "",
     email: searchParams.get("email") ?? "",
-    segment: (searchParams.get("segment") as CustomerSegment | "all") ?? "all",
-    status: (searchParams.get("status") as CustomerFilters["status"]) ?? "all",
-    vipOnly: searchParams.get("vip") === "true",
-    ltvMin: num("ltvMin"),
-    ltvMax: num("ltvMax"),
-    ordersMin: num("ordersMin"),
-    ordersMax: num("ordersMax"),
-    registeredFrom: searchParams.get("registeredFrom") ?? "",
-    registeredTo: searchParams.get("registeredTo") ?? "",
-    lastPurchaseFrom: searchParams.get("lastPurchaseFrom") ?? "",
-    lastPurchaseTo: searchParams.get("lastPurchaseTo") ?? "",
-    lastActivityFrom: searchParams.get("lastActivityFrom") ?? "",
-    lastActivityTo: searchParams.get("lastActivityTo") ?? "",
-    tags,
-    hasPurchased:
-      (searchParams.get("hasPurchased") as CustomerFilters["hasPurchased"]) ??
-      "all",
     customerAgeRange:
       (searchParams.get("ageRange") as CustomerAgeRange | null) ?? "",
     gender: (searchParams.get("gender") as CustomerGender | "all" | null) ?? "all",

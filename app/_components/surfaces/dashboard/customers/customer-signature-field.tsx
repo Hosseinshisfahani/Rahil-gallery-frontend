@@ -69,7 +69,7 @@ export function CustomerSignatureField({
     }
 
     onPendingFileChange?.(file);
-    onSignatureUrlChange?.(undefined);
+    onSignatureUrlChange?.(file.name);
   }
 
   function handleRemove() {

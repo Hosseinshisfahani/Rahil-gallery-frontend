@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/_components/core/primitive/button";
-import type { CustomerImportProfile } from "../data/mock-customers";
+import type { CustomerDetail, CustomerImportProfile } from "@/lib/api/customers/types";
 import { useAdminT } from "../layout/admin-locale-provider";
 import { ModalShell } from "./modal-shell";
 import {
@@ -108,7 +108,7 @@ function HistoryIncludedImportModal({
 }
 
 interface EditHistoryImportModalProps {
-  customer: import("../data/mock-customers").CustomerDetail;
+  customer: CustomerDetail;
   onConfirm: (payload: ImportProfileSubmit) => Promise<void>;
   onClose: () => void;
 }

@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/_components/core/primitive/button";
+import { Input } from "@/_components/core/primitive/input";
 import { DashboardDateInput } from "../abstract/dashboard-date-input";
 import { DashboardSelect, DashboardSelectOption } from "../abstract/dashboard-select";
 import { fieldPlaceholder } from "../abstract/form-placeholders";
@@ -12,10 +13,9 @@ import {
   CUSTOMER_TYPES,
   PURCHASED_CATEGORY_OPTIONS,
   type CustomerAgeRange,
-  type CustomerGender,
   type CustomerType,
   type PurchasedCategory,
-} from "../data/mock-customers";
+} from "@/lib/api/customers/types";
 import { useAdminT } from "../layout/admin-locale-provider";
 import type { CustomerFilters } from "./lib/filter-customers";
 
@@ -124,6 +124,25 @@ export function CustomersCrmAdvancedSearch({
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <div className="flex flex-col gap-2">
+          <Input
+            id="crm-customer-id"
+            value={filters.customerId}
+            onChange={(e) => update({ customerId: e.target.value })}
+            placeholder={t("customers.fields.userId")}
+            aria-label={t("customers.fields.userId")}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Input
+            id="crm-email"
+            type="email"
+            value={filters.email}
+            onChange={(e) => update({ email: e.target.value })}
+            placeholder={t("customers.fields.email")}
+            aria-label={t("customers.fields.email")}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
           <DashboardSelect
             id="crm-age-range"
             value={filters.customerAgeRange}
@@ -226,16 +245,6 @@ export function CustomersCrmAdvancedSearch({
           toValue={filters.firstVisitTo}
           onFromChange={(firstVisitFrom) => update({ firstVisitFrom })}
           onToChange={(firstVisitTo) => update({ firstVisitTo })}
-          fromLabel={t("common.from")}
-          toLabel={t("common.to")}
-        />
-        <DateRangeField
-          label={t("customers.crmAdvancedSearch.lastOrderDate")}
-          slug="last-order"
-          fromValue={filters.lastPurchaseFrom}
-          toValue={filters.lastPurchaseTo}
-          onFromChange={(lastPurchaseFrom) => update({ lastPurchaseFrom })}
-          onToChange={(lastPurchaseTo) => update({ lastPurchaseTo })}
           fromLabel={t("common.from")}
           toLabel={t("common.to")}
         />

@@ -3,7 +3,10 @@
 import { cn } from "@/lib/utils";
 import { Input } from "@/_components/core/primitive/input";
 import { DashboardDateInput } from "../abstract/dashboard-date-input";
-import { DashboardSelect, DashboardSelectOption } from "../abstract/dashboard-select";
+import {
+  DashboardSelect,
+  DashboardSelectOption,
+} from "../abstract/dashboard-select";
 import { fieldPlaceholder } from "../abstract/form-placeholders";
 import { CustomerSignatureField } from "./customer-signature-field";
 import { Textarea } from "@/_components/core/primitive/textarea";
@@ -11,12 +14,13 @@ import { useCustomerEnumLabels } from "@/lib/i18n/admin/use-customer-labels";
 import {
   CUSTOMER_AGE_RANGES,
   CUSTOMER_TYPES,
+  CustomerGender,
   PURCHASED_CATEGORY_OPTIONS,
   type CustomerAgeRange,
   type CustomerImportProfile,
   type CustomerType,
   type PurchasedCategory,
-} from "../data/mock-customers";
+} from "@/lib/api/customers/types";
 import { useAdminT } from "../layout/admin-locale-provider";
 
 export function emptyImportProfile(): CustomerImportProfile {
@@ -24,6 +28,7 @@ export function emptyImportProfile(): CustomerImportProfile {
     firstName: "",
     lastName: "",
     job: "",
+    gender: "male",
     phone: "",
     email: "",
     address: "",
@@ -40,7 +45,7 @@ export function emptyImportProfile(): CustomerImportProfile {
 }
 
 export function importProfileToForm(
-  profile: CustomerImportProfile,
+  profile: CustomerImportProfile
 ): CustomerImportProfile {
   return { ...profile, purchasedCategories: [...profile.purchasedCategories] };
 }
@@ -96,7 +101,10 @@ export function CustomerHistoryImportForm({
     update({ purchasedCategories: next });
   }
 
-  const firstNameLabel = fieldPlaceholder(t("customers.fields.firstName"), true);
+  const firstNameLabel = fieldPlaceholder(
+    t("customers.fields.firstName"),
+    true
+  );
   const lastNameLabel = fieldPlaceholder(t("customers.fields.lastName"), true);
   const jobLabel = fieldPlaceholder(t("customers.fields.job"));
   const phoneLabel = fieldPlaceholder(t("customers.import.phoneNumber"), true);
@@ -135,6 +143,19 @@ export function CustomerHistoryImportForm({
               placeholder={lastNameLabel}
               aria-label={lastNameLabel}
             />
+          </div>
+          <div>
+            <DashboardSelect
+              id={`${idPrefix}-type`}
+              value={values.customerType}
+              onChange={(e) =>
+                update({ gender: e.target.value as CustomerGender })
+              }
+              aria-label={typeLabel}
+            >
+              <DashboardSelectOption value="male">مرد</DashboardSelectOption>
+              <DashboardSelectOption value="female">زن</DashboardSelectOption>
+            </DashboardSelect>
           </div>
         </div>
         <div>
@@ -281,7 +302,7 @@ export function CustomerHistoryImportForm({
                     "flex cursor-pointer items-center gap-2 rounded-sm border px-3 py-2 text-sm transition-colors",
                     active
                       ? "border-accent bg-accent/10 text-ink"
-                      : "border-border bg-surface text-ink-muted hover:border-ink-muted",
+                      : "border-border bg-surface text-ink-muted hover:border-ink-muted"
                   )}
                 >
                   <input
@@ -321,7 +342,9 @@ export function CustomerHistoryImportForm({
               onSignatureFileChange?.(file);
               if (file) update({ signature: "" });
             }}
-            onSignatureUrlChange={(url) => update({ signature: url ?? "" })}
+            onSignatureUrlChange={(url) => {
+              update({ signature: url ?? "" });
+            }}
             onRemove={() => {
               update({ signature: "" });
               onSignatureRemove?.();
@@ -335,7 +358,7 @@ export function CustomerHistoryImportForm({
 
 export function validateImportProfile(
   profile: CustomerImportProfile,
-  t: (key: string) => string,
+  t: (key: string) => string
 ): string | null {
   if (!profile.firstName.trim()) return t("customers.import.firstNameRequired");
   if (!profile.lastName.trim()) return t("customers.import.lastNameRequired");

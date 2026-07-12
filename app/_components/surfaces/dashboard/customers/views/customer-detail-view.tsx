@@ -85,7 +85,7 @@ export function CustomerDetailView({ customerId }: CustomerDetailViewProps) {
       )}
 
       <CustomerProfileHero customer={customer} />
-      <CustomerProfileTable customer={customer} />
+      {/* <CustomerProfileTable customer={customer} /> */}
       <CustomerImportProfileSection customer={customer} />
     </div>
   );

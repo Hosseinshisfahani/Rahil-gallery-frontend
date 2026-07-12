@@ -1,23 +1,6 @@
 export { listCustomers, fetchAllCustomers, getCustomer } from "./queries";
 export type { ListCustomersOptions } from "./queries";
-export {
-  getCustomerSegments,
-  listSavedViews,
-  getSavedView,
-  createSavedView,
-  updateSavedView,
-  deleteSavedView,
-} from "./queries";
-export {
-  createCustomer,
-  updateCustomer,
-  deleteCustomer,
-  blockCustomer,
-  unblockCustomer,
-  addCustomerNote,
-  toggleCustomerVip,
-  toggleCustomerTag,
-} from "./mutations";
+export { createCustomer, updateCustomer, deleteCustomer } from "./mutations";
 export {
   uploadCustomerSignature,
   deleteCustomerSignature,
@@ -27,10 +10,21 @@ export {
 export type {
   CreateCustomerInput,
   UpdateCustomerInput,
-  BlockCustomerInput,
-  UnblockCustomerInput,
-  AddCustomerNoteInput,
-  ToggleCustomerTagInput,
+  CustomerSummary,
+  CustomerDetail,
+  CustomerImportProfile,
+  CustomerType,
+  CustomerAgeRange,
+  CustomerGender,
+  PurchasedCategory,
+  CustomerImportMode,
+} from "./types";
+export {
+  CUSTOMER_TYPES,
+  CUSTOMER_AGE_RANGES,
+  CUSTOMER_GENDERS,
+  PURCHASED_CATEGORY_OPTIONS,
+  PURCHASED_CATEGORY_DISPLAY_ORDER,
 } from "./types";
 export {
   customerFiltersToParams,
@@ -38,20 +32,4 @@ export {
   shouldIncludeTotal,
 } from "./params";
 export type { CustomerListQuery, CustomerListParamsOptions } from "./params";
-export {
-  savedPayloadToCustomerFilters,
-  customerFiltersToSavedPayload,
-  segmentOnlyFilters,
-  canSaveCustomerFilters,
-  isSavedPayloadEmpty,
-} from "./saved-views";
-export type {
-  SavedFilterPayload,
-  SavedListView,
-  SavedViewType,
-  SegmentsResponse,
-  SegmentSummary,
-  CreateSavedViewInput,
-  UpdateSavedViewInput,
-} from "./saved-views";
 export { hasAdvancedCustomerFilters } from "@/_components/surfaces/dashboard/customers/lib/filter-customers";

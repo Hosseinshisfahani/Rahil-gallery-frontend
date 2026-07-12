@@ -105,7 +105,7 @@ export const adminMessagesFaBase = {
       fieldColumn: "فیلد",
       valueColumn: "مقدار",
       description: "اطلاعات حساب و CRM ذخیره‌شده مشتری",
-      importedTitle: "پروفایل واردشده",
+      importedTitle: "پروفایل کاربری",
       importedDescription: "اطلاعات تکمیلی از ثبت با سابقه",
       sections: {
         account: "حساب",

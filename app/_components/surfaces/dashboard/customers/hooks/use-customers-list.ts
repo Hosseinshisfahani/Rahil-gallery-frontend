@@ -3,16 +3,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { readStoredAdminLocale } from "@/lib/admin-locale";
 import { getAdminMessage } from "@/lib/i18n/admin";
-import type { CustomerSummary } from "../../data/mock-customers";
+import type { CustomerSummary } from "@/lib/api/customers/types";
 import {
   defaultCustomerFilters,
   type CustomerFilters,
 } from "../lib/filter-customers";
-import { getCustomerSegments, listCustomers } from "@/lib/api/customers";
+import { listCustomers } from "@/lib/api/customers";
 import type { PaginationMeta } from "@/lib/api/types";
 import { paginationHasExactTotal } from "@/lib/api/types";
 import { PAGE_SIZE_OPTIONS } from "../customers-pagination";
-import type { SegmentsResponse } from "@/lib/api/customers/saved-views";
 
 const SEARCH_DEBOUNCE_MS = 400;
 
@@ -32,8 +31,6 @@ export interface UseCustomersListResult {
   loading: boolean;
   error: string | null;
   refetch: () => void;
-  segments: SegmentsResponse | null;
-  segmentsLoading: boolean;
 }
 
 export function useCustomersList(): UseCustomersListResult {
@@ -46,8 +43,6 @@ export function useCustomersList(): UseCustomersListResult {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [fetchKey, setFetchKey] = useState(0);
-  const [segments, setSegments] = useState<SegmentsResponse | null>(null);
-  const [segmentsLoading, setSegmentsLoading] = useState(true);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -77,34 +72,6 @@ export function useCustomersList(): UseCustomersListResult {
   }, []);
 
   const skipInitialListReset = useRef(true);
-  const skipInitialSegmentsReset = useRef(true);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function loadSegments() {
-      if (!skipInitialSegmentsReset.current) {
-        setSegmentsLoading(true);
-      }
-      skipInitialSegmentsReset.current = false;
-
-      try {
-        const data = await getCustomerSegments(controller.signal);
-        setSegments(data);
-      } catch {
-        if (!controller.signal.aborted) {
-          setSegments(null);
-        }
-      } finally {
-        if (!controller.signal.aborted) {
-          setSegmentsLoading(false);
-        }
-      }
-    }
-
-    void loadSegments();
-    return () => controller.abort();
-  }, [fetchKey]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -168,7 +135,5 @@ export function useCustomersList(): UseCustomersListResult {
     loading,
     error,
     refetch,
-    segments,
-    segmentsLoading,
   };
 }

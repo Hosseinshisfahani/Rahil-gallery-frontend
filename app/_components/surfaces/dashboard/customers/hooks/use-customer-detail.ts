@@ -3,24 +3,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { readStoredAdminLocale } from "@/lib/admin-locale";
 import { getAdminMessage } from "@/lib/i18n/admin";
-import type {
-  BlockReasonCode,
-  CustomerDetail,
-  CustomerTag,
-} from "../../data/mock-customers";
-import {
-  addCustomerNote,
-  blockCustomer,
-  deleteCustomer,
-  getCustomer,
-  toggleCustomerTag,
-  toggleCustomerVip,
-  unblockCustomer,
-  updateCustomer,
-} from "@/lib/api/customers";
+import type { CustomerDetail } from "@/lib/api/customers/types";
+import { deleteCustomer, getCustomer } from "@/lib/api/customers";
 import { saveCustomerImportProfile } from "@/lib/api/customers/signature";
 import type { ImportProfileSubmit } from "../add-customer-flow";
-import type { CustomerFormValues } from "../customer-crud-modals";
 
 function adminT(key: string): string {
   return getAdminMessage(readStoredAdminLocale(), key);
@@ -84,18 +70,6 @@ export function useCustomerDetail(customerId: string) {
     error,
     mutating,
     refetch: () => load(),
-    updateProfile: (values: CustomerFormValues) =>
-      mutate(async () => {
-        await updateCustomer(customerId, {
-          fullName: values.fullName,
-          phone: values.phone,
-          email: values.email || undefined,
-          locale: values.locale,
-          defaultRingSize: values.defaultRingSize || undefined,
-          isVip: values.isVip,
-        });
-        return refreshCustomer();
-      }),
     updateImportProfile: (payload: ImportProfileSubmit) =>
       mutate(async () => {
         await saveCustomerImportProfile({
@@ -104,31 +78,6 @@ export function useCustomerDetail(customerId: string) {
           signatureFile: payload.signatureFile,
           removeSignature: payload.removeSignature,
         });
-        return refreshCustomer();
-      }),
-    block: (reason: BlockReasonCode, note: string) =>
-      mutate(async () => {
-        await blockCustomer(customerId, { reason, note });
-        return refreshCustomer();
-      }),
-    unblock: (justification: string) =>
-      mutate(async () => {
-        await unblockCustomer(customerId, { justification });
-        return refreshCustomer();
-      }),
-    toggleVip: () =>
-      mutate(async () => {
-        await toggleCustomerVip(customerId);
-        return refreshCustomer();
-      }),
-    toggleTag: (tag: CustomerTag) =>
-      mutate(async () => {
-        await toggleCustomerTag(customerId, { tag });
-        return refreshCustomer();
-      }),
-    addNote: (body: string) =>
-      mutate(async () => {
-        await addCustomerNote(customerId, { body });
         return refreshCustomer();
       }),
     remove: () => mutate(() => deleteCustomer(customerId)),

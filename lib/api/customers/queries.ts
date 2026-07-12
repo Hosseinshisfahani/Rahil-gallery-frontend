@@ -1,15 +1,8 @@
-import type { CustomerDetail, CustomerSummary } from "@/_components/surfaces/dashboard/data/mock-customers";
+import type { CustomerDetail, CustomerSummary } from "./types";
 import type { CustomerFilters } from "@/_components/surfaces/dashboard/customers/lib/filter-customers";
 import { apiRequest } from "../client";
 import type { PaginatedResponse } from "../types";
 import { customerFiltersToParams } from "./params";
-import type {
-  CreateSavedViewInput,
-  SavedListView,
-  SavedViewType,
-  SegmentsResponse,
-  UpdateSavedViewInput,
-} from "./saved-views";
 
 const CUSTOMERS_PATH = "/admin/customers";
 
@@ -74,58 +67,4 @@ export async function getCustomer(
   signal?: AbortSignal,
 ): Promise<CustomerDetail> {
   return apiRequest<CustomerDetail>(`${CUSTOMERS_PATH}/${id}`, { signal });
-}
-
-export async function getCustomerSegments(
-  signal?: AbortSignal,
-): Promise<SegmentsResponse> {
-  return apiRequest<SegmentsResponse>(`${CUSTOMERS_PATH}/segments`, { signal });
-}
-
-export async function listSavedViews(
-  viewType?: SavedViewType,
-  signal?: AbortSignal,
-): Promise<SavedListView[]> {
-  const response = await apiRequest<{ data: SavedListView[] }>(
-    `${CUSTOMERS_PATH}/saved-views`,
-    {
-      params: viewType ? { type: viewType } : undefined,
-      signal,
-    },
-  );
-  return response.data;
-}
-
-export async function getSavedView(
-  viewId: string,
-  signal?: AbortSignal,
-): Promise<SavedListView> {
-  return apiRequest<SavedListView>(`${CUSTOMERS_PATH}/saved-views/${viewId}`, {
-    signal,
-  });
-}
-
-export async function createSavedView(
-  input: CreateSavedViewInput,
-): Promise<SavedListView> {
-  return apiRequest<SavedListView>(`${CUSTOMERS_PATH}/saved-views`, {
-    method: "POST",
-    body: input,
-  });
-}
-
-export async function updateSavedView(
-  viewId: string,
-  input: UpdateSavedViewInput,
-): Promise<SavedListView> {
-  return apiRequest<SavedListView>(`${CUSTOMERS_PATH}/saved-views/${viewId}`, {
-    method: "PATCH",
-    body: input,
-  });
-}
-
-export async function deleteSavedView(viewId: string): Promise<void> {
-  await apiRequest<{ success: true }>(`${CUSTOMERS_PATH}/saved-views/${viewId}`, {
-    method: "DELETE",
-  });
 }

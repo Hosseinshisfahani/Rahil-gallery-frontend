@@ -1,4 +1,4 @@
-import type { CustomerSummary } from "../../data/mock-customers";
+import type { CustomerSummary } from "@/lib/api/customers/types";
 
 function escapeCsvField(value: string): string {
   if (value.includes(",") || value.includes('"') || value.includes("\n")) {
@@ -9,38 +9,28 @@ function escapeCsvField(value: string): string {
 
 export function exportCustomersToCsv(customers: CustomerSummary[]): string {
   const headers = [
-    "User ID",
+    "Customer ID",
     "Full Name",
-    "Customer Type",
-    "Product Categories",
     "Phone",
-    "Registration Date",
-    "Last Activity",
-    "Total Orders",
-    "Total LTV",
-    "Segment",
-    "Status",
-    "VIP",
-    "Tags",
-    "Last Purchase",
+    "Email",
+    "Customer Type",
+    "Age Range",
+    "Gender",
+    "Product Categories",
+    "Created At",
   ];
 
   const rows = customers.map((c) =>
     [
       c.id,
       c.fullName,
-      c.customerType ?? "",
-      (c.purchasedCategories ?? []).join("; "),
       c.phone,
-      c.registeredAt,
-      c.lastActivityAt,
-      String(c.totalOrders),
-      String(c.totalLtv),
-      c.segment,
-      c.status,
-      c.isVip ? "yes" : "no",
-      c.tags.join("; "),
-      c.lastPurchaseDate ?? "",
+      "",
+      c.customerType ?? "",
+      c.customerAgeRange ?? "",
+      c.gender ?? "",
+      (c.purchasedCategories ?? []).join("; "),
+      c.createdAt,
     ]
       .map(escapeCsvField)
       .join(","),
