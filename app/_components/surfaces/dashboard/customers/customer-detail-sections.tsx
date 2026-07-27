@@ -167,6 +167,8 @@ export function CustomerProfileTable({
       />
       <ProfileTableRow label={t("customers.fields.job")} value={customer.job} />
       <ProfileTableRow label={t("customers.fields.address")} value={customer.address} />
+      <ProfileTableRow label={t("customers.fields.melliCode")} value={customer.melliCode} mono />
+      <ProfileTableRow label={t("customers.fields.postalCode")} value={customer.postalCode} mono />
 
       <ProfileSectionRow title={t("customers.profile.sections.crm")} />
       <ProfileTableRow
@@ -202,6 +204,7 @@ export function CustomerProfileTable({
         value={customer.firstVisitDate ? formatDate(customer.firstVisitDate, locale) : null}
       />
       <ProfileTableRow label={t("customers.fields.description")} value={customer.description} />
+      <ProfileTableRow label={t("customers.fields.marketerNote")} value={customer.marketerNote} />
     </ProfileTable>
   );
 }
@@ -239,6 +242,8 @@ export function CustomerImportProfileSection({
       <ProfileTableRow label={t("customers.fields.phone")} value={profile.phone} mono />
       <ProfileTableRow label={t("customers.fields.email")} value={profile.email} />
       <ProfileTableRow label={t("customers.fields.address")} value={profile.address} />
+      <ProfileTableRow label={t("customers.fields.melliCode")} value={profile.melliCode} mono />
+      <ProfileTableRow label={t("customers.fields.postalCode")} value={profile.postalCode} mono />
       <ProfileTableRow
         label={t("customers.fields.gender")}
         value={profile.gender ? gender(profile.gender) : null}
@@ -278,6 +283,7 @@ export function CustomerImportProfileSection({
 
       <ProfileSectionRow title={t("customers.profile.sections.notes")} />
       <ProfileTableRow label={t("customers.fields.description")} value={profile.description} />
+      <ProfileTableRow label={t("customers.fields.marketerNote")} value={profile.marketerNote} />
       <ProfileTableRow
         label={t("customers.fields.signature")}
         value={

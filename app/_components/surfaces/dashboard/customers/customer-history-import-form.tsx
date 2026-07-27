@@ -32,6 +32,8 @@ export function emptyImportProfile(): CustomerImportProfile {
     phone: "",
     email: "",
     address: "",
+    melliCode: "",
+    postalCode: "",
     birthday: "",
     marriageDate: "",
     importantDate: "",
@@ -40,6 +42,7 @@ export function emptyImportProfile(): CustomerImportProfile {
     customerAgeRange: undefined,
     purchasedCategories: [],
     description: "",
+    marketerNote: "",
     signature: "",
   };
 }
@@ -110,6 +113,8 @@ export function CustomerHistoryImportForm({
   const phoneLabel = fieldPlaceholder(t("customers.import.phoneNumber"), true);
   const emailLabel = fieldPlaceholder(t("customers.fields.email"));
   const addressLabel = fieldPlaceholder(t("customers.fields.address"));
+  const melliCodeLabel = fieldPlaceholder(t("customers.fields.melliCode"));
+  const postalCodeLabel = fieldPlaceholder(t("customers.fields.postalCode"));
   const birthdayLabel = fieldPlaceholder(t("customers.fields.birthday"));
   const marriageLabel = fieldPlaceholder(t("customers.fields.marriageDate"));
   const importantLabel = fieldPlaceholder(t("customers.fields.importantDate"));
@@ -118,6 +123,7 @@ export function CustomerHistoryImportForm({
   const ageLabel = fieldPlaceholder(t("customers.fields.ageRange"));
   const categoriesLabel = t("customers.fields.purchasedCategories");
   const descriptionLabel = fieldPlaceholder(t("customers.fields.description"));
+  const marketerNoteLabel = fieldPlaceholder(t("customers.fields.marketerNote"));
 
   return (
     <div className="flex flex-col gap-5">
@@ -187,6 +193,32 @@ export function CustomerHistoryImportForm({
               onChange={(e) => update({ email: e.target.value })}
               placeholder={emailLabel}
               aria-label={emailLabel}
+            />
+          </div>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <Input
+              id={`${idPrefix}-melli-code`}
+              value={values.melliCode ?? ""}
+              onChange={(e) => update({ melliCode: e.target.value })}
+              placeholder={melliCodeLabel}
+              aria-label={melliCodeLabel}
+              className="font-mono text-ltr"
+              dir="ltr"
+              inputMode="numeric"
+            />
+          </div>
+          <div>
+            <Input
+              id={`${idPrefix}-postal-code`}
+              value={values.postalCode ?? ""}
+              onChange={(e) => update({ postalCode: e.target.value })}
+              placeholder={postalCodeLabel}
+              aria-label={postalCodeLabel}
+              className="font-mono text-ltr"
+              dir="ltr"
+              inputMode="numeric"
             />
           </div>
         </div>
@@ -331,6 +363,16 @@ export function CustomerHistoryImportForm({
             onChange={(e) => update({ description: e.target.value })}
             placeholder={descriptionLabel}
             aria-label={descriptionLabel}
+          />
+        </div>
+        <div>
+          <Textarea
+            id={`${idPrefix}-marketer-note`}
+            rows={4}
+            value={values.marketerNote ?? ""}
+            onChange={(e) => update({ marketerNote: e.target.value })}
+            placeholder={marketerNoteLabel}
+            aria-label={marketerNoteLabel}
           />
         </div>
         <div>

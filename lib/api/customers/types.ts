@@ -53,6 +53,8 @@ export interface CustomerImportProfile {
   phone: string;
   email?: string;
   address?: string;
+  melliCode?: string;
+  postalCode?: string;
   birthday?: string;
   marriageDate?: string;
   importantDate?: string;
@@ -62,6 +64,7 @@ export interface CustomerImportProfile {
   customerAgeRange?: CustomerAgeRange;
   purchasedCategories: PurchasedCategory[];
   description?: string;
+  marketerNote?: string;
   signature?: string;
 }
 
@@ -81,11 +84,14 @@ export interface CustomerDetail extends CustomerSummary {
   email?: string;
   job?: string;
   address?: string;
+  melliCode?: string;
+  postalCode?: string;
   birthday?: string;
   marriageDate?: string;
   importantDate?: string;
   firstVisitDate?: string;
   description?: string;
+  marketerNote?: string;
   signatureUrl?: string;
   importProfile: CustomerImportProfile;
 }
