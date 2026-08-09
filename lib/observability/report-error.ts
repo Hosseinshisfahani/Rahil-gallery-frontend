@@ -1,6 +1,8 @@
-import { ingestObservabilityEvent } from "@/lib/api/observability";
-import type { IngestObservabilityEventInput } from "@/lib/api/observability/types";
-import { getAccessToken } from "@/lib/api/auth/session";
+import { getAccessToken } from "@/lib/api/auth";
+import {
+  ingestObservabilityEvent,
+  type IngestObservabilityEventInput,
+} from "./ingest";
 
 const DEDUPE_MS = 15_000;
 const recent = new Map<string, number>();

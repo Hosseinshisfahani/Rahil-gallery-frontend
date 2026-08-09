@@ -1,109 +1,109 @@
-# Rehil Gallery — Component Library & Per-Page Trees
+# Rahil Gallery — Component Library & Per-Page Trees
 
-> **Task 2 deliverable.** Components grouped by architecture layer first, then shared library, then per page.  
-> Naming: `PascalCase` components; `(shared)` = reused across pages.  
-> **Code location:** `app/_components/` · **Showcase:** `/design-system` · **Admin preview:** `/admin`
+> Naming: `PascalCase` components. Prefer deep imports (no mega-barrels).  
+> **Showcase:** `/design-system` · **Admin:** `/admin`
 
 ---
 
 ## Component Architecture
 
-Headless **core** primitives + **themed surfaces** (store vs dashboard) + **shared** domain/layout blocks + **exclusive** page-only UI.
+Route-colocated UI + shadcn primitives. The old Atomic `app/_components/` tree (`core` / `shared` / `exclusive` / `surfaces`) has been removed.
 
 ```
-app/_components/
-├── core/                         # Surface-agnostic primitives & config
-│   ├── primitive/                # Button, Input, Badge, Heading, …
-│   ├── config/                   # variants.ts, tokens.ts, navigation.ts
-│   ├── surface.tsx               # SurfaceShell → sets data-surface
-│   └── types.ts
-├── surfaces/
-│   ├── store/abstract/           # Luxury storefront composites
-│   └── dashboard/
-│       ├── abstract/             # DashboardCard, StatCard, …
-│       └── layout/               # AdminShell, AdminSidebar, AdminTopBar
-├── shared/
-│   ├── layout/                   # SiteHeader, SiteFooter, Container, …
-│   └── inclusive/                # ProductCard, PriceDisplay, StatusBadge, …
-└── exclusive/                    # Page-unique components (empty until needed)
+components/ui/                    # shadcn (Button, Input, Select, Dialog, …)
+components/admin/ui/              # Shared admin widgets (DashboardCard, pagination, modal-shell, …)
+
+app/(store)/_components/          # Flat fat modules (no taxonomy subfolders)
+├── store-layout.tsx              # StoreChrome, SiteHeader, SiteFooter, Container, …
+├── catalog.tsx                   # ProductCard, ProductGrid, PriceDisplay, …
+├── landing.tsx                   # Home page sections + mock data
+└── store-ui.tsx                  # Badge, Heading, Eyebrow, Text (+ variants)
+
+app/(store)/design-system/
+├── page.tsx
+├── tokens.ts
+├── demos.tsx                     # Docs-only widgets (Card, FormField, …)
+└── sections.tsx                  # Showcase sections
+
+app/admin/_components/
+├── layout/                       # AdminShell, auth, locale, theme (+ greeting)
+├── customers/                    # Flat feature root (views, hooks, utils colocated)
+└── products/                     # Flat feature root
+
+components/providers/
+└── surface-shell.tsx             # SurfaceShell → data-surface
+
+lib/
+├── store-navigation.ts           # Store nav links
+├── media.ts                      # Media / signature URL helpers
+├── observability/                # Client report + HTTP ingest
+└── types.ts                      # Locale, PaddingSize, …
 ```
 
 ### Dual themes (CSS)
 
-Themes live in `app/styles/themes/` and activate via `data-surface` on each route layout:
+Themes live in `app/styles/themes/` (`store.css`, `admin-theme.css`) and activate via `data-surface` on each route layout:
 
 | Surface | Route group | Visual direction | Key tokens |
 |---------|-------------|------------------|------------|
-| `store` | `app/(store)/` | Modern bold **luxury** — gold accent, Playfair display, generous spacing | `--accent` gold, `--font-display` Playfair |
-| `dashboard` | `app/admin/` | **Modern operational** UI — indigo primary, zinc palette, compact controls, dark sidebar | `--primary` indigo, `--sidebar-*`, Geist sans |
+| `store` | `app/(store)/` | Modern bold **luxury** — gold accent, display fonts | `--accent` gold, `--font-display` |
+| `dashboard` | `app/admin/` | **Modern operational** UI — indigo primary, zinc, dark sidebar | `--primary` indigo, `--sidebar-*` |
 
 ```tsx
-// Storefront layout — app/(store)/layout.tsx
-<SurfaceShell surface="store">{children}</SurfaceShell>
+// Storefront — app/(store)/layout.tsx
+<SurfaceShell surface="store"><StoreChrome>{children}</StoreChrome></SurfaceShell>
 
-// Admin layout — app/admin/layout.tsx
-<SurfaceShell surface="dashboard">{children}</SurfaceShell>
+// Admin — app/admin/layout.tsx
+<SurfaceShell surface="dashboard">{/* locale + auth */}{children}</SurfaceShell>
 ```
-
-Account and checkout pages will use the **store** surface (customer-facing). Staff admin uses **dashboard** only.
 
 ### Import patterns
 
 ```tsx
-// Primitives (any surface)
-import { Button, Heading, Input } from "@/_components/core";
-
-// Store composites
-import { Card, FormField, OtpInput } from "@/_components/surfaces/store";
-
-// Admin UI
-import { AdminShell, StatCard } from "@/_components/surfaces/dashboard";
-
-// Cross-cutting domain + storefront chrome
-import { ProductCard, SiteHeader } from "@/_components/shared";
-
-// Barrel (re-exports all layers)
-import { Button, Card, AdminShell } from "@/_components";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { DashboardCard } from "@/components/admin/ui/dashboard-card";
+import { AdminShell } from "@/app/admin/_components/layout/admin-shell";
+import { ProductCard } from "@/app/(store)/_components/catalog";
+import { SiteHeader } from "@/app/(store)/_components/store-layout";
+import { SurfaceShell } from "@/components/providers/surface-shell";
 ```
 
-### Layer assignment rules
+### Placement rules
 
-| Layer | Use when | Examples |
-|-------|----------|----------|
-| **core/primitive** | Single-purpose, token-driven, no surface-specific layout | `Button`, `Input`, `Badge` |
-| **surfaces/store/abstract** | Store-themed composites built from core | `Card`, `FormField`, `EmptyState` |
-| **surfaces/dashboard/** | Admin-only layout and data UI | `DashboardCard`, `AdminShell` |
-| **shared/inclusive** | Domain blocks used on storefront **or** both surfaces | `ProductCard`, `StatusBadge` |
-| **shared/layout** | Storefront chrome (not used in admin shell) | `SiteHeader`, `SiteFooter` |
-| **exclusive/** | One-off page sections with no reuse | Campaign hero, unique landing block |
+| Home | Use when | Examples |
+|------|----------|----------|
+| `components/ui/` | Generic controls (shadcn) | Button, Input, Dialog, Select |
+| `components/admin/ui/` | Admin widgets with 2+ consumers | DashboardCard, DashboardPagination |
+| `components/providers/` | App-wide providers / shells | SurfaceShell |
+| `app/admin/_components/` | Admin feature UI | customers table, product form |
+| `app/(store)/_components/` | Store chrome / catalog / landing | SiteHeader, ProductCard, LandingHero |
+| `app/(store)/design-system/` | Docs-only demos | FormField, StatusBadge |
+| `lib/` | Non-UI shared helpers | store-navigation, media, types |
 
 ---
 
-## Implementation Status (Design System Phase)
+## Implementation Status
 
-| Component | Layer | Path | Status |
-|-----------|-------|------|--------|
-| `SurfaceShell` | core | `core/surface.tsx` | ✅ |
-| `Button`, `Input`, `Textarea`, `Select`, `Label` | core | `core/primitive/` | ✅ |
-| `Badge`, `Heading`, `Text`, `Eyebrow`, `FilterChip` | core | `core/primitive/` | ✅ |
-| `Skeleton`, `ProductCardSkeleton`, `TextSkeleton` | core | `core/primitive/skeleton.tsx` | ✅ |
-| `Card`, `FormField`, `SectionTitle`, `EmptyState` | store | `surfaces/store/abstract/` | ✅ |
-| `PhoneInput`, `OtpInput` | store | `surfaces/store/abstract/` | ✅ |
-| `DashboardCard`, `StatCard`, `DashboardSectionTitle` | dashboard | `surfaces/dashboard/abstract/` | ✅ |
-| `ActionQueue`, `DashboardOrdersTable`, `LowStockList`, `ProductionQueue`, `DashboardQuickActions` | dashboard | `surfaces/dashboard/abstract/` | ✅ |
-| Analytics views (`KpiGrid`, `FunnelChart`, `MetricBarList`, …) | dashboard | `surfaces/dashboard/analytics/` | ✅ (mock data) |
-| `AdminShell`, `AdminSidebar`, `AdminTopBar` | dashboard | `surfaces/dashboard/layout/` | ✅ |
-| `SiteHeader`, `SiteFooter`, `Container`, `Section` | shared/layout | `shared/layout/` | ✅ |
-| `LocaleSwitcher`, `MobileNavDrawer` | shared/layout | `shared/layout/` | ✅ |
-| `ProductCard`, `ProductGrid`, `PriceDisplay` | shared/inclusive | `shared/inclusive/` | ✅ |
-| `AvailabilityBadge`, `StatusBadge`, `RatingStars` | shared/inclusive | `shared/inclusive/` | ✅ |
-| All other components below | — | — | 📋 Planned |
+| Component | Path | Status |
+|-----------|------|--------|
+| `SurfaceShell` | `components/providers/surface-shell.tsx` | ✅ |
+| shadcn Button / Input / Textarea / Label / Select / Skeleton / Badge | `components/ui/` | ✅ |
+| Store Badge / Heading / Eyebrow / Text | `app/(store)/_components/store-ui.tsx` | ✅ |
+| `FilterChip` | `components/admin/ui/filter-chip.tsx` | ✅ |
+| DS Card / FormField / EmptyState / Phone / OTP | `app/(store)/design-system/demos.tsx` | ✅ |
+| `DashboardCard`, `StatCard`, pagination, modal-shell | `components/admin/ui/` | ✅ |
+| `AdminShell` + chrome | `app/admin/_components/layout/` | ✅ |
+| `SiteHeader`, `SiteFooter`, `Container`, drawer | `app/(store)/_components/store-layout.tsx` | ✅ |
+| `ProductCard`, `ProductGrid`, price / rating / availability | `app/(store)/_components/catalog.tsx` | ✅ |
+| Landing sections | `app/(store)/_components/landing.tsx` | ✅ |
+| Planned storefront features below | — | 📋 Planned |
 
 ---
 
 ## Shared Component Library
 
-> **Layer** column: where the component lives when implemented (`core`, `store`, `dashboard`, `shared`).
+> **Layer** column in the tables below is historical planning language. Prefer the placement rules above when implementing (`components/ui`, `(store)/_components`, `admin/_components`).
 
 ### Layout & Navigation
 
@@ -602,25 +602,6 @@ AdminDashboardPage
 ```
 
 **Preview route:** `/admin` (mock data, dashboard surface)
-
----
-
-### AD-19 Analytics Dashboards
-
-```
-AnalyticsLayout
-├── AdminShell
-├── AnalyticsTabNav
-└── View (one of)
-    ├── ExecutiveAnalyticsView — KpiGrid + RankedList (top products)
-    ├── MarketingAnalyticsView — channel mix, CAC, campaigns
-    ├── ProductAnalyticsView — SKU rankings, inventory status
-    ├── CustomerAnalyticsView — cohorts, first-purchase categories
-    └── FunnelAnalyticsView — FunnelChart, device & checkout breakdown
-```
-
-**Routes:** `/admin/analytics`, `/admin/analytics/marketing`, `/product`, `/customer`, `/funnel`  
-**Metric definitions:** [kpi-analytics.md](./kpi-analytics.md)
 
 ---
 

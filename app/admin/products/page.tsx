@@ -1,14 +1,14 @@
-import { ProductsListView } from "@/_components/surfaces/dashboard/products";
-import { TranslatedAdminShell } from "@/_components/surfaces/dashboard/layout/translated-admin-shell";
+import { ProductsListView } from "@/app/admin/_components/products";
+import { AdminShell } from "@/app/admin/_components/layout/admin-shell";
 
 export default function AdminProductsPage() {
   return (
-    <TranslatedAdminShell
+    <AdminShell
       titleKey="products.title"
       subtitleKey="products.subtitle"
       includeDate
     >
       <ProductsListView />
-    </TranslatedAdminShell>
+    </AdminShell>
   );
 }

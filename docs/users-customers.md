@@ -1,7 +1,7 @@
-# Rehil Gallery — Users & Customers Module
+# Rahil Gallery — Users & Customers Module
 
 > **Status:** Implemented in admin UI (v1) with example external API. Production backend integration pending.  
-> **Related docs:** [api-assumptions.md](./api-assumptions.md) · [business-logic.md](./business-logic.md) · [kpi-analytics.md](./kpi-analytics.md) · [pages.md](./pages.md)
+> **Related docs:** [api-assumptions.md](./api-assumptions.md) · [business-logic.md](./business-logic.md) · [pages.md](./pages.md)
 
 ---
 
@@ -34,26 +34,25 @@ This document focuses on **Customer management**, which is fully implemented in 
 | **Admin** | Full access — create, edit, delete, block, export |
 | **Customer support** | View profiles, orders; restricted block reason codes |
 | **CRM / Growth** | Segmentation, tags, VIP assignment, export |
-| **Read-only analyst** | Customer analytics only (via `/admin/analytics/customer`) |
 
 Current v1 UI does not yet enforce role-based visibility; the backend must enforce permissions per the matrix below when the production API is connected. See [business-logic.md §8.2](./business-logic.md#82-permission-matrix) for the broader admin permission model.
 
 ### 2.2 Customer capability matrix
 
-| Capability | Admin | Support | CRM | Analyst |
-|------------|:-----:|:-------:|:---:|:-------:|
-| View customer list | ✓ | ✓ | ✓ | ✓ |
-| View full profile | ✓ | ✓ | ✓ | ✓ |
-| View orders per customer | ✓ | ✓ | ✓ | ✓ |
-| Quick add customer | ✓ | | ✓ | |
-| History-included import | ✓ | | ✓ | |
-| Edit customer metadata | ✓ | | ✓ | |
-| Assign VIP status | ✓ | | ✓ | |
-| Add / remove tags | ✓ | | ✓ | |
-| Block / unblock user | ✓ | ✓ (restricted) | | |
-| View wishlist | ✓ | ✓ | ✓ | |
-| View LTV & analytics | ✓ | ✓ | ✓ | ✓ |
-| Export customer data | ✓ | | ✓ | |
+| Capability | Admin | Support | CRM |
+|------------|:-----:|:-------:|:---:|
+| View customer list | ✓ | ✓ | ✓ |
+| View full profile | ✓ | ✓ | ✓ |
+| View orders per customer | ✓ | ✓ | ✓ |
+| Quick add customer | ✓ | | ✓ |
+| History-included import | ✓ | | ✓ |
+| Edit customer metadata | ✓ | | ✓ |
+| Assign VIP status | ✓ | | ✓ |
+| Add / remove tags | ✓ | | ✓ |
+| Block / unblock user | ✓ | ✓ (restricted) | |
+| View wishlist | ✓ | ✓ | ✓ |
+| View LTV | ✓ | ✓ | ✓ |
+| Export customer data | ✓ | | ✓ |
 | Delete user account | ✓ | | | |
 
 ---
@@ -64,7 +63,6 @@ Current v1 UI does not yet enforce role-based visibility; the backend must enfor
 |-------|-------------|
 | `/admin/customers` | Paginated customer list with search, filters, export, add customer |
 | `/admin/customers/[id]` | Customer profile — overview, orders, wishlist, notes, audit log |
-| `/admin/analytics/customer` | Aggregate customer KPIs (LTV, cohorts) — separate from CRM |
 
 Sidebar link: **Customers** in `AdminShell` → `/admin/customers`.
 
@@ -290,13 +288,12 @@ When connected to production auth:
 ### 8.1 Client layer
 
 ```
-app/admin/customers/*          ← thin route pages
-app/_components/.../customers/ ← UI, hooks, filters
+app/admin/customers/*              ← thin route pages
+app/admin/_components/customers/   ← UI, hooks, filters
 lib/api/customers/
-  queries.ts      ← listCustomers, getCustomer, fetchAllCustomers
-  mutations.ts    ← create, update, delete, block, VIP, tags, notes
-  params.ts       ← filter ↔ query param serialization
+  customers.ts    ← list/get/mutations, params, signature
   types.ts        ← request/response TypeScript types
+  index.ts        ← public barrel
 lib/api/client.ts ← fetch wrapper, error handling
 lib/api/config.ts ← base URL resolution
 ```
@@ -306,7 +303,7 @@ lib/api/config.ts ← base URL resolution
 | Mode | Configuration | Base path |
 |------|---------------|-----------|
 | **Example API** (default) | Leave `NEXT_PUBLIC_API_BASE_URL` unset | `/api/admin/customers` |
-| **Production server** | `NEXT_PUBLIC_API_BASE_URL=https://api.rehil.gallery/v1` | `{base}/admin/customers` |
+| **Production server** | `NEXT_PUBLIC_API_BASE_URL=https://api.rahil.gallery/v1` | `{base}/admin/customers` |
 
 No UI changes required when switching — only the env variable.
 
@@ -405,7 +402,7 @@ Extends summary with: `email`, `locale`, `defaultRingSize`, lifecycle metrics, b
 
 See [§5.2](#52-history-included) for field list. TypeScript definitions and enum labels live in:
 
-`app/_components/surfaces/dashboard/data/mock-customers.ts`
+`@/lib/api/customers/types`
 
 ### 9.4 Segments (system)
 
@@ -429,11 +426,9 @@ UI preview only — counts are static mock data. Production implementation will 
 
 ---
 
-## 11. Analytics integration
+## 11. Related metrics
 
-Customer-level KPIs on the profile (LTV, repeat rate, engagement score, funnel position) align with the analytics layer defined in [kpi-analytics.md](./kpi-analytics.md).
-
-Aggregate customer analytics live at `/admin/analytics/customer` — separate from per-customer CRM.
+Customer profiles surface LTV and order history for CRM workflows. Aggregate BI dashboards are out of scope for this module.
 
 ---
 
@@ -491,32 +486,29 @@ app/api/admin/customers/      # Example external API
   [id]/route.ts
   [id]/block|unblock|vip|tags|notes/route.ts
 
-app/_components/surfaces/dashboard/customers/
-  views/
-    customers-list-view.tsx   # List + filters + pagination
-    customer-detail-view.tsx  # Profile tabs + actions
-  hooks/
-    use-customers-list.ts     # Paginated fetch + filters
-    use-customer-detail.ts    # Profile fetch + mutations
+app/admin/_components/customers/
+  customers-list-view.tsx     # List + filters + pagination
+  customer-detail-view.tsx    # Profile tabs + actions
+  use-customers-list.ts       # Paginated fetch + filters
+  use-customer-detail.ts      # Profile fetch + mutations
   add-customer-flow.tsx       # Quick vs history choice
   customer-history-import-form.tsx
   customer-crud-modals.tsx    # Quick create/edit/delete
   customer-action-modals.tsx  # Block, VIP, tags, notes
   customer-detail-sections.tsx  # Profile section cards
   customers-filters.tsx
-  customers-advanced-search.tsx
+  customers-crm-advanced-search.tsx
   customers-table.tsx
-  customers-pagination.tsx
-  lib/
-    filter-customers.ts
-    export-customers.ts
+  filter-customers.ts
+  export-customers.ts
+  customer-error.ts
+  customer-detail-enabled.ts
+  index.ts
 
-lib/api/customers/            # API client (production-ready)
-  queries.ts
-  mutations.ts
-  params.ts
+lib/api/customers/            # API client
+  customers.ts                # list/get/mutations, params, signature
   types.ts
-  example-store.ts            # Dev-only in-memory persistence
+  index.ts
 ```
 
 ---

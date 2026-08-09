@@ -1,0 +1,131 @@
+/**
+ * Dashboard surface tokens + typography.
+ * Component-specific styles live in Tailwind utilities on components.
+ */
+[data-surface="dashboard"] {
+  --ink: #18181b;
+  --ink-muted: #52525b;
+  --ink-subtle: #71717a;
+  --canvas: #f4f4f5;
+  --surface: #ffffff;
+  --surface-elevated: #fafafa;
+  --border: #e4e4e7;
+  --border-strong: #d4d4d8;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-muted: #eef2ff;
+  --accent-foreground: #ffffff;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-foreground: #ffffff;
+  --success: #059669;
+  --success-muted: #ecfdf5;
+  --warning: #d97706;
+  --warning-muted: #fffbeb;
+  --error: #dc2626;
+  --error-muted: #fef2f2;
+  --info: #0284c7;
+  --info-muted: #f0f9ff;
+
+  --shadow-sm: 0 1px 2px rgb(24 24 27 / 0.04);
+  --shadow-md: 0 4px 16px rgb(24 24 27 / 0.08);
+  --shadow-lg: 0 8px 32px rgb(24 24 27 / 0.1);
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-control: var(--radius-md);
+
+  --control-height-sm: 2rem;
+  --control-height-md: 2.25rem;
+  --control-height-lg: 2.5rem;
+
+  --font-display: var(--font-geist-sans);
+  --heading-weight: 600;
+  --heading-tracking: -0.025em;
+
+  --badge-transform: none;
+  --badge-tracking: 0.02em;
+
+  --header-height: 3.5rem;
+  --container-max: 100%;
+  --sidebar-width: 16rem;
+  --sidebar-width-collapsed: 4rem;
+
+  --sidebar-bg: #09090b;
+  --sidebar-fg: #fafafa;
+  --sidebar-muted: #a1a1aa;
+  --sidebar-border: #27272a;
+  --sidebar-active: #6366f1;
+
+  --overlay: rgb(24 24 27 / 0.45);
+  --scrim: rgb(24 24 27 / 0.72);
+
+  --focus-color: #6366f1;
+}
+
+[data-surface="dashboard"] h1,
+[data-surface="dashboard"] h2,
+[data-surface="dashboard"] h3,
+[data-surface="dashboard"] h4,
+[data-surface="dashboard"] .font-display {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-weight: var(--heading-weight);
+  letter-spacing: var(--heading-tracking);
+}
+
+html[lang="fa"] [data-surface="dashboard"] h1,
+html[lang="fa"] [data-surface="dashboard"] h2,
+html[lang="fa"] [data-surface="dashboard"] h3,
+html[lang="fa"] [data-surface="dashboard"] h4,
+html[lang="fa"] [data-surface="dashboard"] .font-display,
+html[dir="rtl"] [data-surface="dashboard"] {
+  font-family: var(--font-vazirmatn), system-ui, sans-serif;
+}
+
+html[data-dashboard-theme="dark"] [data-surface="dashboard"] {
+  color-scheme: dark;
+
+  --ink: #ececee;
+  --ink-muted: #9b9ba4;
+  --ink-subtle: #6b6b74;
+
+  --canvas: #101012;
+  --surface: #18181b;
+  --surface-elevated: #222226;
+  --border: #2c2c32;
+  --border-strong: #3a3a42;
+
+  --accent: #7074f5;
+  --accent-hover: #8588f7;
+  --accent-muted: rgb(99 102 241 / 0.14);
+  --accent-foreground: #ffffff;
+
+  --primary: #6366f1;
+  --primary-hover: #7578f2;
+  --primary-foreground: #ffffff;
+
+  --success: #6ee7a8;
+  --success-muted: rgb(16 185 129 / 0.11);
+  --warning: #f0cc66;
+  --warning-muted: rgb(234 179 8 / 0.11);
+  --error: #f0a8a8;
+  --error-muted: rgb(239 68 68 / 0.11);
+  --info: #7ec8f8;
+  --info-muted: rgb(56 189 248 / 0.11);
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.28);
+  --shadow-md: 0 4px 14px rgb(0 0 0 / 0.34);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.4);
+
+  --focus-color: #7578f2;
+
+  --sidebar-bg: #08080a;
+  --sidebar-fg: #ececee;
+  --sidebar-muted: #868690;
+  --sidebar-border: #1e1e23;
+  --sidebar-active: #6366f1;
+
+  --overlay: rgb(0 0 0 / 0.6);
+  --scrim: rgb(0 0 0 / 0.72);
+}

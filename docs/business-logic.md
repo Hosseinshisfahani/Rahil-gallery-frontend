@@ -1,4 +1,4 @@
-# Rehil Gallery — Business Logic Documentation
+# Rahil Gallery — Business Logic Documentation
 
 > **Version:** 1.0  
 > **Scope:** Frontend (Next.js) business rules and workflows. Backend is a separate project with an existing API.  
@@ -26,7 +26,7 @@
 
 ### 1.1 Brand Positioning
 
-Rehil Gallery is a **luxury, high-end jewelry** brand. The storefront prioritizes editorial presentation, craftsmanship storytelling, and a premium purchase experience. Products span ready-to-ship inventory and made-to-order pieces with extended lead times.
+Rahil Gallery is a **luxury, high-end jewelry** brand. The storefront prioritizes editorial presentation, craftsmanship storytelling, and a premium purchase experience. Products span ready-to-ship inventory and made-to-order pieces with extended lead times.
 
 ### 1.2 Category Tree
 
@@ -499,9 +499,6 @@ Admin UI lives in this Next.js project at `/admin/*` (locale: bilingual labels r
 | Homepage editorial blocks | ✓ | | | ✓ |
 | Review moderation | ✓ | | | ✓ |
 | Customer accounts — view | ✓ | | ✓ | |
-| Analytics dashboard | ✓ | | | |
-
-See [kpi-analytics.md](./kpi-analytics.md) for KPI definitions, dashboard views, and metric formulas.
 
 ### 8.3 Catalog Manager Workflows
 
@@ -665,12 +662,6 @@ Frontend maps codes to localized user messages.
 - Admin routes protected by auth guard + role check
 - Rate limit UI feedback on OTP resend countdown
 
-### 11.5 Analytics ⚠️
-
-- Event hooks defined for: `view_item`, `add_to_cart`, `begin_checkout`, `purchase`
-- Implementation deferred to integration phase
-- Admin analytics UI at `/admin/analytics/*` — see [kpi-analytics.md](./kpi-analytics.md)
-
 ---
 
 ## Appendix A: Glossary
@@ -699,4 +690,4 @@ Frontend maps codes to localized user messages.
 
 ---
 
-*Document maintained as part of Rehil Gallery frontend project. Update when backend API spec is provided.*
+*Document maintained as part of Rahil Gallery frontend project. Update when backend API spec is provided.*

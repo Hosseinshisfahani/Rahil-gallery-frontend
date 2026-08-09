@@ -1,4 +1,5 @@
-import { SurfaceShell } from "@/_components/core/surface";
+import { SurfaceShell } from "@/components/providers/surface-shell";
+import { StoreChrome } from "./_components/store-layout";
 
 export default function StoreLayout({
   children,
@@ -7,7 +8,7 @@ export default function StoreLayout({
 }) {
   return (
     <SurfaceShell surface="store" className="flex min-h-full flex-1 flex-col">
-      {children}
+      <StoreChrome>{children}</StoreChrome>
     </SurfaceShell>
   );
 }

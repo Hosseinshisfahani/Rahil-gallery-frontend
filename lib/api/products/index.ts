@@ -1,6 +1,7 @@
-export { listProducts, getProduct, listCategories } from "./queries";
-export type { ListProductsOptions } from "./queries";
 export {
+  listProducts,
+  getProduct,
+  listCategories,
   createProduct,
   updateProduct,
   archiveProduct,
@@ -10,14 +11,11 @@ export {
   addProductImage,
   removeProductImage,
   adjustVariantInventory,
-} from "./mutations";
-export { productFiltersToParams } from "./params";
-export type { ProductListQuery } from "./params";
-export {
+  productFiltersToParams,
   defaultProductFilters,
   countActiveProductFilters,
-} from "./filters";
-export type { ProductFilters } from "./filters";
+} from "./products";
+export type { ListProductsOptions, ProductListQuery, ProductFilters } from "./products";
 export type {
   AdjustInventoryInput,
   BilingualText,

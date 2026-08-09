@@ -1,7 +1,12 @@
 @import "tailwindcss";
 @import "./styles/themes/store.css";
-@import "./styles/themes/dashboard.css";
+@import "./styles/themes/admin-theme.css";
 @import "./styles/landing.css";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Dashboard dark mode uses html[data-dashboard-theme="dark"] (see admin-theme-toggle). */
+@custom-variant dark (&:where(html[data-dashboard-theme="dark"] *));
 
 /* Fallback tokens before surface is set */
 :root {
@@ -51,6 +56,34 @@
   --sidebar-active: #6366f1;
   --overlay: rgb(24 24 27 / 0.45);
   --scrim: rgb(24 24 27 / 0.72);
+
+  /* shadcn semantic aliases → existing brand tokens (dark mode follows token swap) */
+  --background: var(--canvas);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --secondary: var(--surface-elevated);
+  --secondary-foreground: var(--ink);
+  --muted: var(--surface-elevated);
+  --muted-foreground: var(--ink-muted);
+  --destructive: var(--error);
+  --input: var(--border);
+  --ring: var(--focus-color);
+  --radius: var(--radius-md);
+  --chart-1: var(--primary);
+  --chart-2: var(--accent);
+  --chart-3: var(--info);
+  --chart-4: var(--success);
+  --chart-5: var(--warning);
+  --sidebar: var(--sidebar-bg);
+  --sidebar-foreground: var(--sidebar-fg);
+  --sidebar-primary: var(--sidebar-active);
+  --sidebar-primary-foreground: var(--sidebar-fg);
+  --sidebar-accent: var(--sidebar-border);
+  --sidebar-accent-foreground: var(--sidebar-fg);
+  --sidebar-ring: var(--sidebar-active);
 }
 
 @theme inline {
@@ -93,16 +126,47 @@
   --font-plex-mono: var(--font-plex-mono);
   --font-cormorant: var(--font-cormorant);
   --font-playfair: var(--font-playfair);
+  --font-heading: var(--font-geist-sans);
 
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 
   --shadow-sm: var(--shadow-sm);
   --shadow-md: var(--shadow-md);
 
   --breakpoint-tablet: 48rem;
   --breakpoint-desktop: 90rem;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 @layer base {

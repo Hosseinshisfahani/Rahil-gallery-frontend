@@ -1,13 +1,13 @@
-import { ProductCreateView } from "@/_components/surfaces/dashboard/products";
-import { TranslatedAdminShell } from "@/_components/surfaces/dashboard/layout/translated-admin-shell";
+import { ProductCreateView } from "@/app/admin/_components/products";
+import { AdminShell } from "@/app/admin/_components/layout/admin-shell";
 
 export default function AdminProductCreatePage() {
   return (
-    <TranslatedAdminShell
+    <AdminShell
       titleKey="products.newProduct"
       subtitleKey="products.newProductSubtitle"
     >
       <ProductCreateView />
-    </TranslatedAdminShell>
+    </AdminShell>
   );
 }

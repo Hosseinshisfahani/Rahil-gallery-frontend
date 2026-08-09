@@ -1,6 +1,9 @@
-export { login, logout, refreshAccessToken, ensureValidAccessToken, getCurrentUser } from "./queries";
-export type { AuthTokenPair, AuthUser, LoginInput } from "./types";
 export {
+  login,
+  logout,
+  getCurrentUser,
+  refreshAccessToken,
+  ensureValidAccessToken,
   clearAuthSession,
   getAccessToken,
   getDevAccessToken,
@@ -8,4 +11,11 @@ export {
   getStoredAccessToken,
   hasAuthSession,
   isAccessTokenExpired,
-} from "./session";
+  handleAuthIssue,
+  isAuthError,
+  setAuthSession,
+  getAccessTokenExpiresAt,
+  ACCESS_TOKEN_REFRESH_BUFFER_MS,
+} from "./auth";
+export type { AuthSession } from "./auth";
+export type { AuthTokenPair, AuthUser, LoginInput } from "./types";

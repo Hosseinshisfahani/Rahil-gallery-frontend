@@ -11,11 +11,10 @@ export type AdminNavItemConfig = {
 };
 
 export const adminNav: readonly AdminNavItemConfig[] = [
-  { href: "/admin", labelKey: "nav.dashboard", icon: "grid", exact: true, enabled: false },
-  { href: "/admin/analytics", labelKey: "nav.analytics", icon: "chart", enabled: false },
-  { href: "/admin/orders", labelKey: "nav.orders", icon: "box", enabled: false },
-  { href: "/admin/products", labelKey: "nav.products", icon: "gem", enabled: false },
+  { href: "/admin", labelKey: "nav.dashboard", icon: "grid", exact: true, enabled: true },
+  { href: "/admin/orders", labelKey: "nav.orders", icon: "box", enabled: true },
+  { href: "/admin/products", labelKey: "nav.products", icon: "gem", enabled: true },
   { href: ADMIN_DEFAULT_ROUTE, labelKey: "nav.customers", icon: "users", enabled: true },
-  { href: "/admin/content", labelKey: "nav.content", icon: "file", enabled: false },
-  { href: "/admin/settings", labelKey: "nav.settings", icon: "settings", enabled: false },
+  { href: "/admin/content", labelKey: "nav.content", icon: "file", enabled: true },
+  { href: "/admin/settings", labelKey: "nav.settings", icon: "settings", enabled: true },
 ];

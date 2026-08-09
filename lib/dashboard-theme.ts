@@ -1,4 +1,4 @@
-export const DASHBOARD_THEME_STORAGE_KEY = "rehil-dashboard-theme";
+export const DASHBOARD_THEME_STORAGE_KEY = "rahil-dashboard-theme";
 
 export type DashboardTheme = "light" | "dark";
 

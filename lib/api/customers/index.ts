@@ -1,12 +1,30 @@
-export { listCustomers, fetchAllCustomers, getCustomer } from "./queries";
-export type { ListCustomersOptions } from "./queries";
-export { createCustomer, updateCustomer, deleteCustomer } from "./mutations";
 export {
+  listCustomers,
+  fetchAllCustomers,
+  getCustomer,
+  createCustomer,
+  updateCustomer,
+  deleteCustomer,
   uploadCustomerSignature,
   deleteCustomerSignature,
   saveCustomerImportProfile,
   createCustomerWithImportProfile,
-} from "./signature";
+  validateSignatureFile,
+  customerFiltersToParams,
+  paramsToCustomerFilters,
+  shouldIncludeTotal,
+  hasAdvancedCustomerFilters,
+  defaultCustomerFilters,
+  countActiveFilters,
+  countAdvancedPanelFilters,
+} from "./customers";
+export type {
+  ListCustomersOptions,
+  CustomerFilters,
+  CustomerListQuery,
+  CustomerListParamsOptions,
+  ImportProfileSaveOptions,
+} from "./customers";
 export type {
   CreateCustomerInput,
   UpdateCustomerInput,
@@ -26,10 +44,3 @@ export {
   PURCHASED_CATEGORY_OPTIONS,
   PURCHASED_CATEGORY_DISPLAY_ORDER,
 } from "./types";
-export {
-  customerFiltersToParams,
-  paramsToCustomerFilters,
-  shouldIncludeTotal,
-} from "./params";
-export type { CustomerListQuery, CustomerListParamsOptions } from "./params";
-export { hasAdvancedCustomerFilters } from "@/_components/surfaces/dashboard/customers/lib/filter-customers";

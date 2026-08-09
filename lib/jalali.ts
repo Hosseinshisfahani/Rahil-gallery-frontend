@@ -17,9 +17,6 @@ export const JALALI_MONTH_NAMES = [
   "اسفند",
 ] as const;
 
-/** Week starts Saturday (index 0) */
-export const JALALI_WEEKDAY_SHORT = ["ش", "ی", "د", "س", "چ", "پ", "ج"] as const;
-
 export const JALALI_WEEKDAY_NAMES = [
   "شنبه",
   "یکشنبه",
@@ -72,13 +69,6 @@ export function isoToJalali(iso: string): JalaliParts | null {
   return { jy: j.jy, jm: j.jm, jd: j.jd };
 }
 
-export function jalaliToIso(jy: number, jm: number, jd: number): string | null {
-  if (!jalaali.isValidJalaaliDate(jy, jm, jd)) return null;
-
-  const g = jalaali.toGregorian(jy, jm, jd);
-  return dateToIso(new Date(g.gy, g.gm - 1, g.gd));
-}
-
 export function dateToJalali(date: Date): JalaliParts {
   const j = jalaali.toJalaali(
     date.getFullYear(),
@@ -86,10 +76,6 @@ export function dateToJalali(date: Date): JalaliParts {
     date.getDate(),
   );
   return { jy: j.jy, jm: j.jm, jd: j.jd };
-}
-
-export function jalaliMonthLength(jy: number, jm: number): number {
-  return jalaali.jalaaliMonthLength(jy, jm);
 }
 
 /** Saturday = 0 … Friday = 6 */
@@ -176,64 +162,4 @@ export function formatDateForAdmin(
   return date.toLocaleDateString("en-US", {
     dateStyle: dateStyle === "short" ? "short" : "medium",
   });
-}
-
-export type CalendarCell = JalaliParts | null;
-
-export function buildJalaliMonthGrid(jy: number, jm: number): CalendarCell[] {
-  const monthLength = jalaliMonthLength(jy, jm);
-  const firstGregorian = jalaali.toGregorian(jy, jm, 1);
-  const firstDate = new Date(
-    firstGregorian.gy,
-    firstGregorian.gm - 1,
-    firstGregorian.gd,
-  );
-  const startOffset = iranWeekdayIndex(firstDate);
-
-  const cells: CalendarCell[] = [];
-  for (let i = 0; i < startOffset; i += 1) {
-    cells.push(null);
-  }
-  for (let day = 1; day <= monthLength; day += 1) {
-    cells.push({ jy, jm, jd: day });
-  }
-  return cells;
-}
-
-export function digitsForLocale(value: number | string, locale: AdminLocale): string {
-  const text = String(value);
-  return locale === "fa" ? toPersianDigits(text) : text;
-}
-
-/** Inclusive Jalali year range for calendar navigation. */
-export function jalaliYearRange(
-  min?: string,
-  max?: string,
-  anchor?: JalaliParts,
-): { minYear: number; maxYear: number } {
-  const pivot = anchor ?? dateToJalali(new Date());
-  let minYear = pivot.jy - 100;
-  let maxYear = pivot.jy + 20;
-
-  if (min) {
-    const parts = isoToJalali(min);
-    if (parts) minYear = Math.max(minYear, parts.jy);
-  }
-  if (max) {
-    const parts = isoToJalali(max);
-    if (parts) maxYear = Math.min(maxYear, parts.jy);
-  }
-
-  if (minYear > maxYear) {
-    return { minYear: maxYear, maxYear: minYear };
-  }
-
-  return { minYear, maxYear };
-}
-
-export function jalaliMonthLabel(jm: number, locale: AdminLocale): string {
-  if (locale === "en") {
-    return String(jm).padStart(2, "0");
-  }
-  return JALALI_MONTH_NAMES[jm - 1];
 }

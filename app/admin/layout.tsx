@@ -1,7 +1,7 @@
-import { SurfaceShell } from "@/_components/core/surface";
-import { AdminAuthGate } from "@/_components/surfaces/dashboard/layout/admin-auth-gate";
-import { AdminLocaleProvider } from "@/_components/surfaces/dashboard/layout/admin-locale-provider";
-import { ObservabilityReporter } from "@/_components/surfaces/dashboard/layout/observability-reporter";
+import { SurfaceShell } from "@/components/providers/surface-shell";
+import { AdminAuthGate } from "@/app/admin/_components/layout/admin-auth-gate";
+import { AdminLocaleProvider } from "@/app/admin/_components/layout/admin-locale-provider";
+import { ObservabilityReporter } from "@/app/admin/_components/layout/observability-reporter";
 import { adminLocaleInitScript } from "@/lib/admin-locale";
 import { dashboardThemeInitScript } from "@/lib/dashboard-theme";
 

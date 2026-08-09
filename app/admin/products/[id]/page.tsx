@@ -1,5 +1,5 @@
-import { ProductDetailView } from "@/_components/surfaces/dashboard/products";
-import { TranslatedAdminShell } from "@/_components/surfaces/dashboard/layout/translated-admin-shell";
+import { ProductDetailView } from "@/app/admin/_components/products";
+import { AdminShell } from "@/app/admin/_components/layout/admin-shell";
 
 export default async function AdminProductDetailPage({
   params,
@@ -9,8 +9,8 @@ export default async function AdminProductDetailPage({
   const { id } = await params;
 
   return (
-    <TranslatedAdminShell titleKey="products.productTitle" subtitleSuffix={id}>
+    <AdminShell titleKey="products.productTitle" subtitleSuffix={id}>
       <ProductDetailView productId={id} />
-    </TranslatedAdminShell>
+    </AdminShell>
   );
 }

@@ -1,12 +1,16 @@
 import { buildApiUrl } from "./config";
-import { ensureValidAccessToken, refreshAccessToken } from "./auth/refresh-coordinator";
-import { handleAuthIssue, isAuthError } from "./auth/session";
+import {
+  ensureValidAccessToken,
+  refreshAccessToken,
+  handleAuthIssue,
+  isAuthError,
+} from "./auth/auth";
 import { ApiError, type ApiErrorBody } from "./types";
 
 export interface ApiRequestOptions extends Omit<RequestInit, "body"> {
   body?: unknown;
   params?: Record<string, string | number | boolean | undefined | null>;
-  /** Skip Bearer token (auth endpoints use auth/queries.ts) */
+  /** Skip Bearer token (auth endpoints use lib/api/auth) */
   skipAuth?: boolean;
 }
 

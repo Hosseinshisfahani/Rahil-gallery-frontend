@@ -1,4 +1,4 @@
-# Rehil Gallery — Figma UI Briefs
+# Rahil Gallery — Figma UI Briefs
 
 > **Task 3 deliverable.** Figma-ready specifications for you to implement visually.  
 > **Direction:** Modern bold — strong typography, high contrast, contemporary luxury.  
@@ -490,7 +490,7 @@ Tabbed: Shipping | Returns | Payment gateways (toggles) | General.
 ## Figma File Structure (Recommended)
 
 ```
-📁 Rehil Gallery
+📁 Rahil Gallery
 ├── 🎨 Design System
 │   ├── Store (luxury tokens)
 │   ├── Dashboard (admin tokens)

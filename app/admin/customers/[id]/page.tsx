@@ -1,6 +1,8 @@
-import { CustomerDetailView } from "@/_components/surfaces/dashboard/customers";
-import { CUSTOMER_DETAIL_PAGE_ENABLED } from "@/_components/surfaces/dashboard/customers/lib/customer-detail-enabled";
-import { TranslatedAdminShell } from "@/_components/surfaces/dashboard/layout/translated-admin-shell";
+import {
+  CUSTOMER_DETAIL_PAGE_ENABLED,
+  CustomerDetailView,
+} from "@/app/admin/_components/customers";
+import { AdminShell } from "@/app/admin/_components/layout/admin-shell";
 import { redirect } from "next/navigation";
 
 export default async function AdminCustomerDetailPage({
@@ -15,8 +17,8 @@ export default async function AdminCustomerDetailPage({
   const { id } = await params;
 
   return (
-    <TranslatedAdminShell titleKey="customers.profileTitle">
+    <AdminShell titleKey="customers.profileTitle">
       <CustomerDetailView customerId={id} />
-    </TranslatedAdminShell>
+    </AdminShell>
   );
 }

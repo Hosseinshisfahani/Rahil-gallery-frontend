@@ -1,6 +1,6 @@
 export type AdminLocale = "en" | "fa";
 
-export const ADMIN_LOCALE_STORAGE_KEY = "rehil-admin-locale";
+export const ADMIN_LOCALE_STORAGE_KEY = "rahil-admin-locale";
 export const DEFAULT_ADMIN_LOCALE: AdminLocale = "fa";
 
 export const ADMIN_LOCALES: { value: AdminLocale; label: string }[] = [

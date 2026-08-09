@@ -1,4 +1,4 @@
-# Rehil Gallery — Page Inventory
+# Rahil Gallery — Page Inventory
 
 > **Task 1 deliverable.** All customer routes are duplicated under `/fa/` and `/en/` unless noted.  
 > **Admin routes** use `/admin/` with no locale prefix (bilingual UI labels).
@@ -398,20 +398,6 @@ Base: `/admin/`
 | **Purpose** | Operational queues: new orders, low stock, pending returns, reviews to moderate, production due |
 | **Roles** | All staff |
 
-See [kpi-analytics.md § Operational dashboard](./kpi-analytics.md#2-operational-vs-analytics-dashboards).
-
----
-
-### AD-19 Analytics Dashboards
-
-| | |
-|---|---|
-| **Routes** | `/admin/analytics`, `/admin/analytics/marketing`, `/admin/analytics/product`, `/admin/analytics/customer`, `/admin/analytics/funnel` |
-| **Purpose** | Business intelligence — executive KPIs, marketing, product, customer, and funnel analytics |
-| **Roles** | Admin only |
-
-Full metric definitions and dashboard structure: [kpi-analytics.md](./kpi-analytics.md).
-
 ---
 
 ### AD-03 Products List
@@ -604,10 +590,10 @@ Full metric definitions and dashboard structure: [kpi-analytics.md](./kpi-analyt
 - Profile, Orders, Addresses, Wishlist, Returns, Logout
 
 **Admin sidebar (preview — `/admin`):**
-- Dashboard, Analytics, Orders, Products, Customers, Content, Settings
+- Dashboard, Orders, Products, Customers, Content, Settings
 
 **Admin sidebar (full v1 spec):**
-- Dashboard, Analytics, Products, Collections, Configurator, Inventory, Orders, Returns, Reviews, Blog, Homepage, Users, Settings
+- Dashboard, Products, Collections, Configurator, Inventory, Orders, Returns, Reviews, Blog, Homepage, Users, Settings
 
 ---
 
@@ -618,8 +604,8 @@ Full metric definitions and dashboard structure: [kpi-analytics.md](./kpi-analyt
 | **P0 — MVP core** | S-01, S-02, S-03, S-05, S-06, A-01, K-01, K-02, K-03, K-04, C-04, C-05 |
 | **P1 — Account & trust** | C-01, C-03, C-06, C-08, C-09, S-13, S-14 |
 | **P2 — Content & brand** | S-04, S-08, S-09, S-10, S-11, S-12, S-07 |
-| **P3 — Admin** | AD-01 through AD-19 (phased: catalog + orders first; analytics Admin-only) |
+| **P3 — Admin** | AD-01 through AD-18 (phased: catalog + orders first) |
 
 ---
 
-*See [kpi-analytics.md](./kpi-analytics.md) for KPI definitions, analytics dashboard structure, and API assumptions. [components.md](./components.md) for architecture (`core/` · `surfaces/` · `shared/`), per-page component breakdown, and implementation status. [figma-briefs.md](./figma-briefs.md) covers dual-surface UI design specs.*
+*[components.md](./components.md) for architecture (`core/` · `surfaces/` · `shared/`), per-page component breakdown, and implementation status. [figma-briefs.md](./figma-briefs.md) covers dual-surface UI design specs.*

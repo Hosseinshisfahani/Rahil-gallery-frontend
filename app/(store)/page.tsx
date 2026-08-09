@@ -6,29 +6,23 @@ import {
   LandingJournal,
   LandingMarquee,
   LandingNewArrivals,
-} from "@/_components/exclusive/landing";
-import { SiteFooter } from "@/_components/shared/layout/site-footer";
-import { SiteHeader } from "@/_components/shared/layout/site-header";
+} from "./_components/landing";
 
 export const metadata: Metadata = {
-  title: "Rehil Gallery — Fine Jewelry",
+  title: "Rahil Gallery — Fine Jewelry",
   description:
-    "Modern retro luxury jewelry. Discover collections, new arrivals, and bespoke pieces from our Tehran atelier.",
+    "Modern retro luxury jewelry. Discover collections, new arrivals, and bespoke pieces from our Isfahan atelier.",
 };
 
 export default function HomePage() {
   return (
-    <div className="landing flex min-h-full flex-1 flex-col">
-      <SiteHeader locale="en" brandHref="/" overlay />
-      <main className="flex-1">
-        <LandingHero />
-        <LandingMarquee />
-        <LandingCollections />
-        <LandingNewArrivals />
-        <LandingEditorial />
-        <LandingJournal />
-      </main>
-      <SiteFooter locale="en" className="border-[var(--landing-border)] bg-[var(--landing-surface)]" />
-    </div>
+    <main className="flex-1">
+      <LandingHero />
+      <LandingMarquee />
+      <LandingCollections />
+      <LandingNewArrivals />
+      <LandingEditorial />
+      <LandingJournal />
+    </main>
   );
 }

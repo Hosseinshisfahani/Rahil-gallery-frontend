@@ -1,7 +1,7 @@
-# Rehil Gallery — API Integration Assumptions
+# Rahil Gallery — API Integration Assumptions
 
 > **Status:** Placeholder contracts until official backend API documentation is provided.  
-> **Base URL:** ⚠️ `https://api.rehil.gallery/v1` (TBD)  
+> **Base URL:** ⚠️ `https://api.rahil.gallery/v1` (TBD)  
 > **Auth:** Bearer JWT in `Authorization` header unless cookie-based session is specified.
 
 ---
@@ -338,9 +338,6 @@ All require staff role. Backend enforces permissions per [business-logic.md](./b
 | Customers | `GET /admin/customers`, `GET/PATCH /admin/customers/:id`, tags, VIP, block/unblock, notes, export |
 | Settings | `GET/PATCH /admin/settings` (shipping, returns, gateways) |
 | Media | `POST /admin/media/upload-url` (presigned) |
-| Analytics | `GET /admin/analytics/overview`, `/marketing`, `/product`, `/customer`, `/funnel` |
-
-See [kpi-analytics.md § API Assumptions](./kpi-analytics.md#12-api-assumptions) for response shapes.
 
 ### PATCH `/admin/orders/:id/status`
 
@@ -365,7 +362,7 @@ Request:
 
 ## Admin Customers
 
-Staff roles: Admin (full), Support (view + restricted block), CRM/Growth (tags, VIP, export), Analyst (read-only analytics).
+Staff roles: Admin (full), Support (view + restricted block), CRM/Growth (tags, VIP, export).
 
 ### GET `/admin/customers`
 
