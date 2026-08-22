@@ -1,8 +1,29 @@
 # Rahil Gallery — API Integration Assumptions
 
-> **Status:** Placeholder contracts until official backend API documentation is provided.  
-> **Base URL:** ⚠️ `https://api.rahil.gallery/v1` (TBD)  
-> **Auth:** Bearer JWT in `Authorization` header unless cookie-based session is specified.
+> **Status:** Live contracts for Go + Django Strangler Fig.  
+> **Browser base:** `/api/v1` (Next.js rewrites)  
+> **Go:** auth, admin customers, catalog (`GO_API_PROXY_URL`, default `:8081`)  
+> **Django:** carts, orders, payments, promotions (`DJANGO_API_PROXY_URL`, default `:8000`)  
+> **Auth:** Bearer JWT issued by Go; Django verifies the same `JWT_ACCESS_SECRET`.
+
+### Response envelope (both backends)
+
+```json
+{ "success": true, "data": {} }
+```
+
+```json
+{ "success": false, "error": { "code": "unauthorized", "message": "..." } }
+```
+
+### Cart (Django)
+
+| Method | Path | Notes |
+|--------|------|--------|
+| GET | `/api/v1/carts/me` | Get or create active cart |
+| POST | `/api/v1/carts/me/items` | `{ variant_id, quantity, unit_price_snapshot }` |
+| PATCH | `/api/v1/carts/me/items/:id` | `{ quantity }` |
+| DELETE | `/api/v1/carts/me/items/:id` | Remove line |
 
 ---
 

@@ -13,7 +13,7 @@ The client also deploys automatically when the API pipeline finishes (repository
 - `SSH_PRIVATE_KEY`
 - `SSH_HOST`
 - `SSH_USER`
-- `CLIENT_DEPLOY_PATH` — e.g. `/root/source/Rahil-Gallery-Client`
+- `CLIENT_DEPLOY_PATH` — e.g. `/root/source/Rahil-gallery-frontend`
 
 ## VPS without npm registry access
 
@@ -28,10 +28,12 @@ The client also deploys automatically when the API pipeline finishes (repository
 
 ```bash
 apt install -y rsync   # optional — deploy uses tar+scp if rsync is missing
-git clone https://github.com/aliakbarebrahimy/Rahil-Gallery-Client.git ~/source/Rahil-Gallery-Client
-cd ~/source/Rahil-Gallery-Client
+git clone https://github.com/aliakbarebrahimy/Rahil-Gallery-Client.git ~/source/Rahil-gallery-frontend
+cd ~/source/Rahil-gallery-frontend
 cp .env.example .env
-# API_PROXY_URL=http://127.0.0.1:8080  (Go API on same host)
+# GO_API_PROXY_URL=http://127.0.0.1:8080   (Go API on same host)
+# DJANGO_API_PROXY_URL=http://127.0.0.1:8000 (Django commerce API)
+# API_PROXY_URL still works as a legacy alias for GO_API_PROXY_URL
 npm install -g pm2
 pm2 startup && pm2 save
 ```
@@ -48,7 +50,7 @@ scp /tmp/rahil-client-release.tar.gz root@YOUR_SERVER:/tmp/
 
 **On VPS** (API must be running on :8080 first):
 ```bash
-cd ~/source/Rahil-Gallery-Client
+cd ~/source/Rahil-gallery-frontend
 mkdir -p /tmp/client-release
 tar -xzf /tmp/rahil-client-release.tar.gz -C /tmp/client-release
 bash scripts/deploy-remote.sh /tmp/client-release
