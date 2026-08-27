@@ -17,6 +17,8 @@ export {
   defaultCustomerFilters,
   countActiveFilters,
   countAdvancedPanelFilters,
+  sendBulkCustomerSMS,
+  customerFiltersToBulkBody,
 } from "./customers";
 export type {
   ListCustomersOptions,
@@ -24,6 +26,7 @@ export type {
   CustomerListQuery,
   CustomerListParamsOptions,
   ImportProfileSaveOptions,
+  BulkSMSResult,
 } from "./customers";
 export type {
   CreateCustomerInput,

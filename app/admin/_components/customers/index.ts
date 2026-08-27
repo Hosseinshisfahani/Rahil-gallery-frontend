@@ -1,5 +1,6 @@
 export {
   ExportConfirmModal,
+  BulkSMSModal,
   AddCustomerFlowModal,
   EditHistoryImportModal,
   DeleteCustomerModal,

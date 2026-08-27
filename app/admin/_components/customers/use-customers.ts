@@ -23,6 +23,7 @@ export interface UseCustomersListResult {
   customers: CustomerSummary[];
   meta: PaginationMeta | null;
   filters: CustomerFilters;
+  requestFilters: CustomerFilters;
   setFilters: (filters: CustomerFilters) => void;
   page: number;
   setPage: (page: number) => void;
@@ -127,6 +128,7 @@ export function useCustomersList(): UseCustomersListResult {
     customers,
     meta,
     filters,
+    requestFilters,
     setFilters,
     page,
     setPage,

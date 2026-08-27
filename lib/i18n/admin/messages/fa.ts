@@ -78,6 +78,7 @@ export const adminMessagesFa = {
     orders: "سفارش‌ها",
     products: "محصولات",
     customers: "مشتریان",
+    sms: "پیامک",
     content: "محتوا",
     settings: "تنظیمات",
     brand: "مدیریت رهیل",
@@ -127,6 +128,7 @@ export const adminMessagesFa = {
     moreAvailable: " (موارد بیشتر موجود است)",
     customersEntity: "مشتری",
     productsEntity: "محصول",
+    smsJobsEntity: "کمپین پیامک",
     rows: "ردیف",
     prev: "قبلی",
     next: "بعدی",
@@ -142,6 +144,7 @@ export const adminMessagesFa = {
     managementTitle: "مدیریت مشتریان",
     addCustomer: "افزودن مشتری",
     exportCsv: "خروجی CSV",
+    sendBulkSms: "ارسال پیامک گروهی",
     allCustomers: "جستجو",
     profileTitle: "پروفایل مشتری",
     profile: {
@@ -291,6 +294,17 @@ export const adminMessagesFa = {
         title: "خروجی داده مشتری",
         description: "خروجی {count} مشتری مطابق فیلترهای فعلی به CSV.",
         compliance: "خروجی شامل PII است — مطابق سیاست نگهداری داده مدیریت کنید.",
+      },
+      bulkSms: {
+        title: "ارسال پیامک گروهی",
+        description:
+          "پیام برای همه مشتریانی که با فیلترهای فعلی هم‌خوانی دارند ارسال می‌شود (شماره‌ها در سرور استخراج می‌شوند).",
+        messageLabel: "متن پیام",
+        messagePlaceholder: "متن پیامک را بنویسید…",
+        confirm: "ارسال پیامک",
+        success:
+          "پذیرفته شد. تطبیق {matched}، شماره نامعتبر {skipped}، دسته {batches}.",
+        error: "صف‌بندی پیامک گروهی ناموفق بود",
       },
       saveFilters: {
         title: "ذخیره پیش‌تنظیم فیلتر",
@@ -510,6 +524,43 @@ export const adminMessagesFa = {
       awareness: "آگاهی",
       consideration: "بررسی",
       purchased: "خرید کرده",
+    },
+  },
+  sms: {
+    title: "گزارش پیامک",
+    subtitle: "تاریخچه کمپین‌ها",
+    openKavenegar: "پنل کاوه‌نگار",
+    empty: "هنوز کمپینی ثبت نشده. از صفحه مشتریان پیامک گروهی بفرستید.",
+    failedLoad: "بارگذاری کمپین‌ها ناموفق بود",
+    table: {
+      created: "تاریخ",
+      status: "وضعیت",
+      message: "متن",
+      matched: "منطبق",
+      sent: "ارسال‌شده",
+      failed: "ناموفق",
+      skipped: "ردشده",
+      note: "یادداشت فروش",
+      actions: "عملیات",
+    },
+    status: {
+      pending: "در صف",
+      running: "در حال ارسال",
+      completed: "تمام‌شده",
+      failed: "خطا",
+    },
+    actions: {
+      addNote: "افزودن یادداشت",
+      editNote: "ویرایش یادداشت",
+    },
+    modals: {
+      note: {
+        title: "یادداشت فروش",
+        description: "بازخورد / نتیجه این کمپین",
+        label: "یادداشت",
+        placeholder: "مثلاً نرخ تبدیل، شکایت، پیگیری…",
+        error: "ذخیره یادداشت ناموفق بود",
+      },
     },
   },
   products: {

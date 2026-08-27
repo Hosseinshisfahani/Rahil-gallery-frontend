@@ -78,6 +78,7 @@ export const adminMessagesEn = {
     orders: "Orders",
     products: "Products",
     customers: "Customers",
+    sms: "SMS",
     content: "Content",
     settings: "Settings",
     brand: "Rahil Admin",
@@ -127,6 +128,7 @@ export const adminMessagesEn = {
     moreAvailable: " (more available)",
     customersEntity: "customers",
     productsEntity: "products",
+    smsJobsEntity: "SMS jobs",
     rows: "Rows",
     prev: "Prev",
     next: "Next",
@@ -142,6 +144,7 @@ export const adminMessagesEn = {
     managementTitle: "Customer management",
     addCustomer: "Add customer",
     exportCsv: "Export CSV",
+    sendBulkSms: "Send Bulk SMS",
     allCustomers: "Search",
     profileTitle: "Customer profile",
     profile: {
@@ -291,6 +294,17 @@ export const adminMessagesEn = {
         title: "Export customer data",
         description: "Export {count} customers matching current filters to CSV.",
         compliance: "Export includes PII — handle per data retention policy.",
+      },
+      bulkSms: {
+        title: "Send bulk SMS",
+        description:
+          "Message will be sent to all customers matching the current filters (server resolves phone numbers).",
+        messageLabel: "Message",
+        messagePlaceholder: "Write the SMS text…",
+        confirm: "Send SMS",
+        success:
+          "Accepted. Matched {matched}, skipped invalid phones {skipped}, batches {batches}.",
+        error: "Failed to queue bulk SMS",
       },
       saveFilters: {
         title: "Save filter preset",
@@ -510,6 +524,43 @@ export const adminMessagesEn = {
       awareness: "Awareness",
       consideration: "Consideration",
       purchased: "Purchased",
+    },
+  },
+  sms: {
+    title: "SMS Reports",
+    subtitle: "Campaign history",
+    openKavenegar: "Open Kavenegar Panel",
+    empty: "No SMS campaigns yet. Send a bulk SMS from Customers.",
+    failedLoad: "Failed to load SMS jobs",
+    table: {
+      created: "Created",
+      status: "Status",
+      message: "Message",
+      matched: "Matched",
+      sent: "Sent",
+      failed: "Failed",
+      skipped: "Skipped",
+      note: "Seller note",
+      actions: "Actions",
+    },
+    status: {
+      pending: "Pending",
+      running: "Running",
+      completed: "Completed",
+      failed: "Failed",
+    },
+    actions: {
+      addNote: "Add note",
+      editNote: "Edit note",
+    },
+    modals: {
+      note: {
+        title: "Seller note",
+        description: "Feedback / ROI for this campaign",
+        label: "Note",
+        placeholder: "e.g. conversion, complaints, follow-up…",
+        error: "Could not save note",
+      },
     },
   },
   products: {

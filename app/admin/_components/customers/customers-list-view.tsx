@@ -18,6 +18,7 @@ import {
 } from "@/components/admin/ui/dashboard-pagination";
 import {
   AddCustomerFlowModal,
+  BulkSMSModal,
   DeleteCustomerModal,
   EditHistoryImportModal,
   ExportConfirmModal,
@@ -41,6 +42,7 @@ export function CustomersListView() {
     customers,
     meta,
     filters,
+    requestFilters,
     setFilters,
     setPage,
     setPerPage,
@@ -50,6 +52,7 @@ export function CustomersListView() {
   } = useCustomersList();
 
   const [showExportModal, setShowExportModal] = useState(false);
+  const [showBulkSmsModal, setShowBulkSmsModal] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<{
@@ -133,6 +136,18 @@ export function CustomersListView() {
     }
   }
 
+  async function handleBulkSms(message: string) {
+    const { sendBulkCustomerSMS } = await import("@/lib/api/customers");
+    const result = await sendBulkCustomerSMS({ message, filters: requestFilters });
+    window.alert(
+      t("customers.modals.bulkSms.success", {
+        matched: result.matched,
+        skipped: result.skippedInvalidPhone,
+        batches: result.batches,
+      }),
+    );
+  }
+
   const resultCount = customers.length;
   const totalCount = meta?.total;
   const exportDisabled =
@@ -151,6 +166,14 @@ export function CustomersListView() {
             onClick={() => setShowCreateModal(true)}
           >
             {t("customers.addCustomer")}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowBulkSmsModal(true)}
+            disabled={loading}
+          >
+            {t("customers.sendBulkSms")}
           </Button>
           <Button
             variant="default"
@@ -268,6 +291,13 @@ export function CustomersListView() {
           customer={editCustomer}
           onClose={closeEdit}
           onConfirm={handleEditSave}
+        />
+      )}
+
+      {showBulkSmsModal && (
+        <BulkSMSModal
+          onClose={() => setShowBulkSmsModal(false)}
+          onSubmit={handleBulkSms}
         />
       )}
 

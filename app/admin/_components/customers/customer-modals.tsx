@@ -53,6 +53,72 @@ export function ExportConfirmModal({
   );
 }
 
+// --- BulkSMSModal ---
+
+export interface BulkSMSModalProps {
+  onClose: () => void;
+  onSubmit: (message: string) => Promise<void>;
+}
+
+export function BulkSMSModal({ onClose, onSubmit }: BulkSMSModalProps) {
+  const { t } = useAdminT();
+  const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleConfirm() {
+    const trimmed = message.trim();
+    if (!trimmed) {
+      setError(t("customers.modals.bulkSms.messageLabel"));
+      return;
+    }
+    setSubmitting(true);
+    setError(null);
+    try {
+      await onSubmit(trimmed);
+      onClose();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t("customers.modals.bulkSms.error"));
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <ModalShell
+      title={t("customers.modals.bulkSms.title")}
+      description={t("customers.modals.bulkSms.description")}
+      onClose={onClose}
+      footer={
+        <>
+          <Button variant="ghost" onClick={onClose} disabled={submitting}>
+            {t("common.cancel")}
+          </Button>
+          <Button variant="default" onClick={handleConfirm} disabled={submitting}>
+            {t("customers.modals.bulkSms.confirm")}
+          </Button>
+        </>
+      }
+    >
+      <label className="block text-sm font-medium text-ink">
+        {t("customers.modals.bulkSms.messageLabel")}
+        <textarea
+          className="mt-2 w-full min-h-28 rounded-[var(--radius-md)] border border-border bg-surface p-3 text-sm"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder={t("customers.modals.bulkSms.messagePlaceholder")}
+          disabled={submitting}
+        />
+      </label>
+      {error && (
+        <p className="mt-3 text-sm text-error" role="alert">
+          {error}
+        </p>
+      )}
+    </ModalShell>
+  );
+}
+
 // --- DeleteCustomerModal ---
 
 export interface DeleteCustomerModalProps {

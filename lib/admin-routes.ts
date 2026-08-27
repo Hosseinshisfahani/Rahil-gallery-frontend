@@ -15,6 +15,7 @@ export const adminNav: readonly AdminNavItemConfig[] = [
   { href: "/admin/orders", labelKey: "nav.orders", icon: "box", enabled: true },
   { href: "/admin/products", labelKey: "nav.products", icon: "gem", enabled: true },
   { href: ADMIN_DEFAULT_ROUTE, labelKey: "nav.customers", icon: "users", enabled: true },
+  { href: "/admin/sms", labelKey: "nav.sms", icon: "file", enabled: true },
   { href: "/admin/content", labelKey: "nav.content", icon: "file", enabled: true },
   { href: "/admin/settings", labelKey: "nav.settings", icon: "settings", enabled: true },
 ];

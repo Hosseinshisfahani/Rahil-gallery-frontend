@@ -293,6 +293,53 @@ export async function deleteCustomer(id: string): Promise<void> {
   });
 }
 
+export interface BulkSMSResult {
+  jobId: string;
+  accepted: boolean;
+  matched: number;
+  skippedInvalidPhone: number;
+  batches: number;
+}
+
+/** Maps UI filters → JSON body expected by POST /admin/customers/sms/bulk */
+export function customerFiltersToBulkBody(filters: CustomerFilters) {
+  return {
+    query: filters.query,
+    customerId: filters.customerId,
+    email: filters.email,
+    customerAgeRange: filters.customerAgeRange,
+    gender: filters.gender,
+    customerTypes: filters.customerTypes,
+    purchaseTypes: filters.purchaseTypes,
+    firstVisitFrom: filters.firstVisitFrom,
+    firstVisitTo: filters.firstVisitTo,
+    birthdayFrom: filters.birthdayFrom,
+    birthdayTo: filters.birthdayTo,
+    marriageFrom: filters.marriageFrom,
+    marriageTo: filters.marriageTo,
+  };
+}
+
+export async function sendBulkCustomerSMS(input: {
+  message: string;
+  filters: CustomerFilters;
+}): Promise<BulkSMSResult> {
+  const res = await apiRequest<{ success: boolean; data: BulkSMSResult }>(
+    `${CUSTOMERS_PATH}/sms/bulk`,
+    {
+      method: "POST",
+      body: {
+        message: input.message,
+        filters: customerFiltersToBulkBody(input.filters),
+      },
+    },
+  );
+  if (!res?.data) {
+    throw new ApiError("REQUEST_FAILED", "Empty bulk SMS response", 500);
+  }
+  return res.data;
+}
+
 // --- signature ---
 
 export function validateSignatureFile(file: File): string | null {
