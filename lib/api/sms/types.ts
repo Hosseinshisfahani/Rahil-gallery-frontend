@@ -10,6 +10,7 @@ export interface SMSJob {
   failed: number;
   batches: number;
   sellerNote: string | null;
+  lastError: string | null;
   createdAt: string;
   updatedAt: string;
   completedAt: string | null;

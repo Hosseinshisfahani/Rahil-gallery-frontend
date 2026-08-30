@@ -541,12 +541,14 @@ export const adminMessagesEn = {
       failed: "Failed",
       skipped: "Skipped",
       note: "Seller note",
+      lastError: "Error",
       actions: "Actions",
     },
     status: {
       pending: "Pending",
       running: "Running",
       completed: "Completed",
+      completed_with_errors: "Completed with errors",
       failed: "Failed",
     },
     actions: {

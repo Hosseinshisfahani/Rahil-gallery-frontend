@@ -301,23 +301,38 @@ export interface BulkSMSResult {
   batches: number;
 }
 
-/** Maps UI filters → JSON body expected by POST /admin/customers/sms/bulk */
-export function customerFiltersToBulkBody(filters: CustomerFilters) {
-  return {
-    query: filters.query,
-    customerId: filters.customerId,
-    email: filters.email,
-    customerAgeRange: filters.customerAgeRange,
-    gender: filters.gender,
-    customerTypes: filters.customerTypes,
-    purchaseTypes: filters.purchaseTypes,
-    firstVisitFrom: filters.firstVisitFrom,
-    firstVisitTo: filters.firstVisitTo,
-    birthdayFrom: filters.birthdayFrom,
-    birthdayTo: filters.birthdayTo,
-    marriageFrom: filters.marriageFrom,
-    marriageTo: filters.marriageTo,
-  };
+/**
+ * Maps UI filters → JSON body for POST /admin/customers/sms/bulk.
+ * Mirrors list query params: omit empty/"all"; quick search only when not advanced.
+ */
+export function customerFiltersToBulkBody(
+  filters: CustomerFilters,
+): Record<string, string | string[]> {
+  const body: Record<string, string | string[]> = {};
+  const advanced = hasAdvancedCustomerFilters(filters);
+
+  if (advanced) {
+    const id = filters.customerId.trim();
+    if (id) body.customerId = id;
+
+    const email = filters.email.trim();
+    if (email) body.email = email;
+
+    if (filters.customerAgeRange) body.customerAgeRange = filters.customerAgeRange;
+    if (filters.gender !== "all") body.gender = filters.gender;
+    if (filters.customerTypes.length > 0) body.customerTypes = filters.customerTypes;
+    if (filters.purchaseTypes.length > 0) body.purchaseTypes = filters.purchaseTypes;
+    if (filters.firstVisitFrom) body.firstVisitFrom = filters.firstVisitFrom;
+    if (filters.firstVisitTo) body.firstVisitTo = filters.firstVisitTo;
+    if (filters.birthdayFrom) body.birthdayFrom = filters.birthdayFrom;
+    if (filters.birthdayTo) body.birthdayTo = filters.birthdayTo;
+    if (filters.marriageFrom) body.marriageFrom = filters.marriageFrom;
+    if (filters.marriageTo) body.marriageTo = filters.marriageTo;
+  } else if (filters.query.trim()) {
+    body.query = filters.query.trim();
+  }
+
+  return body;
 }
 
 export async function sendBulkCustomerSMS(input: {

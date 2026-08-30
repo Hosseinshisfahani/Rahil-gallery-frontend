@@ -26,6 +26,7 @@ import { useSMSJobs } from "./use-sms-jobs";
 
 const MESSAGE_PREVIEW_LENGTH = 60;
 const NOTE_PREVIEW_LENGTH = 40;
+const ERROR_PREVIEW_LENGTH = 48;
 const KAVENEGAR_PANEL_URL = "https://console.kavenegar.com/home";
 
 function truncate(value: string, max: number): string {
@@ -114,6 +115,7 @@ export function SmsReportsView() {
                   <th className={tableThClass}>{t("sms.table.failed")}</th>
                   <th className={tableThClass}>{t("sms.table.skipped")}</th>
                   <th className={tableThClass}>{t("sms.table.note")}</th>
+                  <th className={tableThClass}>{t("sms.table.lastError")}</th>
                   <th className={tableThClass}>{t("sms.table.actions")}</th>
                 </tr>
               </thead>
@@ -147,6 +149,15 @@ export function SmsReportsView() {
                       {job.sellerNote
                         ? truncate(job.sellerNote, NOTE_PREVIEW_LENGTH)
                         : "—"}
+                    </TableCell>
+                    <TableCell label={t("sms.table.lastError")}>
+                      {job.lastError ? (
+                        <span className="text-error" title={job.lastError}>
+                          {truncate(job.lastError, ERROR_PREVIEW_LENGTH)}
+                        </span>
+                      ) : (
+                        "—"
+                      )}
                     </TableCell>
                     <TableCell label={t("sms.table.actions")} layout="actions">
                       <Button

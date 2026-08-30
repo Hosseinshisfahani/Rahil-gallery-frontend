@@ -541,12 +541,14 @@ export const adminMessagesFa = {
       failed: "ناموفق",
       skipped: "ردشده",
       note: "یادداشت فروش",
+      lastError: "خطا",
       actions: "عملیات",
     },
     status: {
       pending: "در صف",
       running: "در حال ارسال",
       completed: "تمام‌شده",
+      completed_with_errors: "تمام‌شده با خطا",
       failed: "خطا",
     },
     actions: {
