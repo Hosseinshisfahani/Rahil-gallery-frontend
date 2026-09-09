@@ -50,11 +50,11 @@ export function ModalShell({
       <DialogContent
         closeLabel={t("common.closeDialog")}
         className={cn(
-          "flex max-h-[90vh] w-full flex-col gap-0 overflow-hidden bg-surface p-0 text-ink ring-border",
+          "flex max-h-[90dvh] w-full min-w-0 flex-col gap-0 overflow-hidden bg-surface p-0 text-ink ring-border",
           sizeClasses[size],
         )}
       >
-        <DialogHeader className="shrink-0 gap-1 border-b border-border/60 px-6 pb-4 pt-6 pe-12 text-start">
+        <DialogHeader className="shrink-0 gap-1 border-b border-border/60 px-4 pb-4 pt-5 pe-12 text-start sm:px-6 sm:pt-6">
           <DialogTitle className="text-lg font-semibold text-ink">
             {title}
           </DialogTitle>
@@ -64,8 +64,8 @@ export function ModalShell({
             </DialogDescription>
           ) : null}
         </DialogHeader>
-        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">{children}</div>
-        <DialogFooter className="mx-0 mb-0 shrink-0 flex-row justify-end gap-3 rounded-none border-border/60 bg-transparent p-6 pt-4">
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6">{children}</div>
+        <DialogFooter className="mx-0 mb-0 shrink-0 flex-row flex-wrap justify-end gap-3 rounded-none border-border/60 bg-transparent p-4 pt-4 sm:p-6">
           {footer}
         </DialogFooter>
       </DialogContent>
