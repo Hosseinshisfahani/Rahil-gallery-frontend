@@ -60,6 +60,8 @@ Copy `.env.example` and adjust as needed:
 
 ## Deploy
 
+Live server orchestration and deploys are managed via `~/source/rahil-stack`.
+
 GitHub Actions builds the standalone bundle and deploys with PM2. See [docs/cicd-setup.md](docs/cicd-setup.md).
 
 To bundle on a machine with npm access:
