@@ -8,10 +8,20 @@ const djangoApiProxyUrl =
   process.env.DJANGO_API_PROXY_URL ?? "http://localhost:8000";
 const apiBaseUrl =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ?? "/api/v1";
+const extraAllowedDevOrigins = (process.env.ALLOWED_DEV_ORIGINS ?? "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  allowedDevOrigins: ["127.0.0.1"],
+  allowedDevOrigins: [
+    "localhost",
+    "127.0.0.1",
+    "10.94.24.217",
+    "46.249.101.208",
+    ...extraAllowedDevOrigins,
+  ],
   async rewrites() {
     // Same-origin proxy: split commerce → Django, everything else → Go
     if (apiBaseUrl.startsWith("http")) {
