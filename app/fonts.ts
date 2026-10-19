@@ -14,6 +14,35 @@ const geistMono = localFont({
   display: "swap",
 });
 
+
+export const morabba = localFont({
+  src: [
+    {
+      path: "../public/fonts/morabba/webfont/fonts/woff2/Morabba-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/morabba/webfont/fonts/woff2/Morabba-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/morabba/webfont/fonts/woff2/Morabba-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/morabba/webfont/fonts/woff2/Morabba-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-morabba",
+  display: "swap",
+});
+
+ 
 const vazirmatn = localFont({
   src: [
     {
@@ -29,6 +58,7 @@ const vazirmatn = localFont({
   ],
   variable: "--font-vazirmatn",
   display: "swap",
+  preload: true,
 });
 
 const cormorant = localFont({
@@ -106,6 +136,7 @@ const plexMono = localFont({
 
 /** CSS variable class names for <html> — self-hosted from public/fonts. */
 export const fontVariables = [
+  morabba.variable,
   geistSans.variable,
   geistMono.variable,
   syne.variable,

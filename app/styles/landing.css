@@ -172,10 +172,107 @@
   color: var(--landing-primary);
 }
 
+.landing-quote {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-weight: 300;
+}
+
 .landing-text-gold {
   color: var(--landing-gold-deep);
 }
 
 .landing-text-primary {
   color: var(--landing-primary);
+}
+
+html[lang="fa"] .landing {
+  --landing-display: var(--font-morabba), serif;
+  --landing-mono: var(--font-body-fa);
+}
+
+html[lang="fa"] .landing h1.landing-display,
+html[lang="fa"] .landing h2.landing-display {
+  font-family: var(--font-morabba), serif;
+  font-size: clamp(2rem, 5vw, 3.2rem) !important;
+  font-weight: 400;
+  font-synthesis: none;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+html[lang="fa"] .landing h3.landing-display:not(.journal-card-title) {
+  font-family: var(--font-morabba), serif;
+  font-weight: 400;
+  font-synthesis: none;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+html[lang="fa"] .landing .landing-quote {
+  font-family: var(--font-morabba), serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem) !important;
+  font-weight: 300;
+  font-synthesis: none;
+  line-height: 1.6;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+html[lang="fa"] .landing .ds-product-title {
+  font-family: var(--font-body-fa), system-ui, sans-serif;
+  font-weight: 600;
+  font-synthesis: none;
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+html[lang="fa"] .landing .landing-mono,
+html[lang="fa"] .landing .landing-pill,
+html[lang="fa"] .landing .ds-nav-link,
+html[lang="fa"] .landing .ds-wordmark,
+html[lang="fa"] .landing footer h3 {
+  font-family: var(--font-body-fa), system-ui, sans-serif;
+  font-synthesis: none;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+html[lang="fa"] .landing .ds-nav-link,
+html[lang="fa"] .landing .ds-wordmark,
+html[lang="fa"] .landing .landing-pill,
+html[lang="fa"] .landing footer h3 {
+  font-weight: 500;
+}
+
+html[lang="fa"] .landing p:not(.landing-mono) {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: #333333;
+}
+
+html[lang="fa"] .landing footer a,
+html[lang="fa"] .landing .journal-card-title {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+html[lang="fa"] .landing .journal-card-title {
+  font-family: var(--font-body-fa), system-ui, sans-serif;
+  font-synthesis: none;
+  letter-spacing: 0;
+  line-height: 1.6;
+}
+
+html[lang="fa"] .landing button,
+html[lang="fa"] .landing .button,
+html[lang="fa"] .landing .landing-pill {
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+}
+
+html[lang="fa"] .landing section:first-of-type .landing-mono {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: #666666;
 }

@@ -62,6 +62,8 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    formats: ["image/webp"],
+    qualities: [75, 80],
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",

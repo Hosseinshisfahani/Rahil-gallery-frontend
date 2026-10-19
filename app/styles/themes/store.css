@@ -89,14 +89,63 @@
   color: var(--brand);
 }
 
+/*
+ * Persian type scale.
+ * Display (hero + short editorial headings): Nabi Regular when licensed.
+ * Until then --font-display-fa is Vazirmatn. The stack still lists Cormorant
+ * before Vazirmatn so Latin letters Nabi does not cover fall through to
+ * Cormorant, and Persian letters Cormorant does not cover fall through to Vazirmatn.
+ * Body 400, navigation and buttons 500, product titles and emphasis 600.
+ * No synthetic bold and no extra tracking.
+ */
+html[lang="fa"] {
+  --font-display-fa: var(--font-vazirmatn);
+  --font-body-fa: var(--font-vazirmatn);
+  --fa-tracking: 0;
+}
+
+html[lang="fa"] [data-surface="store"] {
+  font-family: var(--font-body-fa), system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  font-synthesis: none;
+  letter-spacing: var(--fa-tracking);
+}
+
 html[lang="fa"] [data-surface="store"] h1,
 html[lang="fa"] [data-surface="store"] h2,
-html[lang="fa"] [data-surface="store"] h3,
-html[lang="fa"] [data-surface="store"] h4,
 html[lang="fa"] [data-surface="store"] .font-display {
-  font-family: var(--font-vazirmatn), system-ui, sans-serif;
-  letter-spacing: 0;
+  font-family: var(--font-display-fa), var(--font-cormorant), "Cormorant Garamond", var(--font-vazirmatn), system-ui, sans-serif;
+  font-weight: 400;
+  font-synthesis: none;
+  letter-spacing: var(--fa-tracking);
+  line-height: 1.45;
   color: var(--ink);
+}
+
+html[lang="fa"] [data-surface="store"] .ds-product-title {
+  font-family: var(--font-body-fa), system-ui, sans-serif;
+  font-weight: 600;
+  font-synthesis: none;
+  letter-spacing: var(--fa-tracking);
+  color: var(--ink);
+}
+
+html[lang="fa"] [data-surface="store"] .ds-nav-link,
+html[lang="fa"] [data-surface="store"] .ds-button,
+html[lang="fa"] [data-surface="store"] .ds-wordmark {
+  font-family: var(--font-body-fa), system-ui, sans-serif;
+  font-weight: 500;
+  font-synthesis: none;
+  letter-spacing: var(--fa-tracking);
+  text-transform: none;
+}
+
+html[lang="fa"] [data-surface="store"] .text-ltr {
+  font-family: var(--font-body-fa), system-ui, sans-serif;
+  letter-spacing: var(--fa-tracking);
+  font-synthesis: none;
 }
 
 [data-surface="store"] .ds-badge {
