@@ -134,7 +134,8 @@ html[lang="fa"] [data-surface="store"] .ds-product-title {
 
 html[lang="fa"] [data-surface="store"] .ds-nav-link,
 html[lang="fa"] [data-surface="store"] .ds-button,
-html[lang="fa"] [data-surface="store"] .ds-wordmark {
+html[lang="fa"] [data-surface="store"] .ds-wordmark,
+html[lang="fa"] [data-surface="store"] footer h3 {
   font-family: var(--font-body-fa), system-ui, sans-serif;
   font-weight: 500;
   font-synthesis: none;

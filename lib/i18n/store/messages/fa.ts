@@ -1,4 +1,8 @@
 import type { StoreMessages } from "./en";
+import { contactPageFa } from "./contact-fa";
+import { foundersPageFa } from "./founders-fa";
+import { historyPageFa } from "./history-fa";
+import { missionPageFa } from "./mission-fa";
 
 export const storeMessagesFa = {
   meta: {
@@ -59,21 +63,39 @@ export const storeMessagesFa = {
       title: "داستان‌هایی از کارگاه",
       posts: {
         goldAndLight: {
-          title: "طلا و نور",
-          excerpt: "چگونه در هر ریخته‌گری، گرما و خویشتن‌داری را کنار هم نگه می‌داریم.",
-          date: "مه ۲۰۲۶",
+          title: "اعجاز طراحی",
+          excerpt: "هر سنگ را برای رنگ و رگه‌اش کنار طلا می‌نشانیم تا قطعه آرام و یکدست بماند.",
+          date: "مهر ۱۴۰۵",
         },
         stoneSelection: {
-          title: "انتخاب سنگ",
-          excerpt: "راهنمای تراش، پاکی و شخصیت سنگ برای قطعات سفارشی.",
-          date: "آوریل ۲۰۲۶",
+          title: "خلق ایده",
+          excerpt: "از اتود روی کاغذ تا پرو در کارگاه؛ راهی که هر قطعه اختصاصی طی می‌کند.",
+          date: "شهریور ۱۴۰۵",
         },
         atelierNotes: {
-          title: "یادداشت‌های کارگاه",
-          excerpt: "پشت میز کار — اتود، موم، و نخستین پرداخت.",
-          date: "مارس ۲۰۲۶",
+          title: "بهترین کیفیت",
+          excerpt: "پس از ریخته‌گری، سوهان و پرداخت است که نور را روی اثر می‌نشاند.",
+          date: "مرداد ۱۴۰۵",
         },
       },
+    },
+  },
+  about: {
+    stripTitle: "درباره ما",
+    pending: "متن و تصویر این صفحه هنوز اضافه نشده است.",
+    continueLabel: "ادامه",
+    relatedLabel: "در این بخش",
+    pages: {
+      history: historyPageFa,
+      founders: foundersPageFa,
+      mission: missionPageFa,
+      clients: {
+        metaTitle: "مشتریان برتر — گالری راحیل",
+        metaDescription: "میهمانان و مشتریان گالری راحیل.",
+        title: "مشتریان برتر",
+        collageAlt: "کلاژ سه عکس",
+      },
+      contact: contactPageFa,
     },
   },
 } satisfies StoreMessages;

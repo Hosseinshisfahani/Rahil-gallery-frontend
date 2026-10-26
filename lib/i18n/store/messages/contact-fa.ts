@@ -1,0 +1,47 @@
+/** Contact page. Persian source for the details the user supplied. */
+export const contactPageFa = {
+  metaTitle: "تماس با ما — گالری راحیل",
+  metaDescription:
+    "گالری راحیل در اصفهان، میدان نقش‌جهان، بازار شیخ لطف‌الله. تلفن، ایمیل و ساعت بازدید.",
+  title: "تماس با ما",
+  lede: "برای بازدید از گالری، یا برای یک سفارش، از راه‌های زیر با ما در تماس باشید.",
+  addressLabel: "نشانی",
+  address: "اصفهان، میدان نقش‌جهان، بازار شیخ لطف‌الله، گالری راحیل",
+  phoneLabel: "تلفن",
+  phone: "0916 200 9540",
+  phoneHref: "tel:+989162009540",
+  emailLabel: "ایمیل",
+  email: "mahdifarahnakian@gmail.com",
+  hoursLabel: "ساعت کار",
+  hours: "۸ صبح تا ۹ شب",
+  socialLabel: "شبکه‌های اجتماعی",
+  socialNote: "این پیوندها فعلاً نمونه‌اند و با حساب‌های گالری جایگزین می‌شوند.",
+  socials: [
+    { label: "Instagram", href: "https://www.instagram.com/" },
+    { label: "WhatsApp", href: "https://wa.me/989162009540" },
+    { label: "Telegram", href: "https://t.me/" },
+  ],
+  storefrontAlt: "سردر گالری راحیل",
+  entranceAlt: "ورودی گالری راحیل",
+  mapLabel: "نقشه",
+  mapNote:
+    "این نقشه نمونه‌ای از محدوده میدان نقش‌جهان است. موقعیت دقیق گالری بعداً جایگزین می‌شود.",
+  mapTitle: "نمونه نقشه میدان نقش‌جهان",
+  mapLink: "باز کردن نقشه",
+  form: {
+    title: "پیام به گالری",
+    nameLabel: "نام",
+    emailLabel: "ایمیل",
+    phoneLabel: "تلفن",
+    messageLabel: "پیام",
+    submit: "ارسال",
+    note: "ارسال پیام هنوز به ایمیل وصل نشده است. این فرم برای دیدن ظاهر صفحه است.",
+    success: "پیام روی همین صفحه ماند. وقتی ارسال وصل شود، همین فرم آن را می‌فرستد.",
+    another: "نوشتن پیام دیگر",
+    errors: {
+      name: "نام را بنویسید.",
+      email: "یک ایمیل درست بنویسید.",
+      message: "پیام را بنویسید.",
+    },
+  },
+} as const;

@@ -4,14 +4,32 @@ export interface NavItem {
   href: string;
   labelEn: string;
   labelFa: string;
+  children?: readonly NavItem[];
 }
 
+export const aboutNavItems: NavItem[] = [
+  { href: "/about/history", labelEn: "History", labelFa: "تاریخچه" },
+  { href: "/about/founders", labelEn: "Founders", labelFa: "بنیان‌گذاران" },
+  { href: "/about/mission", labelEn: "Mission", labelFa: "مأموریت" },
+  { href: "/about/clients", labelEn: "Top Clients", labelFa: "مشتریان برتر" },
+  { href: "/about/contact", labelEn: "Contact Us", labelFa: "تماس با ما" },
+];
+
 export const primaryNavItems: NavItem[] = [
-  { href: "/shop", labelEn: "Shop", labelFa: "فروشگاه" },
+  {
+    href: "/categories",
+    labelEn: "Products",
+    labelFa: "دسته‌بندی محصولات",
+  },
+  { href: "/services", labelEn: "Services", labelFa: "خدمات" },
   { href: "/collections", labelEn: "Collections", labelFa: "کلکسیون‌ها" },
-  { href: "/custom", labelEn: "Custom", labelFa: "سفارشی" },
   { href: "/journal", labelEn: "Journal", labelFa: "مجله" },
-  { href: "/about", labelEn: "About", labelFa: "درباره" },
+  {
+    href: "/about",
+    labelEn: "About Us",
+    labelFa: "درباره ما",
+    children: aboutNavItems,
+  },
 ];
 
 export const footerLinkGroups = {
@@ -22,10 +40,11 @@ export const footerLinkGroups = {
     { href: "/shop/bracelets", labelEn: "Bracelets", labelFa: "دستبند" },
   ],
   brand: [
-    { href: "/about", labelEn: "About", labelFa: "درباره ما" },
-    { href: "/craft", labelEn: "Craftsmanship", labelFa: "هنر ساخت" },
-    { href: "/journal", labelEn: "Journal", labelFa: "مجله" },
-    { href: "/contact", labelEn: "Contact", labelFa: "تماس" },
+    { href: "/about/history", labelEn: "History", labelFa: "تاریخچه" },
+    { href: "/about/founders", labelEn: "Founders", labelFa: "بنیان‌گذاران" },
+    { href: "/about/mission", labelEn: "Mission", labelFa: "مأموریت" },
+    { href: "/about/clients", labelEn: "Top Clients", labelFa: "مشتریان برتر" },
+    { href: "/about/contact", labelEn: "Contact Us", labelFa: "تماس با ما" },
   ],
   help: [
     { href: "/size-guide", labelEn: "Size Guide", labelFa: "راهنمای سایز" },
@@ -44,4 +63,15 @@ export function getLocalizedLabel(
 
 export function localePath(locale: Locale, path = "") {
   return `/${locale}${path}`;
+}
+
+/** Keep the current page when the header language switch is used. */
+export function switchLocalePath(pathname: string, locale: Locale) {
+  const target: Locale = locale === "fa" ? "en" : "fa";
+  const prefix = `/${locale}`;
+  if (pathname === prefix) return `/${target}`;
+  if (pathname.startsWith(`${prefix}/`)) {
+    return `/${target}${pathname.slice(prefix.length)}`;
+  }
+  return `/${target}`;
 }

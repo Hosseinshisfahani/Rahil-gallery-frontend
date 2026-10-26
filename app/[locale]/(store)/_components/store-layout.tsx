@@ -9,6 +9,7 @@ import {
   getLocalizedLabel,
   localePath,
   primaryNavItems,
+  switchLocalePath,
   type NavItem,
 } from "@/lib/store-navigation";
 import {
@@ -88,6 +89,7 @@ export function MobileNavDrawer({
   brandName = "Rahil Gallery",
 }: MobileNavDrawerProps) {
   const side = locale === "fa" ? "left" : "right";
+  const pathname = usePathname();
 
   return (
     <Sheet
@@ -113,15 +115,34 @@ export function MobileNavDrawer({
                 <Link
                   href={localePath(locale, item.href)}
                   onClick={onClose}
-                  className="ds-nav-link text-base text-ink"
+                  aria-current={isNavActive(pathname, locale, item.href) ? "page" : undefined}
+                  className="ds-nav-link text-base text-ink aria-[current=page]:text-[var(--brand,var(--primary))]"
                 >
                   {getLocalizedLabel(item, locale)}
                 </Link>
+                {item.children ? (
+                  <ul className="mt-3 flex flex-col gap-3 ps-4">
+                    {item.children.map((child) => (
+                      <li key={child.href}>
+                        <Link
+                          href={localePath(locale, child.href)}
+                          onClick={onClose}
+                          aria-current={
+                            isNavActive(pathname, locale, child.href) ? "page" : undefined
+                          }
+                          className="text-sm text-ink-muted aria-[current=page]:text-[var(--brand,var(--primary))]"
+                        >
+                          {getLocalizedLabel(child, locale)}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </li>
             ))}
           </ul>
           <div className="mt-8 border-t border-border pt-6">
-            <LocaleSwitcher locale={locale} />
+            <LocaleSwitcher locale={locale} href={switchLocalePath(pathname, locale)} />
           </div>
         </nav>
       </SheetContent>
@@ -167,6 +188,52 @@ export function MobileMenuButton({
     >
       <MenuIcon />
     </button>
+  );
+}
+
+function isNavActive(pathname: string, locale: Locale, href: string) {
+  const full = localePath(locale, href);
+  return pathname === full || pathname.startsWith(`${full}/`);
+}
+
+function DesktopNavMenu({
+  item,
+  locale,
+  pathname,
+}: {
+  item: NavItem;
+  locale: Locale;
+  pathname: string;
+}) {
+  const children = item.children ?? [];
+  const active = isNavActive(pathname, locale, item.href);
+
+  return (
+    <div className="group relative">
+      <Link
+        href={localePath(locale, item.href)}
+        aria-haspopup="true"
+        aria-current={active ? "page" : undefined}
+        className="ds-nav-link text-ink transition-colors hover:text-[var(--brand,var(--primary))] aria-[current=page]:text-[var(--brand,var(--primary))]"
+      >
+        {getLocalizedLabel(item, locale)}
+      </Link>
+      <div className="absolute top-full left-1/2 z-50 hidden -translate-x-1/2 pt-1 group-hover:block group-focus-within:block">
+        <ul className="min-w-48 border border-border bg-surface py-2 shadow-[var(--shadow-md)]">
+          {children.map((child) => (
+            <li key={child.href}>
+              <Link
+                href={localePath(locale, child.href)}
+                aria-current={isNavActive(pathname, locale, child.href) ? "page" : undefined}
+                className="ds-nav-link block px-4 py-2.5 text-ink transition-colors hover:text-[var(--brand,var(--primary))] aria-[current=page]:text-[var(--brand,var(--primary))]"
+              >
+                {getLocalizedLabel(child, locale)}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
 
@@ -253,6 +320,7 @@ export function SiteHeader({
   classNames,
 }: SiteHeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
   const home = brandHref ?? localePath(locale);
 
   return (
@@ -271,7 +339,11 @@ export function SiteHeader({
           <div className="grid h-[var(--header-height)] grid-cols-[1fr_auto_1fr] items-center gap-4">
             <div className="flex items-center gap-1">
               <MobileMenuButton onClick={() => setMobileOpen(true)} />
-              <LocaleSwitcher locale={locale} className="hidden sm:inline-flex" />
+              <LocaleSwitcher
+                locale={locale}
+                href={switchLocalePath(pathname, locale)}
+                className="hidden sm:inline-flex"
+              />
             </div>
 
             <Link href={home} className="ds-wordmark font-display text-center">
@@ -307,15 +379,25 @@ export function SiteHeader({
             )}
             aria-label="Primary"
           >
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={localePath(locale, item.href)}
-                className="ds-nav-link text-ink transition-colors hover:text-[var(--brand,var(--primary))]"
-              >
-                {getLocalizedLabel(item, locale)}
-              </Link>
-            ))}
+            {navItems.map((item) =>
+              item.children?.length ? (
+                <DesktopNavMenu
+                  key={item.href}
+                  item={item}
+                  locale={locale}
+                  pathname={pathname}
+                />
+              ) : (
+                <Link
+                  key={item.href}
+                  href={localePath(locale, item.href)}
+                  aria-current={isNavActive(pathname, locale, item.href) ? "page" : undefined}
+                  className="ds-nav-link text-ink transition-colors hover:text-[var(--brand,var(--primary))] aria-[current=page]:text-[var(--brand,var(--primary))]"
+                >
+                  {getLocalizedLabel(item, locale)}
+                </Link>
+              ),
+            )}
           </nav>
         </Container>
       </header>

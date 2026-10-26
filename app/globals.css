@@ -2,6 +2,8 @@
 @import "./styles/themes/store.css";
 @import "./styles/themes/admin-theme.css";
 @import "./styles/landing.css";
+@import "./styles/about.css";
+@import "./styles/showcase-pages.css";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 

@@ -6,7 +6,11 @@ import type { StoreMessages } from "@/lib/i18n/store";
 import { localePath } from "@/lib/store-navigation";
 import type { Locale } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { ProductCard, ProductGrid } from "./catalog";
+import {
+  ProductCard,
+  ProductGrid,
+  type AvailabilityStatus,
+} from "./catalog";
 import { Container } from "./store-layout";
 
 type LandingCopy = StoreMessages["landing"];
@@ -39,31 +43,38 @@ const landingCollections = [
   },
 ] as const;
 
-const landingProducts = [
+const landingProducts: readonly {
+  path: string;
+  titleKey: keyof LandingCopy["arrivals"]["products"];
+  imageUrl: string;
+  availability: AvailabilityStatus;
+  rating?: number;
+  reviewCount?: number;
+}[] = [
   {
     path: "/shop/josephine-aigrette",
     titleKey: "silverTurquoiseRing",
     imageUrl: "/landing/silver-turquoise-ring.webp",
-    availability: "made_to_order" as const,
+    availability: "made_to_order",
   },
   {
     path: "/shop/josephine-eclat-floral",
     titleKey: "turquoiseGoldPendant",
     imageUrl: "/landing/turquoise-gold-pendant.webp",
-    availability: "in_stock" as const,
+    availability: "in_stock",
     reviewCount: 12,
   },
   {
     path: "/shop/josephine-amour",
     titleKey: "goldBlueStoneRing",
     imageUrl: "/landing/gold-blue-stone-ring.webp",
-    availability: "in_stock" as const,
+    availability: "in_stock",
   },
   {
     path: "/shop/bee-de-chaumet",
     titleKey: "turquoisePearlEarrings",
     imageUrl: "/landing/turquoise-pearl-earrings-v2.webp",
-    availability: "made_to_order" as const,
+    availability: "made_to_order",
     reviewCount: 4,
   },
 ] as const;
@@ -72,17 +83,17 @@ const landingJournalPosts = [
   {
     path: "/journal/gold-and-light",
     postKey: "goldAndLight",
-    imageUrl: "/_dev/products/ALL-CHAUMET-26-VD-CNY-WEB-S-ED-SL-BML-BGLS-1080x1080-1-563x0.jpg",
+    imageUrl: "/landing/journal-turquoise-crown.webp",
   },
   {
     path: "/journal/stone-selection",
     postKey: "stoneSelection",
-    imageUrl: "/_dev/products/ALL-CHAUMET-26-VD-CNY-WEB-S-ED-SL-JSP-AIG-PEND-1080x1080-1-563x0.jpg",
+    imageUrl: "/landing/journal-layered-necklaces.webp",
   },
   {
     path: "/journal/atelier-notes",
     postKey: "atelierNotes",
-    imageUrl: "/_dev/products/ALL-CHAUMET-26-VD-CNY-WEB-S-ED-SL-LIENS-JDL-PEND-1-1080x1080-1-563x0.jpg",
+    imageUrl: "/landing/journal-blue-pendant.webp",
   },
 ] as const;
 
@@ -360,8 +371,8 @@ function LandingNewArrivals({
               title={copy.products[product.titleKey]}
               imageUrl={product.imageUrl}
               availability={product.availability}
-              rating={"rating" in product ? product.rating : undefined}
-              reviewCount={"reviewCount" in product ? product.reviewCount : undefined}
+              rating={product.rating}
+              reviewCount={product.reviewCount}
               locale={locale}
               priority={i < 2}
               classNames={{
@@ -410,7 +421,7 @@ function LandingEditorial({
             <p className="max-w-md leading-relaxed text-[var(--landing-muted)]">
               {copy.body}
             </p>
-            <Link href={localePath(locale, "/craft")} className="landing-pill landing-pill-primary w-fit">
+            <Link href={localePath(locale, "/about/history")} className="landing-pill landing-pill-primary w-fit">
               {copy.cta}
             </Link>
           </div>

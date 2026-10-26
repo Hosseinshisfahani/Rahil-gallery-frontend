@@ -2,8 +2,18 @@ import type { Locale } from "@/lib/types";
 import { storeMessagesEn, type StoreMessages } from "./messages/en";
 import { storeMessagesFa } from "./messages/fa";
 
-type MessageTree = { readonly [key: string]: string | readonly string[] | MessageTree };
-type MessageValue = string | readonly string[] | MessageTree;
+type MessageTree = {
+  readonly [key: string]:
+    | string
+    | readonly string[]
+    | readonly MessageTree[]
+    | MessageTree;
+};
+type MessageValue =
+  | string
+  | readonly string[]
+  | readonly MessageTree[]
+  | MessageTree;
 
 const catalogs: Record<Locale, StoreMessages> = {
   en: storeMessagesEn,

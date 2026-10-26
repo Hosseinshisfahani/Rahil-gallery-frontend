@@ -1,3 +1,8 @@
+import { contactPageEn } from "./contact-en";
+import { foundersPageEn } from "./founders-en";
+import { historyPageEn } from "./history-en";
+import { missionPageEn } from "./mission-en";
+
 export const storeMessagesEn = {
   meta: {
     title: "Rahil Gallery — Fine Jewelry",
@@ -49,7 +54,7 @@ export const storeMessagesEn = {
       quote:
         "“Every piece begins as a line on paper — then gold, fire, and patience do the rest.”",
       body: "Our atelier blends traditional bench techniques with contemporary silhouettes. Configure metal, stone, and size — or commission something entirely your own.",
-      cta: "Our craft",
+      cta: "Our history",
       imageAlt: "Chaumet editorial — fine jewelry",
     },
     journal: {
@@ -57,21 +62,39 @@ export const storeMessagesEn = {
       title: "Stories from the studio",
       posts: {
         goldAndLight: {
-          title: "Gold & Light",
-          excerpt: "How we balance warmth and restraint in every cast.",
-          date: "May 2026",
+          title: "Setting Turquoise",
+          excerpt: "Each stone is set beside the gold for its color and veining, so the piece stays calm and even.",
+          date: "Oct 2026",
         },
         stoneSelection: {
-          title: "Choosing the Stone",
-          excerpt: "A guide to cuts, clarity, and character for bespoke pieces.",
-          date: "Apr 2026",
+          title: "The Path of a Commission",
+          excerpt: "From the sketch on paper to the fitting in the atelier — the way every bespoke piece is made.",
+          date: "Sep 2026",
         },
         atelierNotes: {
-          title: "Atelier Notes",
-          excerpt: "Inside the bench — sketches, wax, and the first polish.",
-          date: "Mar 2026",
+          title: "The Last Polish",
+          excerpt: "After the cast, it is the file and the polish that set the light on the gold.",
+          date: "Aug 2026",
         },
       },
+    },
+  },
+  about: {
+    stripTitle: "About us",
+    pending: "Text and pictures for this page have not been added yet.",
+    continueLabel: "Continue",
+    relatedLabel: "In this section",
+    pages: {
+      history: historyPageEn,
+      founders: foundersPageEn,
+      mission: missionPageEn,
+      clients: {
+        metaTitle: "Top Clients — Rahil Gallery",
+        metaDescription: "Guests and clients of Rahil Gallery.",
+        title: "Top Clients",
+        collageAlt: "A three-part collage",
+      },
+      contact: contactPageEn,
     },
   },
 } as const;
