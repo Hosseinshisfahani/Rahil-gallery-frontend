@@ -9,6 +9,12 @@ import { Container, SiteFooter } from "./store-layout";
 
 type ShowcaseCopy = ReturnType<typeof getShowcaseCopy>;
 
+function formatIndex(index: number, locale: Locale) {
+  const value = String(index + 1).padStart(2, "0");
+  if (locale !== "fa") return value;
+  return value.replace(/\d/g, (digit) => "۰۱۲۳۴۵۶۷۸۹"[Number(digit)]);
+}
+
 function EditorialHeading({
   label,
   title,
@@ -30,8 +36,8 @@ function EditorialHeading({
       </p>
       <h2
         className={cn(
-          "showcase-display mt-5 text-[clamp(2.35rem,6vw,5rem)] leading-[1.05]",
-          light ? "text-white" : "text-primary",
+          "showcase-display mt-5 text-[clamp(2.35rem,6vw,5rem)]",
+          light ? "showcase-on-dark" : "text-primary",
         )}
       >
         {title}
@@ -60,17 +66,17 @@ function PageHero({
         className="absolute inset-y-0 start-0 hidden w-[42%] bg-primary lg:block"
       />
       <Container className="relative grid min-h-[calc(100svh-var(--header-height)-var(--header-nav-height))] items-center gap-12 py-14 md:py-20 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-        <div className="relative z-10 lg:text-white">
+        <div className="showcase-on-navy relative z-10">
           <p className="showcase-label text-accent lg:text-[#d4c4a8]">{eyebrow}</p>
-          <h1 className="showcase-display mt-6 max-w-2xl text-[clamp(3.25rem,7vw,7rem)] leading-[0.95] text-primary lg:text-white">
+          <h1 className="showcase-display mt-6 max-w-2xl text-[clamp(2.75rem,6vw,5.5rem)] text-primary">
             {title}
           </h1>
-          <p className="mt-8 max-w-xl text-base leading-8 text-ink-muted lg:text-white/70 md:text-lg">
+          <p className="mt-8 max-w-xl text-base leading-8 text-ink-muted md:text-lg lg:text-white/75">
             {intro}
           </p>
           <a
             href="#overview"
-            className="mt-10 inline-flex items-center gap-3 text-xs font-medium tracking-[0.16em] uppercase text-primary lg:text-white"
+            className="showcase-index mt-10 inline-flex items-center gap-3 text-primary lg:text-white"
           >
             {indexLabel}
             <ArrowDown aria-hidden="true" size={15} strokeWidth={1.5} />
@@ -127,7 +133,7 @@ function ContactPanel({
       <Container className="grid gap-10 py-16 md:py-24 lg:grid-cols-[1fr_auto] lg:items-end">
         <div className="max-w-4xl">
           <p className="showcase-label text-primary">{eyebrow}</p>
-          <h2 className="showcase-display mt-5 text-[clamp(2.5rem,6vw,5.5rem)] leading-none text-primary">
+          <h2 className="showcase-display mt-5 text-[clamp(2.4rem,5vw,4.5rem)] text-primary">
             {title}
           </h2>
           <p className="mt-7 max-w-2xl text-base leading-8 text-primary/75 md:text-lg">
@@ -191,12 +197,12 @@ export function CategoriesPage({
                         className="object-cover transition-transform duration-700 group-hover:scale-[1.025]"
                       />
                     ) : null}
-                    <span className="absolute start-5 top-5 grid size-10 place-items-center rounded-full bg-white/90 text-xs text-primary backdrop-blur-sm">
-                      {String(index + 1).padStart(2, "0")}
+                    <span className="showcase-num absolute start-5 top-5 grid size-10 place-items-center rounded-full bg-white/90 text-sm text-primary backdrop-blur-sm">
+                      {formatIndex(index, locale)}
                     </span>
                   </div>
                   <div className="flex flex-1 flex-col px-6 py-8 md:px-8 md:py-10">
-                    <h3 className="showcase-display text-3xl leading-tight text-primary">
+                    <h3 className="showcase-display text-[clamp(1.7rem,2vw,2.15rem)] text-primary">
                       {group.title}
                     </h3>
                     <p className="mt-4 leading-7 text-ink-muted">
@@ -245,8 +251,8 @@ export function CategoriesPage({
                     key={type}
                     className="grid grid-cols-[2.5rem_1fr] items-center gap-3 border-b border-white/15 py-5"
                   >
-                    <span className="text-[0.65rem] tracking-[0.12em] text-[#d4c4a8]">
-                      {String(index + 1).padStart(2, "0")}
+                    <span className="showcase-num text-sm text-[#d4c4a8]">
+                      {formatIndex(index, locale)}
                     </span>
                     <span className="text-sm leading-6 text-white md:text-base">
                       {type}
@@ -304,11 +310,11 @@ export function ServicesPage({
                   key={service.title}
                   className="grid gap-8 border-b border-border py-10 md:grid-cols-[4rem_1fr_0.65fr] md:items-center md:gap-10 md:py-14"
                 >
-                  <span className="showcase-display text-4xl text-accent">
-                    {String(index + 1).padStart(2, "0")}
+                  <span className="showcase-num text-4xl text-accent">
+                    {formatIndex(index, locale)}
                   </span>
                   <div className="max-w-2xl">
-                    <h3 className="showcase-display text-[clamp(1.75rem,3vw,2.65rem)] leading-tight text-primary">
+                    <h3 className="showcase-display text-[clamp(1.55rem,2.4vw,2.15rem)] text-primary">
                       {service.title}
                     </h3>
                     <p className="mt-4 max-w-xl leading-7 text-ink-muted">
@@ -341,10 +347,10 @@ export function ServicesPage({
             <ol className="mt-14 grid gap-px bg-border md:grid-cols-3">
               {copy.process.map((step, index) => (
                 <li key={step.title} className="bg-[#f4f1eb] p-8 md:p-10">
-                  <span className="showcase-display text-5xl text-accent">
-                    {String(index + 1).padStart(2, "0")}
+                  <span className="showcase-num text-5xl text-accent">
+                    {formatIndex(index, locale)}
                   </span>
-                  <h3 className="mt-10 text-lg font-medium text-primary">
+                  <h3 className="showcase-display mt-10 text-[1.65rem] text-primary">
                     {step.title}
                   </h3>
                   <p className="mt-4 leading-7 text-ink-muted">{step.body}</p>
