@@ -71,6 +71,15 @@ html[lang="fa"] .showcase-index {
   font-size: 0.95rem;
 }
 
+@media (min-width: 64rem) {
+  html[lang="fa"] [data-surface="store"] .showcase-page .showcase-hero-title {
+    max-width: 100%;
+    font-size: clamp(2.75rem, 4.75vw, 4.75rem);
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+}
+
 html[lang="fa"] .showcase-num {
   font-family: var(--font-vazirmatn), system-ui, sans-serif;
   font-weight: 500;

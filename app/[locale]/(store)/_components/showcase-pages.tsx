@@ -66,9 +66,9 @@ function PageHero({
         className="absolute inset-y-0 start-0 hidden w-[42%] bg-primary lg:block"
       />
       <Container className="relative grid min-h-[calc(100svh-var(--header-height)-var(--header-nav-height))] items-center gap-12 py-14 md:py-20 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-        <div className="showcase-on-navy relative z-10">
+        <div className="showcase-on-navy relative z-10 min-w-0 lg:pe-8 xl:pe-12">
           <p className="showcase-label text-accent lg:text-[#d4c4a8]">{eyebrow}</p>
-          <h1 className="showcase-display mt-6 max-w-2xl text-[clamp(2.75rem,6vw,5.5rem)] text-primary">
+          <h1 className="showcase-display showcase-hero-title mt-6 max-w-full text-[clamp(2.75rem,6vw,5.5rem)] text-primary">
             {title}
           </h1>
           <p className="mt-8 max-w-xl text-base leading-8 text-ink-muted md:text-lg lg:text-white/75">
@@ -293,8 +293,8 @@ export function ServicesPage({
           intro={copy.intro}
           indexLabel={copy.indexLabel}
           images={[
-            "/landing/journal-layered-necklaces.webp",
-            "/landing/gold-blue-stone-ring.webp",
+            "/landing/IMG_20220918_143321_562.jpg",
+            "/landing/Gemini_Generated_Image_tkjtt2tkjtt2tkjt.jpeg",
           ]}
         />
 
