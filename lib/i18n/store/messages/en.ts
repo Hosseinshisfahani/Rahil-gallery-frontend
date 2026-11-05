@@ -81,9 +81,11 @@ export const storeMessagesEn = {
   },
   about: {
     stripTitle: "About us",
+    stripEyebrow: "Rahil Gallery",
+    stripLede:
+      "A lineage from the Isfahan bazaar, and a contemporary view of gem, craft, and meaning.",
     pending: "Text and pictures for this page have not been added yet.",
     continueLabel: "Continue",
-    relatedLabel: "In this section",
     pages: {
       history: historyPageEn,
       founders: foundersPageEn,
@@ -92,6 +94,13 @@ export const storeMessagesEn = {
         metaTitle: "Top Clients — Rahil Gallery",
         metaDescription: "Guests and clients of Rahil Gallery.",
         title: "Top Clients",
+        headline: "Guests from around the world",
+        subtitle: "Moments of meeting, trust, and connection across cultures",
+        heroAlt: "Guests of Rahil Gallery",
+        intro: [
+          "Rahil Gallery has welcomed figures, artists, traders, and friends from many cultures and countries.",
+          "Every visit is a chance for conversation, for sharing Iranian art, and for building ties that go beyond a transaction.",
+        ],
         collageAlt: "A three-part collage",
       },
       contact: contactPageEn,

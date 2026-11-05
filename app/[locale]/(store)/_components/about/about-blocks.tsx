@@ -26,49 +26,60 @@ export function AboutSection({
 
 export function AboutHero({
   src,
-  alt,
+  alt = "",
   kicker,
   title,
   lede,
   fit = "cover",
   wide = false,
+  className,
 }: {
-  src: string;
-  alt: string;
+  src?: string;
+  alt?: string;
   kicker?: string;
   title: string;
   lede?: React.ReactNode;
   fit?: "cover" | "contain";
   /** Keep a panoramic photograph fully visible. */
   wide?: boolean;
+  className?: string;
 }) {
   return (
     <header>
-      <div
-        className={cn(
-          "relative",
-          wide
-            ? "aspect-[2057/764] w-full"
-            : "h-[50vh] min-h-[20rem] max-h-[36rem]",
-          fit === "contain" && "bg-surface-elevated",
-        )}
-      >
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          priority
-          sizes="100vw"
-          className={fit === "contain" ? "object-contain p-8" : "object-cover"}
-        />
-      </div>
-      <Container className="pt-10 md:pt-14">
+      {src ? (
+        <Container className="pt-6 md:pt-8">
+          <div className="about-media about-media-hero">
+            <div
+              className={cn(
+                "about-media-frame relative",
+                wide
+                  ? "aspect-[2057/764] w-full"
+                  : "h-[46vh] min-h-[18rem] max-h-[34rem]",
+                fit === "contain" && "bg-surface-elevated",
+              )}
+            >
+              <Image
+                src={src}
+                alt={alt}
+                fill
+                priority
+                sizes="100vw"
+                className={cn(
+                  "about-media-image",
+                  fit === "contain" ? "object-contain p-8" : "object-cover",
+                )}
+              />
+            </div>
+          </div>
+        </Container>
+      ) : null}
+      <Container className={cn("text-center", src ? "pt-10 md:pt-14" : "pt-10 md:pt-16", className)}>
         {kicker ? <p className="about-kicker">{kicker}</p> : null}
-        <h1 className="about-display mt-4 max-w-3xl text-[clamp(2.6rem,6vw,4.5rem)]">
+        <h1 className="about-display mx-auto mt-4 max-w-3xl text-[clamp(2.6rem,6vw,4.5rem)]">
           {title}
         </h1>
         {lede ? (
-          <div className="mt-6 max-w-2xl text-base leading-relaxed text-ink-muted md:text-lg">
+          <div className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-ink-muted md:text-lg">
             {lede}
           </div>
         ) : null}
@@ -94,7 +105,7 @@ export function ImageTextBlock({
     <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
       <figure
         className={cn(
-          "relative aspect-[4/5] bg-surface-elevated",
+          "about-media about-media-frame relative aspect-[4/5] bg-surface-elevated",
           flip && "md:order-2",
         )}
       >
@@ -103,7 +114,10 @@ export function ImageTextBlock({
           alt={alt}
           fill
           sizes="(min-width: 48rem) 40vw, 100vw"
-          className={fit === "contain" ? "object-contain p-8" : "object-cover"}
+          className={cn(
+            "about-media-image",
+            fit === "contain" ? "object-contain p-8" : "object-cover",
+          )}
         />
       </figure>
       <div className={cn(flip && "md:order-1")}>{children}</div>
@@ -144,49 +158,23 @@ export function AboutNextLink({
   title: string;
 }) {
   return (
-    <Link
-      href={href}
-      className="group flex items-end justify-between gap-6 border border-border px-6 py-8 transition-colors hover:border-[var(--brand)]"
-    >
-      <span className="flex min-w-0 flex-col items-start">
-        <span className="about-kicker">{kicker}</span>
-        <span className="about-display mt-3 text-[clamp(2rem,4vw,2.75rem)]">
-          {title}
-        </span>
+    <Link href={href} className="about-next group">
+      <span className="about-next-kicker">{kicker}</span>
+      <span className="about-next-title">{title}</span>
+      <span className="about-next-cta" aria-hidden="true">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.25"
+          className="about-next-cta-arrow"
+        >
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
       </span>
-      <svg
-        width="28"
-        height="28"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1"
-        aria-hidden="true"
-        className="shrink-0 text-[var(--brand)] rtl:scale-x-[-1]"
-      >
-        <path d="M5 12h14M13 6l6 6-6 6" />
-      </svg>
     </Link>
   );
 }
 
-export function RelatedLinks({
-  label,
-  links,
-}: {
-  label: string;
-  links: readonly { href: string; title: string }[];
-}) {
-  return (
-    <nav aria-label={label} className="mt-12">
-      <p className="about-kicker">{label}</p>
-      <ul className="mt-4 flex flex-col gap-3">
-        {links.map((link) => (
-          <li key={link.href}>
-            <AboutInlineLink href={link.href}>{link.title}</AboutInlineLink>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-}

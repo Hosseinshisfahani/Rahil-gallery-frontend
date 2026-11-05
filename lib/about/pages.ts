@@ -24,12 +24,3 @@ export function nextAboutSlug(slug: AboutSlug): AboutSlug {
   const index = aboutPageOrder.indexOf(slug);
   return aboutPageOrder[(index + 1) % aboutPageOrder.length];
 }
-
-/** Structural cross-links from the plan. Bodies stay empty until each page’s text arrives. */
-export const aboutRelated: Record<AboutSlug, readonly AboutSlug[]> = {
-  history: ["founders", "mission"],
-  founders: ["history", "mission"],
-  mission: ["founders", "clients"],
-  clients: ["mission", "contact"],
-  contact: ["clients", "founders"],
-};

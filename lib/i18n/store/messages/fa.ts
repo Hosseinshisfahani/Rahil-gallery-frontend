@@ -82,9 +82,11 @@ export const storeMessagesFa = {
   },
   about: {
     stripTitle: "درباره ما",
+    stripEyebrow: "گالری راحیل",
+    stripLede:
+      "میراثی از بازار اصفهان، نگاهی معاصر به گوهر، هنر و انسان.",
     pending: "متن و تصویر این صفحه هنوز اضافه نشده است.",
     continueLabel: "ادامه",
-    relatedLabel: "در این بخش",
     pages: {
       history: historyPageFa,
       founders: foundersPageFa,
@@ -93,6 +95,13 @@ export const storeMessagesFa = {
         metaTitle: "مشتریان برتر — گالری راحیل",
         metaDescription: "میهمانان و مشتریان گالری راحیل.",
         title: "مشتریان برتر",
+        headline: "میهمانانی از سراسر جهان",
+        subtitle: "لحظه‌هایی از دیدار، اعتماد و پیوند میان فرهنگ‌ها",
+        heroAlt: "میهمانان گالری راحیل",
+        intro: [
+          "گالری راحیل میزبان چهره‌ها، هنرمندان، بازرگانان و دوستانی از فرهنگ‌ها و کشورهای گوناگون بوده است.",
+          "هر بازدید، فرصتی برای گفت‌وگو، معرفی هنر ایرانی و ساختن پیوندهایی فراتر از معامله است.",
+        ],
         collageAlt: "کلاژ سه عکس",
       },
       contact: contactPageFa,

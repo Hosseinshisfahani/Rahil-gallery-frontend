@@ -62,7 +62,7 @@
   --badge-tracking: 0.12em;
 
   --header-height: 3.5rem;
-  --header-nav-height: 2.75rem;
+  --header-nav-height: 0px;
   --container-max: 96rem;
   --sidebar-width: 15rem;
 
@@ -208,6 +208,58 @@ html[lang="fa"] [data-surface="store"] .text-ltr {
   font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
+  color: var(--brand);
+}
+
+/* Solid navy header — same blue as landing primary */
+[data-surface="store"] .store-header {
+  background: var(--brand);
+  border-bottom-color: color-mix(in srgb, #fff 14%, transparent);
+  color: #fff;
+}
+
+[data-surface="store"] .store-header .store-header-nav {
+  border-top: 0;
+}
+
+[data-surface="store"] .store-header .ds-wordmark,
+[data-surface="store"] .store-header .ds-nav-link,
+[data-surface="store"] .store-header a[aria-label],
+[data-surface="store"] .store-header button {
+  color: #fff;
+}
+
+[data-surface="store"] .store-header .ds-wordmark:hover,
+[data-surface="store"] .store-header .ds-nav-link:hover,
+[data-surface="store"] .store-header a[aria-label]:hover,
+[data-surface="store"] .store-header button:hover {
+  color: #d4c4a8;
+}
+
+[data-surface="store"] .store-header .ds-nav-link[aria-current="page"] {
+  color: #d4c4a8;
+}
+
+[data-surface="store"] .store-header .store-locale-switch {
+  color: color-mix(in srgb, #fff 78%, transparent);
+}
+
+[data-surface="store"] .store-header .store-locale-switch:hover {
+  color: #fff;
+}
+
+/* Dropdown panels stay light for readability */
+[data-surface="store"] .store-header .group ul {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+[data-surface="store"] .store-header .group ul .ds-nav-link {
+  color: var(--ink);
+}
+
+[data-surface="store"] .store-header .group ul .ds-nav-link:hover,
+[data-surface="store"] .store-header .group ul .ds-nav-link[aria-current="page"] {
   color: var(--brand);
 }
 

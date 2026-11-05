@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { aboutPath, aboutRelated, nextAboutSlug } from "@/lib/about/pages";
+import { aboutPath, nextAboutSlug } from "@/lib/about/pages";
 import type { StoreMessages } from "@/lib/i18n/store";
 import { localePath } from "@/lib/store-navigation";
 import type { Locale } from "@/lib/types";
@@ -9,22 +9,21 @@ import {
   AboutInlineLink,
   AboutNextLink,
   PullQuote,
-  RelatedLinks,
 } from "./about-blocks";
 import { Container } from "../store-layout";
 
 const historyHero = "/landing/internal-collection.png";
 
-/** Pictures supplied for this page, in chapter order. Null means no related picture yet. */
+/** Temporary chapter pictures — replace with final assets later. */
 const chapterImages = [
-  { src: "/landing/rahil-gallery-front.jpg", fit: "cover" },
-  null,
-  { src: "/landing/logo.jpg", fit: "contain" },
-  { src: "/landing/Layer%2010.jpg", fit: "cover" },
-  { src: "/landing/Layer%207.jpg", fit: "cover" },
-  null,
-  { src: "/landing/rahil-gallery-hero.jpg", fit: "cover" },
-] as const;
+  { src: "/landing/rahil-gallery-front.jpg", fit: "cover" as const },
+  { src: "/landing/journal-blue-pendant.webp", fit: "cover" as const },
+  { src: "/landing/logo.jpg", fit: "contain" as const },
+  { src: "/landing/journal-turquoise-crown.webp", fit: "cover" as const },
+  { src: "/landing/Layer%207.jpg", fit: "cover" as const },
+  { src: "/rahil-top-clients/images/16-india-ambassador.webp", fit: "cover" as const },
+  { src: "/landing/rahil-gallery-hero.jpg", fit: "cover" as const },
+];
 
 export function HistoryView({
   locale,
@@ -48,8 +47,8 @@ export function HistoryView({
         wide
       />
 
-      <Container className="py-16 md:py-20">
-        <div className="max-w-3xl space-y-6 text-base leading-relaxed text-ink-muted md:text-lg">
+      <Container className="py-16 md:py-24">
+        <div className="mx-auto max-w-3xl space-y-7 text-center text-base leading-relaxed text-ink-muted md:space-y-8 md:text-lg">
           <p>
             {opening.beforeFounder}<AboutInlineLink href={localePath(locale, "/about/founders")}>{opening.founderName}</AboutInlineLink>{opening.afterFounder}
           </p>
@@ -60,26 +59,32 @@ export function HistoryView({
         </div>
       </Container>
 
-      <Container className="pb-8">
+      <Container className="pb-16 md:pb-24">
         <ol className="about-timeline">
           {history.chapters.map((chapter, index) => {
             const image = chapterImages[index];
-            const flip = index === chapterImages.length - 1;
+            // 1-based odd → left, even → right (both FA and EN)
+            const imageOnLeft = index % 2 === 0;
+            const imageOnStart = locale === "fa" ? !imageOnLeft : imageOnLeft;
+            const flip = Boolean(image) && !imageOnStart;
             return (
               <li key={chapter.heading}>
-                <h2 className="about-display text-[clamp(1.8rem,3vw,2.6rem)]">
-                  {chapter.heading}
-                </h2>
+                {!image ? (
+                  <h2 className="about-display text-[clamp(1.8rem,3vw,2.6rem)]">
+                    {chapter.heading}
+                  </h2>
+                ) : null}
                 <div
                   className={cn(
-                    "mt-8",
-                    image && "grid items-start gap-10 md:grid-cols-2 md:gap-16",
+                    image
+                      ? "grid items-center gap-8 md:grid-cols-2 md:gap-12 lg:gap-20"
+                      : "mt-10",
                   )}
                 >
                   {image ? (
                     <figure
                       className={cn(
-                        "relative bg-surface-elevated",
+                        "about-media about-media-frame relative w-full bg-surface-elevated",
                         image.fit === "contain" ? "aspect-square" : "aspect-[4/3]",
                         flip && "md:order-2",
                       )}
@@ -89,13 +94,27 @@ export function HistoryView({
                         alt={chapter.imageAlt}
                         fill
                         sizes="(min-width: 48rem) 40vw, 100vw"
-                        className={
-                          image.fit === "contain" ? "object-contain p-8" : "object-cover"
-                        }
+                        className={cn(
+                          "about-media-image",
+                          image.fit === "contain"
+                            ? "object-contain p-8"
+                            : "object-cover",
+                        )}
                       />
                     </figure>
                   ) : null}
-                  <div className={cn(flip && image && "md:order-1", "space-y-6")}>
+                  <div
+                    className={cn(
+                      "space-y-7 md:space-y-8",
+                      flip && image && "md:order-1",
+                      image && "flex flex-col justify-center py-2 md:py-6",
+                    )}
+                  >
+                    {image ? (
+                      <h2 className="about-display text-[clamp(1.8rem,3vw,2.6rem)]">
+                        {chapter.heading}
+                      </h2>
+                    ) : null}
                     {chapter.paragraphs[0] ? (
                       <p className="text-base leading-relaxed text-ink-muted md:text-lg">
                         {chapter.paragraphs[0]}
@@ -122,44 +141,37 @@ export function HistoryView({
                         {paragraph}
                       </p>
                     ))}
-                    {chapter.closing.length > 0 ? (
-                      <div className="space-y-3 pt-4">
-                        {chapter.closing.map((line, lineIndex) => (
-                          <p
-                            key={line}
-                            className={
-                              lineIndex === 0
-                                ? "about-display text-[clamp(1.7rem,3vw,2.4rem)]"
-                                : "text-base leading-relaxed text-ink md:text-lg"
-                            }
-                          >
-                            {line}
-                          </p>
-                        ))}
-                      </div>
-                    ) : null}
                   </div>
                 </div>
+
+                {chapter.closing.length > 0 ? (
+                  <aside className="about-manifesto" aria-label={chapter.closing[0]}>
+                    <div className="about-manifesto-inner">
+                      <p className="about-manifesto-title">{chapter.closing[0]}</p>
+                      <span className="about-manifesto-rule" aria-hidden="true" />
+                      <ul className="about-manifesto-lines">
+                        {chapter.closing.slice(1).map((line) => (
+                          <li key={line}>{line}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </aside>
+                ) : null}
               </li>
             );
           })}
         </ol>
       </Container>
 
-      <Container className="py-16 md:py-24">
-        <AboutNextLink
-          href={localePath(locale, aboutPath(next))}
-          kicker={about.continueLabel}
-          title={about.pages[next].title}
-        />
-        <RelatedLinks
-          label={about.relatedLabel}
-          links={aboutRelated.history.map((related) => ({
-            href: localePath(locale, aboutPath(related)),
-            title: about.pages[related].title,
-          }))}
-        />
-      </Container>
+      <section className="about-next-band">
+        <Container className="py-8 md:py-10">
+          <AboutNextLink
+            href={localePath(locale, aboutPath(next))}
+            kicker={about.continueLabel}
+            title={about.pages[next].title}
+          />
+        </Container>
+      </section>
     </>
   );
 }

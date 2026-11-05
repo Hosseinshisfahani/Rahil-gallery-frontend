@@ -61,7 +61,7 @@ export function LocaleSwitcher({
     <Link
       href={href ?? localePath(targetLocale)}
       className={cn(
-        "text-xs font-medium uppercase tracking-widest text-ink-subtle transition-colors hover:text-ink",
+        "store-locale-switch text-xs font-medium uppercase tracking-widest text-ink-subtle transition-colors hover:text-ink",
         className,
       )}
       aria-label={`Switch to ${targetLocale === "fa" ? "Persian" : "English"}`}
@@ -273,10 +273,12 @@ function SearchIcon() {
   );
 }
 
-function HeartIcon() {
+function AboutIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" aria-hidden="true">
-      <path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.5-7 10-7 10z" />
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v6" />
+      <circle cx="12" cy="7.5" r="0.75" fill="currentColor" stroke="none" />
     </svg>
   );
 }
@@ -329,13 +331,12 @@ export function SiteHeader({
         className={cn(
           overlay
             ? "landing-header-overlay absolute inset-x-0 top-0 z-40 border-b bg-transparent"
-            : "sticky top-0 z-40 border-b border-border/80 bg-surface",
+            : "store-header sticky top-0 z-40 border-b",
           className,
           classNames?.root,
         )}
       >
         <Container className={cn(classNames?.inner)}>
-          {/* Top row — wordmark centered, utilities flanking */}
           <div className="grid h-[var(--header-height)] grid-cols-[1fr_auto_1fr] items-center gap-4">
             <div className="flex items-center gap-1">
               <MobileMenuButton onClick={() => setMobileOpen(true)} />
@@ -346,9 +347,51 @@ export function SiteHeader({
               />
             </div>
 
-            <Link href={home} className="ds-wordmark font-display text-center">
-              {brandName}
-            </Link>
+            {overlay ? (
+              <Link href={home} className="ds-wordmark font-display text-center">
+                {brandName}
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href={home}
+                  className="ds-wordmark font-display text-center lg:hidden"
+                >
+                  {brandName}
+                </Link>
+                <nav
+                  className={cn(
+                    "landing-header-nav store-header-nav hidden items-center justify-center gap-6 lg:flex xl:gap-8",
+                    classNames?.nav,
+                  )}
+                  aria-label="Primary"
+                >
+                  {navItems.map((item) =>
+                    item.children?.length ? (
+                      <DesktopNavMenu
+                        key={item.href}
+                        item={item}
+                        locale={locale}
+                        pathname={pathname}
+                      />
+                    ) : (
+                      <Link
+                        key={item.href}
+                        href={localePath(locale, item.href)}
+                        aria-current={
+                          isNavActive(pathname, locale, item.href)
+                            ? "page"
+                            : undefined
+                        }
+                        className="ds-nav-link text-ink transition-colors hover:text-[var(--brand,var(--primary))] aria-[current=page]:text-[var(--brand,var(--primary))]"
+                      >
+                        {getLocalizedLabel(item, locale)}
+                      </Link>
+                    ),
+                  )}
+                </nav>
+              </>
+            )}
 
             <div
               className={cn(
@@ -359,8 +402,11 @@ export function SiteHeader({
               <IconLink href={localePath(locale, "/search")} label="Search">
                 <SearchIcon />
               </IconLink>
-              <IconLink href={localePath(locale, "/account/wishlist")} label="Wishlist">
-                <HeartIcon />
+              <IconLink
+                href={localePath(locale, "/about")}
+                label={locale === "fa" ? "درباره ما" : "About us"}
+              >
+                <AboutIcon />
               </IconLink>
               <IconLink href={localePath(locale, "/account")} label="Account">
                 <UserIcon />
@@ -370,35 +416,6 @@ export function SiteHeader({
               </IconLink>
             </div>
           </div>
-
-          {/* Desktop nav — centered uppercase links */}
-          <nav
-            className={cn(
-              "landing-header-nav hidden h-[var(--header-nav-height,2.75rem)] items-center justify-center gap-8 border-t border-border/50 lg:flex",
-              classNames?.nav,
-            )}
-            aria-label="Primary"
-          >
-            {navItems.map((item) =>
-              item.children?.length ? (
-                <DesktopNavMenu
-                  key={item.href}
-                  item={item}
-                  locale={locale}
-                  pathname={pathname}
-                />
-              ) : (
-                <Link
-                  key={item.href}
-                  href={localePath(locale, item.href)}
-                  aria-current={isNavActive(pathname, locale, item.href) ? "page" : undefined}
-                  className="ds-nav-link text-ink transition-colors hover:text-[var(--brand,var(--primary))] aria-[current=page]:text-[var(--brand,var(--primary))]"
-                >
-                  {getLocalizedLabel(item, locale)}
-                </Link>
-              ),
-            )}
-          </nav>
         </Container>
       </header>
       <MobileNavDrawer

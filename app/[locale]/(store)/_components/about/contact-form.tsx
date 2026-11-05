@@ -6,8 +6,7 @@ import type { StoreMessages } from "@/lib/i18n/store";
 
 type FormCopy = StoreMessages["about"]["pages"]["contact"]["form"];
 
-const fieldClass =
-  "w-full border border-border bg-transparent px-4 py-3 text-base text-ink outline-none focus:border-[var(--brand)]";
+const fieldClass = "about-contact-field";
 
 export function ContactForm({ copy }: { copy: FormCopy }) {
   const [name, setName] = useState("");
@@ -30,9 +29,9 @@ export function ContactForm({ copy }: { copy: FormCopy }) {
 
   if (sent) {
     return (
-      <div className="border border-border px-6 py-8">
-        <h2 className="about-display text-[clamp(1.6rem,3vw,2.2rem)]">{copy.title}</h2>
-        <p className="mt-6 text-base leading-relaxed text-ink md:text-lg">{copy.success}</p>
+      <div className="about-contact-card about-contact-form">
+        <h2 className="about-display">{copy.title}</h2>
+        <p>{copy.success}</p>
         <Button
           type="button"
           className="mt-8"
@@ -51,11 +50,11 @@ export function ContactForm({ copy }: { copy: FormCopy }) {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="border border-border px-6 py-8">
-      <h2 className="about-display text-[clamp(1.6rem,3vw,2.2rem)]">{copy.title}</h2>
-      <div className="mt-8 flex flex-col gap-5">
-        <label className="flex flex-col gap-2">
-          <span className="about-kicker">{copy.nameLabel}</span>
+    <form onSubmit={onSubmit} noValidate className="about-contact-card about-contact-form">
+      <h2 className="about-display">{copy.title}</h2>
+      <div className="about-contact-fields">
+        <label>
+          <span>{copy.nameLabel}</span>
           <input
             className={fieldClass}
             name="name"
@@ -66,8 +65,8 @@ export function ContactForm({ copy }: { copy: FormCopy }) {
           />
           {errors.name ? <span className="text-sm text-destructive">{errors.name}</span> : null}
         </label>
-        <label className="flex flex-col gap-2">
-          <span className="about-kicker">{copy.emailLabel}</span>
+        <label>
+          <span>{copy.emailLabel}</span>
           <input
             className={fieldClass}
             type="email"
@@ -80,8 +79,8 @@ export function ContactForm({ copy }: { copy: FormCopy }) {
           />
           {errors.email ? <span className="text-sm text-destructive">{errors.email}</span> : null}
         </label>
-        <label className="flex flex-col gap-2">
-          <span className="about-kicker">{copy.phoneLabel}</span>
+        <label>
+          <span>{copy.phoneLabel}</span>
           <input
             className={fieldClass}
             type="tel"
@@ -92,10 +91,10 @@ export function ContactForm({ copy }: { copy: FormCopy }) {
             onChange={(event) => setPhone(event.target.value)}
           />
         </label>
-        <label className="flex flex-col gap-2">
-          <span className="about-kicker">{copy.messageLabel}</span>
+        <label>
+          <span>{copy.messageLabel}</span>
           <textarea
-            className={`${fieldClass} min-h-36 resize-y`}
+            className={fieldClass}
             name="message"
             rows={5}
             value={message}
@@ -107,10 +106,10 @@ export function ContactForm({ copy }: { copy: FormCopy }) {
           ) : null}
         </label>
       </div>
-      <Button type="submit" className="mt-8">
+      <Button type="submit" size="lg">
         {copy.submit}
       </Button>
-      <p className="mt-4 text-sm leading-relaxed text-ink-muted">{copy.note}</p>
+      <p className="about-contact-note">{copy.note}</p>
     </form>
   );
 }

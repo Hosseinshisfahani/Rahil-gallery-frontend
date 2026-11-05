@@ -23,7 +23,6 @@ export const primaryNavItems: NavItem[] = [
   },
   { href: "/services", labelEn: "Services", labelFa: "خدمات" },
   { href: "/collections", labelEn: "Collections", labelFa: "کلکسیون‌ها" },
-  { href: "/journal", labelEn: "Journal", labelFa: "مجله" },
   {
     href: "/about",
     labelEn: "About Us",

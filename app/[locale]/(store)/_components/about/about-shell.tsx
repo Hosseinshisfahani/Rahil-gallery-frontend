@@ -1,8 +1,8 @@
-import { aboutPath, aboutRelated, nextAboutSlug, type AboutSlug } from "@/lib/about/pages";
+import { aboutPath, nextAboutSlug, type AboutSlug } from "@/lib/about/pages";
 import { getStoreCatalog } from "@/lib/i18n/store";
 import { localePath } from "@/lib/store-navigation";
 import type { Locale } from "@/lib/types";
-import { AboutNextLink, RelatedLinks } from "./about-blocks";
+import { AboutNextLink } from "./about-blocks";
 import { Container } from "../store-layout";
 
 export function AboutShellPage({
@@ -27,13 +27,6 @@ export function AboutShellPage({
           href={localePath(locale, aboutPath(next))}
           kicker={about.continueLabel}
           title={about.pages[next].title}
-        />
-        <RelatedLinks
-          label={about.relatedLabel}
-          links={aboutRelated[slug].map((related) => ({
-            href: localePath(locale, aboutPath(related)),
-            title: about.pages[related].title,
-          }))}
         />
       </Container>
     </>

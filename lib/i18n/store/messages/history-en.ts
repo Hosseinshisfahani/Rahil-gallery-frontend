@@ -38,7 +38,7 @@ export const historyPageEn = {
     },
     {
       heading: "Knowledge, the basis of creating value",
-      imageAlt: "",
+      imageAlt: "Gem and knowledge in the Rahil atelier",
       quote: "",
       paragraphs: [
         "We believe that knowing a gem, before it is a commercial act, calls for knowledge, study, and a careful eye.",
@@ -92,7 +92,7 @@ export const historyPageEn = {
     },
     {
       heading: "Commercial diplomacy, the art of making a relationship",
-      imageAlt: "",
+      imageAlt: "A commercial meeting at Rahil Gallery",
       quote: "",
       paragraphs: [
         "Our experience in international trade has brought us to an important truth:",

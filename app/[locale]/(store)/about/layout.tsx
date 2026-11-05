@@ -19,11 +19,18 @@ export default async function AboutLayout({
 
   return (
     <div className="about flex min-h-full flex-1 flex-col">
-      <div className="border-b border-border bg-canvas">
-        <Container className="py-8 md:py-10">
-          <p className="about-display text-[clamp(2rem,4vw,3rem)]">{about.stripTitle}</p>
+      <header className="about-masthead">
+        <Container className="about-masthead-inner">
+          <div className="about-masthead-copy">
+            <p className="about-kicker">{about.stripEyebrow}</p>
+            <p className="about-display about-masthead-title">
+              {about.stripTitle}
+            </p>
+            <p className="about-masthead-lede">{about.stripLede}</p>
+          </div>
         </Container>
-      </div>
+      </header>
+
       <AboutSubnav
         locale={locale}
         label={about.stripTitle}
@@ -32,7 +39,7 @@ export default async function AboutLayout({
           label: getLocalizedLabel(item, locale),
         }))}
       />
-      <main className="flex-1">{children}</main>
+      <main className="about-content flex-1">{children}</main>
       <SiteFooter locale={locale} />
     </div>
   );

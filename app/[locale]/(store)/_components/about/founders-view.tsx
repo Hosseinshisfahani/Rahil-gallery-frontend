@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { aboutPath, aboutRelated, nextAboutSlug } from "@/lib/about/pages";
+import { aboutPath, nextAboutSlug } from "@/lib/about/pages";
 import type { StoreMessages } from "@/lib/i18n/store";
 import { localePath } from "@/lib/store-navigation";
 import type { Locale } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { AboutInlineLink, AboutNextLink, RelatedLinks } from "./about-blocks";
+import { AboutInlineLink, AboutNextLink } from "./about-blocks";
 import { Container } from "../store-layout";
 
 /** Portraits in the same order as the people copy. Circle hides the formal portrait’s white corners. */
@@ -104,13 +104,6 @@ export function FoundersView({
           href={localePath(locale, aboutPath(next))}
           kicker={about.continueLabel}
           title={about.pages[next].title}
-        />
-        <RelatedLinks
-          label={about.relatedLabel}
-          links={aboutRelated.founders.map((related) => ({
-            href: localePath(locale, aboutPath(related)),
-            title: about.pages[related].title,
-          }))}
         />
       </Container>
     </>
